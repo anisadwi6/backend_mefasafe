@@ -1,6 +1,8 @@
 // resources/js/components/App.jsx
 import React from 'react';
 import Dashboard from './Dashboard';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Profile from './Profile';
 import Login from './Login';
 import Register from './Register';
 import TermAgreement from './TermAgreement';
@@ -38,7 +40,14 @@ export default function App() {
     };
 
     if (screen === 'dashboard') {
-        return <Dashboard user={user} profile={profile} onLogout={handleLogout} />;
+        return (
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/Profil" element={<Profile user={user} profile={profile} onUpdate={handleAuthSuccess} onLogout={handleLogout} />} />
+                    <Route path="/*" element={<Dashboard user={user} profile={profile} onLogout={handleLogout} />} />
+                </Routes>
+            </BrowserRouter>
+        );
     }
 
     if (screen === 'register') {

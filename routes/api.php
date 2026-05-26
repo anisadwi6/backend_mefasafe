@@ -1,11 +1,17 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Api\ChatBotController;
 use App\Http\Controllers\Api\ClaimController;
 use App\Http\Controllers\Api\DoctorConsultationController;
 use App\Http\Controllers\Api\FeedbackController;
+use App\Http\Controllers\Api\HospitalController;
+use App\Http\Controllers\Api\HomeDashboardController;
+use App\Http\Controllers\Api\ReminderController;
+use App\Http\Controllers\Api\RiwayatController;
 use App\Http\Controllers\Api\HospitalRegistrationController;
 use App\Http\Controllers\Api\InsurancePolicyController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -24,4 +30,37 @@ Route::prefix('v1')->group(function (): void {
     Route::get('/user-insurance', [InsurancePolicyController::class, 'index']);
     Route::get('/claims/status', [ClaimController::class, 'index']);
     Route::get('/transactions/recent', [TransactionController::class, 'index']);
+    
+    // Notification routes
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::get('/notifications/summary', [NotificationController::class, 'summary']);
+    
+    // ChatBot routes
+    Route::post('/chatbot/chat', [ChatBotController::class, 'chat']);
+    Route::get('/chatbot/quick-replies', [ChatBotController::class, 'quickReplies']);
+
+    // Home Dashboard route
+    Route::get('/home-dashboard', [HomeDashboardController::class, 'index']);
+
+    // My policies
+    Route::get('/my-policies', [InsurancePolicyController::class, 'myPolicies']);
+
+    // Riwayat (registrasi RS + transaksi + klaim)
+    Route::get('/riwayat', [RiwayatController::class, 'index']);
+
+    // Reminder / Kalender Pengingat
+    Route::get('/reminders/today', [ReminderController::class, 'today']);
+    Route::get('/reminders/upcoming', [ReminderController::class, 'upcoming']);
+    Route::get('/reminders', [ReminderController::class, 'index']);
+    Route::post('/reminders', [ReminderController::class, 'store']);
+    Route::put('/reminders/{id}', [ReminderController::class, 'update']);
+    Route::delete('/reminders/{id}', [ReminderController::class, 'destroy']);
+
+    // Hospitals routes
+    Route::get('/hospitals', [HospitalController::class, 'index']);
+    Route::get('/hospitals/{id}', [HospitalController::class, 'show']);
+    Route::get('/hospitals/{id}/doctors', [HospitalController::class, 'doctors']);
+    Route::post('/hospitals', [HospitalController::class, 'store']);
+    Route::put('/hospitals/{id}', [HospitalController::class, 'update']);
+    Route::delete('/hospitals/{id}', [HospitalController::class, 'destroy']);
 });

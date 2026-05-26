@@ -1,12 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './components/App';
-import '../css/app.css';
+import './bootstrap'; // If using Laravel's default bootstrap layout
+import '../css/app.css'; 
 
-console.log('React app is starting...');
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>
-);
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './components/App';
+
+const container = document.getElementById('app');
+
+if (container) {
+    const root = createRoot(container);
+    root.render(
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>
+    );
+}

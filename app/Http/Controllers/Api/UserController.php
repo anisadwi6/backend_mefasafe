@@ -82,17 +82,23 @@ class UserController extends Controller
         $user = User::with('profile')->findOrFail($id);
 
         $validated = $request->validate([
+            'name' => ['sometimes', 'string', 'max:255'],
             'email' => ['sometimes', 'email:rfc,dns', 'max:255', 'unique:users,email,' . $user->id],
             'password' => ['sometimes', 'string', 'min:8', 'confirmed'],
             'role' => ['sometimes', 'in:pengguna,admin'],
             'full_name' => ['sometimes', 'string', 'max:255'],
             'birth_info' => ['sometimes', 'string', 'max:255'],
             'address' => ['sometimes', 'string', 'max:500'],
+            'profile_picture' => ['sometimes', 'nullable', 'file', 'mimes:jpg,jpeg,png', 'max:2048'],
             'identity_card' => ['sometimes', 'nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
             'digital_signature' => ['sometimes', 'nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
         ]);
 
         $user = DB::transaction(function () use ($user, $validated, $request) {
+            if (array_key_exists('name', $validated)) {
+                $user->name = $validated['name'];
+            }
+
             if (array_key_exists('email', $validated)) {
                 $user->email = $validated['email'];
             }
@@ -103,6 +109,10 @@ class UserController extends Controller
 
             if (array_key_exists('role', $validated)) {
                 $user->role = $validated['role'];
+            }
+
+            if ($request->hasFile('profile_picture')) {
+                $user->profile_picture = asset($this->uploadFile($request->file('profile_picture'), 'profiles'));
             }
 
             $user->save();

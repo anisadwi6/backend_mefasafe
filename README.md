@@ -1,608 +1,395 @@
-# MefaSafe - Digital Insurance Platform
+# MefaSafe — Digital Insurance Platform
 
-[![Laravel](https://img.shields.io/badge/Laravel-10.x-red.svg)](https://laravel.com)
-[![React](https://img.shields.io/badge/React-18.x-blue.svg)](https://reactjs.org)
-[![Vite](https://img.shields.io/badge/Vite-5.x-646CFF.svg)](https://vitejs.dev)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Laravel](https://img.shields.io/badge/Laravel-11.x-FF2D20?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com)
+[![React](https://img.shields.io/badge/React-19.x-61DAFB?style=flat-square&logo=react&logoColor=black)](https://reactjs.org)
+[![Vite](https://img.shields.io/badge/Vite-8.x-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind-4.x-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![License](https://img.shields.io/badge/license-MIT-22C55E?style=flat-square)](LICENSE)
 
-## 📋 Deskripsi Project
-
-MefaSafe adalah prototype solusi digital dalam sektor InsurTech yang dikembangkan untuk meningkatkan transparansi dan kemudahan dalam pembelian produk asuransi online. Platform ini menyediakan fitur-fitur modern untuk manajemen polis, klaim digital, konsultasi dokter online, dan layanan kesehatan terintegrasi.
-
-### 🎯 Tujuan Utama
-
-- ✅ Meningkatkan transparansi pembelian produk asuransi online
-- ✅ Menghadirkan pencatatan klaim digital yang akurat
-- ✅ Memberikan informasi premi dan riwayat transaksi secara real-time
-- ✅ Menyediakan fitur konsultasi dokter melalui video call
-- ✅ Membangun kepercayaan konsumen melalui keamanan data dan akuntansi transparan
+> Platform asuransi kesehatan digital yang menyediakan manajemen polis, klaim digital, konsultasi dokter, kalender pengingat kesehatan, dan layanan terintegrasi berbasis web.
 
 ---
 
-## 📚 Table of Contents
+## 📋 Daftar Isi
 
-- [Arsitektur System](#-arsitektur-system)
+- [Deskripsi](#-deskripsi)
+- [Arsitektur Sistem](#-arsitektur-sistem)
 - [Tech Stack](#-tech-stack)
 - [Fitur Utama](#-fitur-utama)
 - [Struktur Project](#-struktur-project)
-- [Database Design](#-database-design)
-- [Installation](#-installation)
-- [API Documentation](#-api-documentation)
-- [UI/UX Design](#-uiux-design)
-- [Testing](#-testing)
+- [Database Schema](#-database-schema)
+- [Instalasi](#-instalasi)
+- [API Endpoints](#-api-endpoints)
 - [Tim Pengembang](#-tim-pengembang)
-- [License](#-license)
+- [Changelog](#-changelog)
 
 ---
 
-## 🏗 Arsitektur System
+## 📖 Deskripsi
 
-Project ini menggunakan arsitektur **MVC (Model-View-Controller)** dengan pemisahan yang jelas antara backend dan frontend:
+MefaSafe adalah prototype solusi digital dalam sektor **InsurTech** yang dikembangkan untuk meningkatkan transparansi dan kemudahan dalam pengelolaan asuransi kesehatan secara online.
+
+### 🎯 Tujuan Utama
+
+| # | Tujuan |
+|---|--------|
+| 1 | Meningkatkan transparansi pembelian dan pengelolaan produk asuransi |
+| 2 | Menghadirkan pencatatan klaim digital yang akurat dan real-time |
+| 3 | Menyediakan konsultasi dokter online (chat & video call) |
+| 4 | Membantu pengguna mengatur jadwal kesehatan dengan kalender pengingat |
+| 5 | Membangun kepercayaan konsumen melalui keamanan data yang transparan |
+
+---
+
+## 🏗 Arsitektur Sistem
 
 ```
-┌─────────────────┐         ┌──────────────────┐         ┌─────────────────┐
-│                 │         │                  │         │                 │
-│  React + Vite   │ ◄─────► │  Laravel API     │ ◄─────► │    Database     │
-│   (Frontend)    │  REST   │   (Backend)      │  MySQL  │     (MySQL)     │
-│                 │         │                  │         │                 │
-└─────────────────┘         └──────────────────┘         └─────────────────┘
+┌──────────────────┐        REST API        ┌──────────────────┐        MySQL        ┌──────────────┐
+│                  │ ◄────────────────────► │                  │ ◄─────────────────► │              │
+│  React + Vite    │                        │   Laravel 11     │                     │   Database   │
+│   (Frontend)     │     Bearer Token       │   (Backend API)  │     Eloquent ORM    │   (MySQL)    │
+│                  │                        │                  │                     │              │
+└──────────────────┘                        └──────────────────┘                     └──────────────┘
 ```
 
-### Komponen Utama
+### Alur Autentikasi
 
-1. **Frontend (React + Vite)**
-   - User Interface untuk Pengguna & Admin
-   - State Management
-   - API Integration
-   - Responsive Design
-
-2. **Backend (Laravel)**
-   - RESTful API
-   - Authentication & Authorization
-   - Business Logic
-   - Database Management
-
-3. **Database (MySQL)**
-   - Data Storage
-   - Relational Schema
-   - Transaction Management
+```
+User → Login/Register → Laravel Sanctum → Bearer Token → localStorage → API Requests
+```
 
 ---
 
 ## 🛠 Tech Stack
 
 ### Backend
-- **Framework**: Laravel 10.x
-- **Language**: PHP 8.2+
-- **Database**: MySQL 8.0+
-- **Authentication**: Laravel Sanctum
-- **API**: RESTful API
+| Teknologi | Versi | Kegunaan |
+|-----------|-------|----------|
+| Laravel | 11.x | Framework PHP utama |
+| PHP | 8.2+ | Bahasa pemrograman |
+| MySQL | 8.0+ | Database relasional |
+| Laravel Sanctum | — | Token-based authentication |
+| Carbon | — | Manipulasi tanggal & waktu |
+| Gemini AI API | Pro | Chatbot AI (MefaBot) |
 
 ### Frontend
-- **Framework**: React 18.x
-- **Build Tool**: Vite 5.x
-- **Language**: JavaScript/TypeScript
-- **Styling**: Tailwind CSS
-- **State Management**: Redux/Context API
-- **Routing**: React Router v6
-
-### Development Tools
-- **Version Control**: Git
-- **Package Manager**: Composer (Backend), npm/yarn (Frontend)
-- **API Testing**: Postman
-- **Code Editor**: VS Code
-- **Design Tool**: Figma
+| Teknologi | Versi | Kegunaan |
+|-----------|-------|----------|
+| React | 19.x | UI library |
+| Vite | 8.x | Build tool & dev server |
+| Tailwind CSS | 4.x | Utility-first styling |
+| React Router DOM | 7.x | Client-side routing |
+| Axios | 1.x | HTTP client |
+| Lucide React | — | Icon library |
+| Leaflet | 1.x | Peta interaktif (lokasi RS) |
 
 ---
 
 ## ⚡ Fitur Utama
 
-### Untuk Pengguna (User)
+### Pengguna
 
 | Fitur | Deskripsi | Status |
-|-------|-----------|--------|
-| 🔐 **Registrasi & Login** | Pendaftaran akun baru dan autentikasi pengguna | ✅ |
-| 📜 **Manajemen Polis** | Pembelian dan pengelolaan polis asuransi | ✅ |
-| 💰 **Klaim Asuransi** | Pengajuan dan tracking klaim secara online | ✅ |
-| 👨‍⚕️ **Konsultasi Dokter** | Video call dan chat dengan dokter spesialis | ✅ |
-| 🏥 **Pendaftaran RS** | Pendaftaran layanan rumah sakit online | ✅ |
-| 📊 **Riwayat Transaksi** | Melihat histori pembayaran premi dan klaim | ✅ |
-| 📅 **Kalender Pengingat** | Notifikasi jatuh tempo pembayaran premi | ✅ |
-| 🤖 **Chatbot 24/7** | Tanya jawab seputar polis, klaim, dan premi | ✅ |
-| 📍 **Daftar RS Mitra** | Informasi rumah sakit mitra dan lokasi | ✅ |
-| 💬 **Feedback & Saran** | Memberikan masukan terhadap layanan | ✅ |
+|-------|-----------|:------:|
+| 🔐 **Autentikasi** | Registrasi, login, dan manajemen sesi | ✅ |
+| 🏠 **Dashboard** | Ringkasan saldo, polis aktif, dan statistik | ✅ |
+| 📜 **Manajemen Polis** | Lihat dan kelola polis asuransi aktif | ✅ |
+| 💰 **Klaim Asuransi** | Pengajuan klaim dengan upload dokumen | ✅ |
+| 👨‍⚕️ **Konsultasi Dokter** | Chat & video call dengan dokter spesialis | ✅ |
+| 🏥 **Daftar Rumah Sakit** | Cari RS mitra dengan peta interaktif | ✅ |
+| 📋 **Pendaftaran RS** | Daftar antrian online dengan barcode | ✅ |
+| 📊 **Riwayat Transaksi** | Histori klaim, premi, dan pendaftaran RS | ✅ |
+| 📅 **Kalender Pengingat** | Buat & kelola jadwal kontrol, obat, vaksin | ✅ |
+| 🔔 **Notifikasi** | Pemberitahuan otomatis untuk semua aktivitas | ✅ |
+| 🤖 **MefaBot (AI)** | Chatbot berbasis Gemini AI untuk bantuan 24/7 | ✅ |
+| 💪 **Health Tracking** | Monitor kesehatan harian | ✅ |
+| 💬 **Feedback & Saran** | Berikan penilaian dan masukan layanan | ✅ |
+| 👤 **Profil Pengguna** | Edit profil, foto, dan tanda tangan digital | ✅ |
 
-### Untuk Admin
+### Kalender Pengingat *(Fitur Terbaru)*
 
-| Fitur | Deskripsi | Status |
-|-------|-----------|--------|
-| ✔️ **Verifikasi Klaim** | Validasi dan verifikasi pengajuan klaim | ✅ |
-| 💸 **Pencairan Dana** | Proses pencairan dana klaim yang disetujui | ✅ |
-| 📈 **Dashboard Admin** | Monitoring aktivitas platform | ✅ |
+- **Kategori pengingat**: Kontrol dokter, Minum obat, Vaksinasi, Lainnya
+- **Pengulangan**: Tidak berulang / Harian / Mingguan / Bulanan
+- **Notifikasi otomatis**: Pengingat yang jatuh tempo hari ini muncul otomatis di halaman Notifikasi
+- **Kalender interaktif**: Navigasi bulan, indikator titik per tanggal, tanggal lalu tidak bisa dipilih
+- **Manajemen**: Tandai selesai, edit, atau hapus pengingat
 
 ---
 
 ## 📁 Struktur Project
 
 ```
-mefasafe/
+MefaSafe/
 │
-├── backend/                      # Laravel Backend
-│   ├── app/
-│   │   ├── Http/
-│   │   │   ├── Controllers/
-│   │   │   │   ├── AuthController.php
-│   │   │   │   ├── PolisController.php
-│   │   │   │   ├── KlaimController.php
-│   │   │   │   ├── KonsultasiController.php
-│   │   │   │   ├── PembayaranController.php
-│   │   │   │   └── RumahSakitController.php
-│   │   │   └── Middleware/
-│   │   ├── Models/
-│   │   │   ├── User.php
-│   │   │   ├── Polis.php
-│   │   │   ├── Klaim.php
-│   │   │   ├── Konsultasi.php
-│   │   │   ├── Pembayaran.php
-│   │   │   └── Dokter.php
-│   │   └── Services/
-│   ├── config/
-│   ├── database/
-│   │   ├── migrations/
-│   │   └── seeders/
-│   ├── routes/
-│   │   ├── api.php
-│   │   └── web.php
-│   ├── tests/
-│   ├── .env.example
-│   ├── composer.json
-│   └── artisan
+├── app/
+│   ├── Http/
+│   │   └── Controllers/
+│   │       └── Api/
+│   │           ├── AuthController.php
+│   │           ├── ChatBotController.php          # MefaBot (Gemini AI)
+│   │           ├── ClaimController.php
+│   │           ├── DoctorConsultationController.php
+│   │           ├── FeedbackController.php
+│   │           ├── HomeDashboardController.php
+│   │           ├── HospitalController.php
+│   │           ├── HospitalRegistrationController.php
+│   │           ├── InsurancePolicyController.php
+│   │           ├── NotificationController.php     # Notifikasi terintegrasi
+│   │           ├── ReminderController.php         # Kalender Pengingat
+│   │           ├── RiwayatController.php
+│   │           ├── TransactionController.php
+│   │           └── UserController.php
+│   └── Models/
+│       ├── Claim.php
+│       ├── Doctor.php
+│       ├── DoctorConsultation.php
+│       ├── Feedback.php
+│       ├── Hospital.php
+│       ├── HospitalRegistration.php
+│       ├── InsurancePolicy.php
+│       ├── Profile.php
+│       ├── Reminder.php                           # Model pengingat
+│       ├── Transaction.php
+│       └── User.php
 │
-├── frontend/                     # React + Vite Frontend
-│   ├── public/
-│   ├── src/
-│   │   ├── assets/
-│   │   ├── components/
-│   │   │   ├── Auth/
-│   │   │   │   ├── Login.jsx
-│   │   │   │   └── Register.jsx
-│   │   │   ├── Dashboard/
-│   │   │   │   └── Home.jsx
-│   │   │   ├── Polis/
-│   │   │   │   ├── PolisList.jsx
-│   │   │   │   └── PolisDetail.jsx
-│   │   │   ├── Klaim/
-│   │   │   │   ├── KlaimForm.jsx
-│   │   │   │   └── KlaimStatus.jsx
-│   │   │   ├── Konsultasi/
-│   │   │   │   ├── DokterList.jsx
-│   │   │   │   ├── ChatRoom.jsx
-│   │   │   │   └── VideoCall.jsx
-│   │   │   ├── RumahSakit/
-│   │   │   │   └── RSDaftar.jsx
-│   │   │   └── Common/
-│   │   │       ├── Navbar.jsx
-│   │   │       ├── Footer.jsx
-│   │   │       └── Loader.jsx
-│   │   ├── contexts/
-│   │   │   └── AuthContext.jsx
-│   │   ├── hooks/
-│   │   ├── pages/
-│   │   │   ├── HomePage.jsx
-│   │   │   ├── ProfilePage.jsx
-│   │   │   ├── TransactionPage.jsx
-│   │   │   └── SettingsPage.jsx
-│   │   ├── services/
-│   │   │   └── api.js
-│   │   ├── utils/
-│   │   ├── App.jsx
-│   │   ├── main.jsx
-│   │   └── index.css
-│   ├── .env.example
-│   ├── package.json
-│   ├── vite.config.js
-│   └── tailwind.config.js
+├── database/
+│   ├── migrations/
+│   │   ├── ..._alter_users_table_for_mefasafe.php
+│   │   ├── ..._create_profiles_table.php
+│   │   ├── ..._create_insurance_policies_table.php
+│   │   ├── ..._create_claims_table.php
+│   │   ├── ..._create_transactions_table.php
+│   │   ├── ..._create_hospital_registrations_table.php
+│   │   ├── ..._create_doctor_consultations_table.php
+│   │   ├── ..._create_feedbacks_table.php
+│   │   ├── ..._create_hospitals_table.php
+│   │   ├── ..._create_doctors_table.php
+│   │   └── ..._create_reminders_table.php         # Tabel pengingat
+│   └── seeders/
+│       ├── DatabaseSeeder.php
+│       ├── DoctorSeeder.php
+│       └── HospitalSeeder.php
 │
-├── docs/                         # Dokumentasi
-│   ├── API.md
-│   ├── DATABASE.md
-│   ├── DEPLOYMENT.md
-│   └── UI_UX.md
+├── resources/
+│   └── js/
+│       ├── app.jsx
+│       └── components/
+│           ├── App.jsx                            # Root + routing utama
+│           ├── Dashboard.jsx                      # Shell utama + navigasi
+│           ├── Login.jsx
+│           ├── Register.jsx
+│           ├── TermAgreement.jsx
+│           ├── Profile.jsx
+│           ├── Notifikasi.jsx
+│           ├── ChatBot.jsx                        # MefaBot UI
+│           ├── KalenderPengingat.jsx              # Kalender Pengingat
+│           ├── DaftarRS.jsx
+│           ├── PendaftaranRS.jsx
+│           ├── Riwayat.jsx
+│           └── HealthService.jsx
 │
-├── .gitignore
-├── README.md
-└── LICENSE
+├── routes/
+│   └── api.php
+│
+├── assets/                                        # Gambar & ikon statis
+├── public/
+├── .env.example
+├── composer.json
+├── package.json
+└── README.md
 ```
 
 ---
 
-## 🗄 Database Design
-
-### Entity Relationship Diagram
-
-```
-┌─────────────┐       ┌─────────────┐       ┌─────────────┐
-│    USER     │       │    POLIS    │       │  PEMBAYARAN │
-├─────────────┤       ├─────────────┤       ├─────────────┤
-│ User_id (PK)│───┐   │ Polis_id(PK)│───┐   │Pembayaran_id│
-│ Nama        │   │   │ User_id (FK)│   │   │ Polis_id(FK)│
-│ Email       │   └──>│ Jenis_polis │   └──>│ Tanggal     │
-└─────────────┘       │ Nomor_polis │       │ Jumlah      │
-                      └─────────────┘       └─────────────┘
-                              │
-                              │
-                              ▼
-                      ┌─────────────┐
-                      │    KLAIM    │
-                      ├─────────────┤
-                      │ Klaim_id(PK)│
-                      │ Polis_id(FK)│
-                      │ Deskripsi   │
-                      │ Status      │
-                      └─────────────┘
-
-┌─────────────┐       ┌─────────────┐
-│ KONSULTASI  │       │   DOKTER    │
-├─────────────┤       ├─────────────┤
-│Konsultasi_id│───┐   │Dokter_id(PK)│
-│ User_id (FK)│   └──>│ Nama_Dokter │
-│Dokter_id(FK)│       │Spesialisasi │
-│ Jenis       │       └─────────────┘
-└─────────────┘
-```
-
-### Normalisasi Database
-
-Database telah melalui proses normalisasi hingga **3NF (Third Normal Form)**:
-
-#### 1NF (First Normal Form)
-- Setiap kolom hanya berisi satu nilai (atomic values)
-- Tidak ada repeating groups
-
-#### 2NF (Second Normal Form)
-- Memenuhi 1NF
-- Setiap atribut non-key bergantung penuh pada primary key
-- Data dipisahkan ke dalam tabel sesuai jenisnya
-
-#### 3NF (Third Normal Form)
-- Memenuhi 2NF
-- Tidak ada transitive dependency
-- Semua atribut bergantung langsung pada primary key
+## 🗄 Database Schema
 
 ### Tabel Utama
 
-| Tabel | Deskripsi | Primary Key |
-|-------|-----------|-------------|
-| `users` | Data pengguna dan admin | `user_id` |
-| `polis` | Data polis asuransi | `polis_id` |
-| `klaim` | Data pengajuan klaim | `klaim_id` |
-| `pembayaran` | Data pembayaran premi | `pembayaran_id` |
-| `konsultasi` | Data konsultasi dokter | `konsultasi_id` |
-| `dokter` | Data dokter spesialis | `dokter_id` |
+| Tabel | Deskripsi | Kolom Penting |
+|-------|-----------|---------------|
+| `users` | Data pengguna | `name`, `email`, `password`, `role` |
+| `profiles` | Profil lengkap | `full_name`, `birth_info`, `address`, `identity_card_path` |
+| `insurance_policies` | Polis asuransi | `policy_number`, `insurance_type`, `premium_amount`, `coverage_limit`, `start_date`, `end_date` |
+| `claims` | Pengajuan klaim | `claim_amount`, `description`, `document_path`, `status` |
+| `transactions` | Transaksi keuangan | `transaction_type`, `amount`, `transaction_date`, `status` |
+| `hospital_registrations` | Pendaftaran RS | `hospital_name`, `doctor_name`, `schedule_date`, `queue_number`, `barcode_data` |
+| `doctor_consultations` | Konsultasi dokter | `doctor_name`, `specialist_type`, `consultation_type`, `status` |
+| `hospitals` | Data rumah sakit | `name`, `address`, `city`, `latitude`, `longitude`, `is_partner` |
+| `doctors` | Data dokter | `hospital_id`, `name`, `specialist`, `availability` |
+| `feedbacks` | Masukan pengguna | `category`, `content`, `rating` |
+| `reminders` | Kalender pengingat | `title`, `reminder_date`, `reminder_time`, `category`, `repeat`, `is_done`, `is_notified` |
 
-> 📖 **Detail lengkap**: Lihat [DATABASE.md](docs/DATABASE.md) untuk schema lengkap dan queries.
+### Relasi Utama
+
+```
+users ──< insurance_policies ──< claims
+users ──< transactions
+users ──< hospital_registrations >── hospitals
+users ──< doctor_consultations
+users ──< feedbacks
+users ──< reminders
+users ──  profiles
+hospitals ──< doctors
+```
 
 ---
 
-## 🚀 Installation
+## 🚀 Instalasi
 
-### Prerequisites
+### Prasyarat
 
-Pastikan Anda telah menginstall:
 - PHP >= 8.2
 - Composer
-- Node.js >= 18.x
-- npm atau yarn
+- Node.js >= 18.x & npm
 - MySQL >= 8.0
 - Git
 
-### Backend Setup (Laravel)
+### 1. Clone Repository
 
 ```bash
-# Clone repository
-git clone https://github.com/your-org/mefasafe.git
-cd mefasafe/backend
+git clone https://github.com/Raihanhidayah12/Mefasefa.git
+cd Mefasefa
+```
 
-# Install dependencies
+### 2. Setup Backend (Laravel)
+
+```bash
+# Install dependencies PHP
 composer install
 
-# Copy environment file
+# Salin file environment
 cp .env.example .env
 
 # Generate application key
 php artisan key:generate
 
-# Configure database di .env
-# DB_CONNECTION=mysql
-# DB_HOST=127.0.0.1
-# DB_PORT=3306
+# Konfigurasi database di .env
 # DB_DATABASE=mefasafe
 # DB_USERNAME=root
 # DB_PASSWORD=
 
-# Run migrations
-php artisan migrate
+# Jalankan migrasi + seeder
+php artisan migrate --seed
 
-# Seed database (optional)
-php artisan db:seed
-
-# Generate Sanctum secret key
-php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
-
-# Start development server
+# Jalankan server
 php artisan serve
-# Backend akan berjalan di http://localhost:8000
+# → http://127.0.0.1:8000
 ```
 
-### Frontend Setup (React + Vite)
+### 3. Setup Frontend (React + Vite)
 
 ```bash
-# Navigate to frontend directory
-cd ../frontend
-
-# Install dependencies
+# Install dependencies JS
 npm install
-# atau
-yarn install
 
-# Copy environment file
-cp .env.example .env
-
-# Configure API endpoint di .env
-# VITE_API_URL=http://localhost:8000/api
-
-# Start development server
+# Jalankan dev server
 npm run dev
-# atau
-yarn dev
-# Frontend akan berjalan di http://localhost:5173
+# → http://localhost:5173
+
+# Atau build untuk production
+npm run build
 ```
 
-### Environment Variables
+### 4. Konfigurasi Gemini AI (Opsional)
 
-#### Backend (.env)
+Untuk mengaktifkan MefaBot dengan Gemini AI:
+
 ```env
-APP_NAME=MefaSafe
-APP_ENV=local
-APP_KEY=
-APP_DEBUG=true
-APP_URL=http://localhost:8000
-
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=mefasafe
-DB_USERNAME=root
-DB_PASSWORD=
-
-SANCTUM_STATEFUL_DOMAINS=localhost:5173
-SESSION_DRIVER=cookie
+# Di file .env
+GEMINI_API_KEY=your_api_key_here
 ```
 
-#### Frontend (.env)
-```env
-VITE_API_URL=http://localhost:8000/api
-VITE_APP_NAME=MefaSafe
-```
+> Tanpa API key, chatbot tetap berfungsi menggunakan fallback responses bawaan.
 
 ---
 
-## 📡 API Documentation
+## 📡 API Endpoints
 
 ### Base URL
 ```
-http://localhost:8000/api
+http://127.0.0.1:8000/api
 ```
 
-### Authentication
+### Autentikasi (Publik)
 
-#### Register
-```http
-POST /api/register
-Content-Type: application/json
+| Method | Endpoint | Deskripsi |
+|--------|----------|-----------|
+| `POST` | `/register` | Registrasi pengguna baru |
+| `POST` | `/login` | Login dan dapatkan token |
 
-{
-  "nama": "John Doe",
-  "email": "john@example.com",
-  "password": "password123",
-  "password_confirmation": "password123"
-}
-```
+### Endpoints Utama (`/api/v1/`)
 
-#### Login
-```http
-POST /api/login
-Content-Type: application/json
-
-{
-  "email": "john@example.com",
-  "password": "password123"
-}
-```
-
-### Endpoints Utama
-
-| Method | Endpoint | Deskripsi | Auth |
-|--------|----------|-----------|------|
-| POST | `/api/register` | Registrasi pengguna baru | ❌ |
-| POST | `/api/login` | Login pengguna | ❌ |
-| POST | `/api/logout` | Logout pengguna | ✅ |
-| GET | `/api/user` | Get user profile | ✅ |
-| GET | `/api/polis` | List semua polis | ✅ |
-| POST | `/api/polis` | Beli polis baru | ✅ |
-| GET | `/api/polis/{id}` | Detail polis | ✅ |
-| POST | `/api/klaim` | Ajukan klaim | ✅ |
-| GET | `/api/klaim/{id}` | Detail klaim | ✅ |
-| PUT | `/api/klaim/{id}` | Update status klaim (Admin) | ✅ |
-| GET | `/api/dokter` | List dokter spesialis | ✅ |
-| POST | `/api/konsultasi` | Buat sesi konsultasi | ✅ |
-| GET | `/api/rumah-sakit` | List rumah sakit mitra | ✅ |
-| GET | `/api/pembayaran` | Riwayat pembayaran | ✅ |
-
-> 📖 **Detail lengkap**: Lihat [API.md](docs/API.md) untuk dokumentasi API lengkap dengan request/response examples.
-
----
-
-## 🎨 UI/UX Design
-
-### Design System
-
-#### Color Palette
-```css
-/* Primary Colors */
---primary: #007AFF;
---primary-dark: #0051D5;
---primary-light: #4DA3FF;
-
-/* Secondary Colors */
---secondary: #34C759;
---secondary-dark: #248A3D;
---secondary-light: #5DD97C;
-
-/* Neutral Colors */
---gray-50: #F9FAFB;
---gray-100: #F3F4F6;
---gray-200: #E5E7EB;
---gray-300: #D1D5DB;
---gray-400: #9CA3AF;
---gray-500: #6B7280;
---gray-600: #4B5563;
---gray-700: #374151;
---gray-800: #1F2937;
---gray-900: #111827;
-
-/* Status Colors */
---success: #34C759;
---warning: #FFCC00;
---error: #FF3B30;
---info: #007AFF;
-```
-
-#### Typography
-```css
-/* Font Family */
-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-
-/* Font Sizes */
---text-xs: 0.75rem;    /* 12px */
---text-sm: 0.875rem;   /* 14px */
---text-base: 1rem;     /* 16px */
---text-lg: 1.125rem;   /* 18px */
---text-xl: 1.25rem;    /* 20px */
---text-2xl: 1.5rem;    /* 24px */
---text-3xl: 1.875rem;  /* 30px */
---text-4xl: 2.25rem;   /* 36px */
-```
-
-### User Persona
-
-**Nama**: Adrian  
-**Usia**: 32 tahun  
-**Lokasi**: Yogyakarta, Malang, Jawa Timur  
-**Penghasilan**: Rp 3.500.000,-
-
-**Goals & Motivations**:
-- Memerlukan konsultasi dengan dokter ahli
-- Ingin memiliki polis hidup yang sehat
-- Ingin berkonsultasi dengan dokter yang tepat
-
-**Challenges**:
-- Sulit mempercayai gaya hidup sehat
-- Sulit untuk tidak makan makanan yang berimbang
-- Membutuhkan motivasi dari orang terdekat
-
-### Wireframes & Prototype
-
-- **Low Fidelity Wireframes**: Tersedia di laporan (halaman 28-33)
-- **High Fidelity Wireframes**: Tersedia di laporan (halaman 34)
-- **Figma Prototype**: [Link ke Figma](https://www.figma.com/design/WtM2SMwBQdtLONWMKctiH3/MefaSafe?node-id=0-1&t=MmXlaoNYZnoYXmj2-1)
-
-> 📖 **Detail lengkap**: Lihat [UI_UX.md](docs/UI_UX.md) untuk user journey, user flow, dan design guidelines.
-
----
-
-## 🧪 Testing
-
-### Backend Testing
-
-```bash
-# Run all tests
-php artisan test
-
-# Run specific test file
-php artisan test tests/Feature/AuthTest.php
-
-# Run with coverage
-php artisan test --coverage
-```
-
-### Frontend Testing
-
-```bash
-# Run unit tests
-npm run test
-
-# Run tests in watch mode
-npm run test:watch
-
-# Run tests with coverage
-npm run test:coverage
-```
+| Method | Endpoint | Deskripsi |
+|--------|----------|-----------|
+| `GET` | `/home-dashboard` | Data dashboard utama |
+| `GET` | `/my-policies` | Polis milik user |
+| `GET/POST` | `/claims` | Daftar & ajukan klaim |
+| `GET/POST` | `/transactions` | Riwayat transaksi |
+| `GET/POST` | `/hospital-registrations` | Pendaftaran RS |
+| `GET/POST` | `/doctor-consultations` | Konsultasi dokter |
+| `GET` | `/hospitals` | Daftar rumah sakit |
+| `GET` | `/hospitals/{id}/doctors` | Dokter di RS tertentu |
+| `GET` | `/riwayat` | Riwayat lengkap user |
+| `GET` | `/notifications` | Semua notifikasi |
+| `GET` | `/notifications/summary` | Ringkasan notifikasi |
+| `GET` | `/reminders` | Semua pengingat user |
+| `POST` | `/reminders` | Buat pengingat baru |
+| `PUT` | `/reminders/{id}` | Update pengingat |
+| `DELETE` | `/reminders/{id}` | Hapus pengingat |
+| `GET` | `/reminders/today` | Pengingat hari ini |
+| `GET` | `/reminders/upcoming` | Pengingat 7 hari ke depan |
+| `POST` | `/chatbot/chat` | Chat dengan MefaBot |
+| `GET` | `/chatbot/quick-replies` | Saran pertanyaan chatbot |
 
 ---
 
 ## 👥 Tim Pengembang
 
-**Kelompok 4 - Kelas T2D**
+**Kelompok 4 — Kelas T2D**  
+Program Studi D3 Teknologi Informasi, Fakultas Vokasi, Universitas Brawijaya  
+Tahun Akademik 2025/2026
 
-| NIM | Nama | Job Description |
-|-----|------|-----------------|
-| 253140707111009 | Anisa Dwi Ariyanti | Activity Diagram, User Persona, User Flow, Wireframe Low & High Fidelity, Diagram Navigasi System |
-| 253140707111011 | Latisha Syifa Pratiwi | Identifikasi User, Tahapan Relasi Normalisasi, Relasi Tabel, User Journey Map, Wireframe Low & High Fidelity |
-| 253140707111013 | Nasywa Putri Rachmita | Use Case/Daftar Kebutuhan, Use Case Diagram, Skenario, User Journey Map, Sitemap, Wireframe Low Fidelity |
-
-**Program Studi**: D3 Teknologi Informasi  
-**Fakultas**: Vokasi  
-**Universitas**: Brawijaya Malang  
-**Tahun**: 2025/2026
-
----
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 📞 Support
-
-Untuk pertanyaan atau bantuan, silakan hubungi:
-
-- **Email**: support@mefasafe.com
-- **Documentation**: [docs/](docs/)
-- **Issues**: [GitHub Issues](https://github.com/your-org/mefasafe/issues)
+| NIM | Nama | Kontribusi |
+|-----|------|------------|
+| 253140707111009 | Anisa Dwi Ariyanti | Activity Diagram, User Persona, User Flow, Wireframe, Diagram Navigasi |
+| 253140707111011 | Latisha Syifa Pratiwi | Identifikasi User, Normalisasi Database, Relasi Tabel, User Journey Map |
+| 253140707111013 | Nasywa Putri Rachmita | Use Case Diagram, Skenario, Sitemap, Wireframe Low Fidelity |
 
 ---
 
 ## 🔄 Changelog
 
-### Version 1.0.0 (UTS - May 2026)
-- ✅ Initial project setup
-- ✅ Database design & normalization
-- ✅ Use case & activity diagrams
-- ✅ UI/UX wireframes & prototype
-- ✅ User persona & journey mapping
-- ✅ System navigation diagram
+### v2.0.0 — UAS (Mei 2026)
+- ✅ Full-stack implementation (Laravel 11 + React 19)
+- ✅ Autentikasi dengan Laravel Sanctum
+- ✅ Dashboard dengan data real-time
+- ✅ Manajemen polis, klaim, dan transaksi
+- ✅ Konsultasi dokter (chat & video call)
+- ✅ Daftar rumah sakit dengan peta Leaflet
+- ✅ Pendaftaran RS online dengan barcode
+- ✅ Riwayat transaksi lengkap
+- ✅ **Kalender Pengingat** dengan notifikasi otomatis *(baru)*
+- ✅ Sistem notifikasi terintegrasi (klaim, transaksi, RS, konsultasi, pengingat)
+- ✅ MefaBot — chatbot AI berbasis Gemini dengan fallback responses
+- ✅ Health Tracking
+- ✅ Feedback & rating sistem
+- ✅ Manajemen profil dengan foto dan tanda tangan digital
 
-### Upcoming (UAS)
-- ⏳ Class diagram implementation
-- ⏳ Backend API development
-- ⏳ Frontend implementation
-- ⏳ Integration testing
-- ⏳ Deployment
+### v1.0.0 — UTS (Mei 2026)
+- ✅ Database design & normalisasi
+- ✅ Use case & activity diagrams
+- ✅ UI/UX wireframes & prototype Figma
+- ✅ User persona & journey mapping
 
 ---
 
-**Made with ❤️ by Kelompok 4**
-#   M e f a s e f a  
- 
+## 📄 License
+
+Proyek ini dilisensikan di bawah [MIT License](LICENSE).
+
+---
+
+<div align="center">
+  <strong>Made with ❤️ by Kelompok 4 — MefaSafe</strong><br>
+  <sub>D3 Teknologi Informasi · Universitas Brawijaya · 2025/2026</sub>
+</div>

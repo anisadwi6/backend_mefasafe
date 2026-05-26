@@ -1,0 +1,223 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Hospital;
+use Illuminate\Database\Seeder;
+
+class HospitalSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $hospitals = [
+            // ── Malang ──────────────────────────────────────────────────
+            [
+                'name'       => 'RSUD Dr. Saiful Anwar Malang',
+                'address'    => 'Jl. Jaksa Agung Suprapto No.2, Klojen',
+                'city'       => 'Malang',
+                'province'   => 'Jawa Timur',
+                'phone'      => '0341-362101',
+                'email'      => 'info@rssa.malangkota.go.id',
+                'latitude'   => -7.9666,
+                'longitude'  => 112.6326,
+                'type'       => 'umum',
+                'facilities' => 'IGD 24 Jam, ICU, NICU, Radiologi, Laboratorium, Farmasi, Poli Spesialis',
+                'is_partner' => true,
+            ],
+            [
+                'name'       => 'RS Lavalette Malang',
+                'address'    => 'Jl. W.R. Supratman No.10, Klojen',
+                'city'       => 'Malang',
+                'province'   => 'Jawa Timur',
+                'phone'      => '0341-362481',
+                'email'      => 'info@rslavalette.co.id',
+                'latitude'   => -7.9731,
+                'longitude'  => 112.6289,
+                'type'       => 'swasta',
+                'facilities' => 'IGD, Rawat Inap, Poli Umum, Poli Spesialis, Laboratorium, Radiologi',
+                'is_partner' => true,
+            ],
+            [
+                'name'       => 'RS Panti Waluya Malang',
+                'address'    => 'Jl. Nusakambangan No.56, Klojen',
+                'city'       => 'Malang',
+                'province'   => 'Jawa Timur',
+                'phone'      => '0341-362017',
+                'email'      => 'info@pantiwaluya.com',
+                'latitude'   => -7.9789,
+                'longitude'  => 112.6201,
+                'type'       => 'swasta',
+                'facilities' => 'IGD, Rawat Inap, Bedah, Kebidanan, Poli Spesialis, Farmasi',
+                'is_partner' => true,
+            ],
+            [
+                'name'       => 'RS Universitas Brawijaya',
+                'address'    => 'Jl. Soekarno Hatta No.2, Lowokwaru',
+                'city'       => 'Malang',
+                'province'   => 'Jawa Timur',
+                'phone'      => '0341-583839',
+                'email'      => 'info@rsubmalang.com',
+                'latitude'   => -7.9425,
+                'longitude'  => 112.6142,
+                'type'       => 'umum',
+                'facilities' => 'IGD 24 Jam, ICU, Rawat Inap, Poli Spesialis, Laboratorium, Radiologi, Farmasi',
+                'is_partner' => true,
+            ],
+            [
+                'name'       => 'Puskesmas Dinoyo Malang',
+                'address'    => 'Jl. MT. Haryono No.167, Lowokwaru',
+                'city'       => 'Malang',
+                'province'   => 'Jawa Timur',
+                'phone'      => '0341-553004',
+                'email'      => null,
+                'latitude'   => -7.9501,
+                'longitude'  => 112.6089,
+                'type'       => 'puskesmas',
+                'facilities' => 'Poli Umum, KIA, Imunisasi, Laboratorium Sederhana, Farmasi',
+                'is_partner' => true,
+            ],
+
+            // ── Surabaya ─────────────────────────────────────────────────
+            [
+                'name'       => 'RSUD Dr. Soetomo Surabaya',
+                'address'    => 'Jl. Mayjen Prof. Dr. Moestopo No.6-8',
+                'city'       => 'Surabaya',
+                'province'   => 'Jawa Timur',
+                'phone'      => '031-5501078',
+                'email'      => 'info@rsdsoetomo.jatimprov.go.id',
+                'latitude'   => -7.2675,
+                'longitude'  => 112.7520,
+                'type'       => 'umum',
+                'facilities' => 'IGD 24 Jam, ICU, ICCU, NICU, Transplantasi, Poli Spesialis Lengkap',
+                'is_partner' => true,
+            ],
+            [
+                'name'       => 'RS Siloam Surabaya',
+                'address'    => 'Jl. Raya Gubeng No.70',
+                'city'       => 'Surabaya',
+                'province'   => 'Jawa Timur',
+                'phone'      => '031-5031333',
+                'email'      => 'info@siloamhospitals.com',
+                'latitude'   => -7.2651,
+                'longitude'  => 112.7508,
+                'type'       => 'swasta',
+                'facilities' => 'IGD, ICU, Rawat Inap, Poli Spesialis, Radiologi, Laboratorium, Farmasi',
+                'is_partner' => true,
+            ],
+            [
+                'name'       => 'RS Premier Surabaya',
+                'address'    => 'Jl. Nginden Intan Barat No.1',
+                'city'       => 'Surabaya',
+                'province'   => 'Jawa Timur',
+                'phone'      => '031-5993211',
+                'email'      => 'info@rspremier.com',
+                'latitude'   => -7.3012,
+                'longitude'  => 112.7789,
+                'type'       => 'swasta',
+                'facilities' => 'IGD, ICU, Rawat Inap, Bedah, Poli Spesialis, Radiologi, Laboratorium',
+                'is_partner' => true,
+            ],
+
+            // ── Jakarta ──────────────────────────────────────────────────
+            [
+                'name'       => 'RSUPN Dr. Cipto Mangunkusumo',
+                'address'    => 'Jl. Diponegoro No.71, Senen',
+                'city'       => 'Jakarta Pusat',
+                'province'   => 'DKI Jakarta',
+                'phone'      => '021-3910600',
+                'email'      => 'info@rscm.co.id',
+                'latitude'   => -6.1944,
+                'longitude'  => 106.8456,
+                'type'       => 'umum',
+                'facilities' => 'IGD 24 Jam, ICU, ICCU, NICU, Transplantasi, Poli Spesialis Lengkap, Radioterapi',
+                'is_partner' => true,
+            ],
+            [
+                'name'       => 'RS Pondok Indah Jakarta',
+                'address'    => 'Jl. Metro Duta Kav. UE, Pondok Indah',
+                'city'       => 'Jakarta Selatan',
+                'province'   => 'DKI Jakarta',
+                'phone'      => '021-7657525',
+                'email'      => 'info@rspondokindah.co.id',
+                'latitude'   => -6.2891,
+                'longitude'  => 106.7892,
+                'type'       => 'swasta',
+                'facilities' => 'IGD, ICU, Rawat Inap, Poli Spesialis, Radiologi, Laboratorium, Farmasi',
+                'is_partner' => true,
+            ],
+            [
+                'name'       => 'RS Siloam Kebon Jeruk Jakarta',
+                'address'    => 'Jl. Perjuangan No.8, Kebon Jeruk',
+                'city'       => 'Jakarta Barat',
+                'province'   => 'DKI Jakarta',
+                'phone'      => '021-5300888',
+                'email'      => 'info@siloamhospitals.com',
+                'latitude'   => -6.1892,
+                'longitude'  => 106.7601,
+                'type'       => 'swasta',
+                'facilities' => 'IGD, ICU, Rawat Inap, Poli Spesialis, Radiologi, Laboratorium',
+                'is_partner' => true,
+            ],
+
+            // ── Bandung ──────────────────────────────────────────────────
+            [
+                'name'       => 'RSUP Dr. Hasan Sadikin Bandung',
+                'address'    => 'Jl. Pasteur No.38',
+                'city'       => 'Bandung',
+                'province'   => 'Jawa Barat',
+                'phone'      => '022-2034953',
+                'email'      => 'info@rshs.or.id',
+                'latitude'   => -6.8912,
+                'longitude'  => 107.6103,
+                'type'       => 'umum',
+                'facilities' => 'IGD 24 Jam, ICU, NICU, Poli Spesialis Lengkap, Radioterapi, Laboratorium',
+                'is_partner' => true,
+            ],
+            [
+                'name'       => 'RS Borromeus Bandung',
+                'address'    => 'Jl. Ir. H. Juanda No.100',
+                'city'       => 'Bandung',
+                'province'   => 'Jawa Barat',
+                'phone'      => '022-2552001',
+                'email'      => 'info@rsborromeus.com',
+                'latitude'   => -6.9012,
+                'longitude'  => 107.6189,
+                'type'       => 'swasta',
+                'facilities' => 'IGD, ICU, Rawat Inap, Bedah, Poli Spesialis, Radiologi, Laboratorium',
+                'is_partner' => true,
+            ],
+
+            // ── Yogyakarta ───────────────────────────────────────────────
+            [
+                'name'       => 'RSUP Dr. Sardjito Yogyakarta',
+                'address'    => 'Jl. Kesehatan No.1, Senolowo',
+                'city'       => 'Yogyakarta',
+                'province'   => 'DI Yogyakarta',
+                'phone'      => '0274-587333',
+                'email'      => 'info@sardjito.co.id',
+                'latitude'   => -7.7689,
+                'longitude'  => 110.3712,
+                'type'       => 'umum',
+                'facilities' => 'IGD 24 Jam, ICU, NICU, Poli Spesialis Lengkap, Radioterapi, Laboratorium',
+                'is_partner' => true,
+            ],
+            [
+                'name'       => 'RS Bethesda Yogyakarta',
+                'address'    => 'Jl. Jend. Sudirman No.70',
+                'city'       => 'Yogyakarta',
+                'province'   => 'DI Yogyakarta',
+                'phone'      => '0274-586688',
+                'email'      => 'info@rsbethesda.com',
+                'latitude'   => -7.7812,
+                'longitude'  => 110.3678,
+                'type'       => 'swasta',
+                'facilities' => 'IGD, ICU, Rawat Inap, Poli Spesialis, Radiologi, Laboratorium, Farmasi',
+                'is_partner' => true,
+            ],
+        ];
+
+        foreach ($hospitals as $data) {
+            Hospital::create($data);
+        }
+    }
+}

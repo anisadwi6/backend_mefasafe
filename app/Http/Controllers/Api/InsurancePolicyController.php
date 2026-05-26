@@ -9,6 +9,31 @@ use Illuminate\Http\Request;
 
 class InsurancePolicyController extends Controller
 {
+    public function myPolicies(Request $request): JsonResponse
+    {
+        $user = \Illuminate\Support\Facades\Auth::user();
+
+        if (!$user) {
+            $userId = $request->query('user_id');
+            if (!$userId) {
+                return response()->json(['message' => 'Unauthenticated.'], 401);
+            }
+            $user = \App\Models\User::find($userId);
+            if (!$user) {
+                return response()->json(['message' => 'User not found.'], 404);
+            }
+        }
+
+        $policies = InsurancePolicy::where('user_id', $user->id)
+            ->orderByDesc('id')
+            ->get();
+
+        return response()->json([
+            'message' => 'User policies retrieved successfully.',
+            'data'    => $policies,
+        ], 200);
+    }
+
     public function index(): JsonResponse
     {
         return response()->json([
@@ -20,26 +45,32 @@ class InsurancePolicyController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'user_id' => ['required', 'exists:users,id'],
-            'policy_number' => ['required', 'string', 'max:255', 'unique:insurance_policies,policy_number'],
+            'user_id'        => ['required', 'exists:users,id'],
+            'policy_number'  => ['required', 'string', 'max:255', 'unique:insurance_policies,policy_number'],
             'insurance_type' => ['required', 'in:jiwa,kesehatan,kendaraan'],
-            'insured_name' => ['required', 'string', 'max:255'],
-            'premium_amount' => ['required', 'numeric', 'min:0', 'regex:/^\d+(\.\d{1,2})?$/'],
-            'status' => ['sometimes', 'in:active,inactive'],
+            'insured_name'   => ['required', 'string', 'max:255'],
+            'premium_amount' => ['required', 'numeric', 'min:0'],
+            'coverage_limit' => ['sometimes', 'numeric', 'min:0'],
+            'start_date'     => ['sometimes', 'nullable', 'date'],
+            'end_date'       => ['sometimes', 'nullable', 'date', 'after_or_equal:start_date'],
+            'status'         => ['sometimes', 'in:active,inactive'],
         ]);
 
         $insurancePolicy = InsurancePolicy::create([
-            'user_id' => $validated['user_id'],
-            'policy_number' => $validated['policy_number'],
+            'user_id'        => $validated['user_id'],
+            'policy_number'  => $validated['policy_number'],
             'insurance_type' => $validated['insurance_type'],
-            'insured_name' => $validated['insured_name'],
+            'insured_name'   => $validated['insured_name'],
             'premium_amount' => $validated['premium_amount'],
-            'status' => $validated['status'] ?? 'active',
+            'coverage_limit' => $validated['coverage_limit'] ?? 100000000,
+            'start_date'     => $validated['start_date'] ?? now()->toDateString(),
+            'end_date'       => $validated['end_date'] ?? now()->addYear()->toDateString(),
+            'status'         => $validated['status'] ?? 'active',
         ]);
 
         return response()->json([
             'message' => 'Insurance policy created successfully.',
-            'data' => $insurancePolicy,
+            'data'    => $insurancePolicy,
         ], 201);
     }
 

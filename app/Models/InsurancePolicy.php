@@ -15,11 +15,17 @@ class InsurancePolicy extends Model
         'insurance_type',
         'insured_name',
         'premium_amount',
+        'coverage_limit',
+        'start_date',
+        'end_date',
         'status',
     ];
 
     protected $casts = [
-        'premium_amount' => 'decimal:2',
+        'premium_amount'  => 'decimal:2',
+        'coverage_limit'  => 'decimal:2',
+        'start_date'      => 'date',
+        'end_date'        => 'date',
     ];
 
     public function user(): BelongsTo

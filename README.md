@@ -342,21 +342,6 @@ http://127.0.0.1:8000/api
 | `GET` | `/chatbot/quick-replies` | Saran pertanyaan chatbot |
 | `GET/PUT` | `/users/{id}` | Profil user & update |
 
----
-
-## 👥 Tim Pengembang
-
-**Kelompok 4 · Kelas T2D**  
-Program Studi D3 Teknologi Informasi, Fakultas Vokasi, Universitas Brawijaya  
-Tahun Akademik 2025/2026
-
-| NIM | Nama | Kontribusi |
-|-----|------|------------|
-| 253140707111009 | Anisa Dwi Ariyanti | Activity Diagram, User Persona, User Flow, Wireframe, Diagram Navigasi |
-| 253140707111011 | Latisha Syifa Pratiwi | Identifikasi User, Normalisasi Database, Relasi Tabel, User Journey Map |
-| 253140707111013 | Nasywa Putri Rachmita | Use Case Diagram, Skenario, Sitemap, Wireframe Low Fidelity |
-
----
 
 ## 📝 Changelog
 

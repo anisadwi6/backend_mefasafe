@@ -55,7 +55,7 @@ export default function Riwayat({ user }) {
     const fetch = async () => {
       try {
         const res = await axios.get(
-          `http://127.0.0.1:8000/api/v1/riwayat?user_id=${user?.id}`,
+          `/api/v1/riwayat?user_id=${user?.id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         if (res.data.success) setItems(res.data.data);
@@ -78,7 +78,7 @@ export default function Riwayat({ user }) {
     setCancelLoading(id);
     try {
       const res = await axios.put(
-        `http://127.0.0.1:8000/api/v1/${endpoint}/${id}`,
+        `/api/v1/${endpoint}/${id}`,
         { status: "canceled" },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -86,7 +86,7 @@ export default function Riwayat({ user }) {
         const msg = res.data.message || "Pendaftaran berhasil dibatalkan.";
         alert(msg);
         const refreshRes = await axios.get(
-          `http://127.0.0.1:8000/api/v1/riwayat?user_id=${user?.id}`,
+          `/api/v1/riwayat?user_id=${user?.id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         if (refreshRes.data.success) setItems(refreshRes.data.data);

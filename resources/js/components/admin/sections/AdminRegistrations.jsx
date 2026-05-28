@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Search, Loader2, Calendar, Activity } from "lucide-react";
 
-const API = "http://127.0.0.1:8000/api/v1/admin";
+const API = "/api/v1/admin";
 const token = () => localStorage.getItem("admin_token");
 
 const STATUS_COLOR = {
@@ -45,12 +45,12 @@ export default function AdminRegistrations() {
                 <button onClick={() => switchTab("hospital")}
                     className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all
                         ${tab === "hospital" ? "bg-blue-600 text-white shadow" : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"}`}>
-                    <Calendar className="w-4 h-4" /> Pendaftaran RS
+                    <Calendar className="w-4 h-4" /> Kunjungan RS
                 </button>
                 <button onClick={() => switchTab("service")}
                     className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all
                         ${tab === "service" ? "bg-blue-600 text-white shadow" : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"}`}>
-                    <Activity className="w-4 h-4" /> Pendaftaran Layanan
+                    <Activity className="w-4 h-4" /> Layanan Kesehatan
                 </button>
             </div>
 

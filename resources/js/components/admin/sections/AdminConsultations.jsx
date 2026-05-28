@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { Search, Loader2, MessageSquare, Send, CheckCircle2, XCircle, Clock, Eye, X, CreditCard, AlertCircle, Download, CheckCheck } from "lucide-react";
 
-const API = "http://127.0.0.1:8000/api/v1/admin";
+const API = "/api/v1/admin";
 const token = () => localStorage.getItem("admin_token");
 
 const STATUS_CFG = {
@@ -232,7 +232,7 @@ export default function AdminConsultations() {
                                 <div className="bg-slate-50 rounded-xl p-3">
                                     <p className="text-sm font-semibold text-slate-600 mb-2">Bukti Pembayaran</p>
                                     {(() => {
-                                        const url = `http://127.0.0.1:8000/storage/${selected.payment_proof_path}`;
+                                        const url = `/storage/${selected.payment_proof_path}`;
                                         const ext = (selected.payment_proof_path || '').split('.').pop()?.toLowerCase();
                                         if (ext === 'jpg' || ext === 'jpeg' || ext === 'png' || ext === 'gif') {
                                             return (

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Profile;
+use App\Models\Referral;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,12 +16,17 @@ class AuthController extends Controller
 {
     public function register(Request $request): JsonResponse
     {
+        if ($request->filled('referral_code')) {
+            $request->merge(['referral_code' => strtoupper($request->input('referral_code'))]);
+        }
+
         $validated = $request->validate([
             'full_name' => ['required', 'string', 'max:255'],
             'birth_info' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:500'],
             'email' => ['required', 'email:rfc,dns', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8'],
+            'referral_code' => ['nullable', 'string', 'exists:users,referral_code'],
             'identity_card' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
             'digital_signature' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
         ]);
@@ -31,6 +37,7 @@ class AuthController extends Controller
                 'email' => $validated['email'],
                 'password' => $validated['password'],
                 'role' => 'pengguna',
+                'referral_code' => $this->makeReferralCode($validated['full_name']),
             ]);
 
             $profileData = [
@@ -49,6 +56,17 @@ class AuthController extends Controller
             }
 
             $user->profile()->create($profileData);
+
+            if (! empty($validated['referral_code'])) {
+                $referrer = User::where('referral_code', strtoupper($validated['referral_code']))->first();
+                if ($referrer && $referrer->id !== $user->id) {
+                    Referral::create([
+                        'referrer_id' => $referrer->id,
+                        'referred_user_id' => $user->id,
+                        'referral_code' => $referrer->referral_code,
+                    ]);
+                }
+            }
 
             return $user->fresh('profile');
         });
@@ -97,5 +115,16 @@ class AuthController extends Controller
         $file->move($directory, $filename);
 
         return $folder . '/' . $filename;
+    }
+
+    private function makeReferralCode(string $name): string
+    {
+        $prefix = strtoupper(Str::slug(substr($name, 0, 4), '')) ?: 'MEFA';
+
+        do {
+            $code = $prefix . random_int(1000, 9999);
+        } while (User::where('referral_code', $code)->exists());
+
+        return $code;
     }
 }

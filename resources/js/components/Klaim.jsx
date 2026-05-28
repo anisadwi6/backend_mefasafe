@@ -31,11 +31,11 @@ export default function Klaim({ user }) {
     try {
       setLoading(true);
       const [claimsRes, policiesRes] = await Promise.all([
-        axios.get(`http://127.0.0.1:8000/api/v1/claims`, {
+        axios.get(`/api/v1/claims`, {
           params: { user_id: user.id },
           headers: { Authorization: `Bearer ${token}` },
         }),
-        axios.get(`http://127.0.0.1:8000/api/v1/my-policies`, {
+        axios.get(`/api/v1/my-policies`, {
           params: { user_id: user.id },
           headers: { Authorization: `Bearer ${token}` },
         })
@@ -81,7 +81,7 @@ export default function Klaim({ user }) {
       data.append("description", formData.description);
       data.append("document", formData.document);
 
-      await axios.post("http://127.0.0.1:8000/api/v1/claims", data, {
+      await axios.post("/api/v1/claims", data, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

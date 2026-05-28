@@ -4,13 +4,21 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\InsurancePolicy;
+use App\Models\DiscountCoupon;
+use App\Models\PromoCode;
 use App\Models\Transaction;
+use App\Services\PromoCodeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class InsurancePolicyController extends Controller
 {
+    public function __construct(private readonly PromoCodeService $promoCodeService)
+    {
+    }
+
     public function myPolicies(Request $request): JsonResponse
     {
         $user = \Illuminate\Support\Facades\Auth::user();
@@ -65,7 +73,11 @@ class InsurancePolicyController extends Controller
             'status' => ['sometimes', 'in:active,inactive'],
             'payment_method' => ['sometimes', 'nullable', 'in:Transfer Bank,GoPay / OVO,Dana / ShopeePay,Alfamart / Indomaret'],
             'payment_proof' => ['sometimes', 'nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:4096'],
+            'discount_code' => ['sometimes', 'nullable', 'string'],
+            'promo_code' => ['sometimes', 'nullable', 'string'],
         ]);
+
+        $promoCodeInput = $validated['promo_code'] ?? $validated['discount_code'] ?? null;
 
         $paymentProofPath = null;
         if ($request->hasFile('payment_proof')) {
@@ -79,12 +91,40 @@ class InsurancePolicyController extends Controller
             $policyStatus = 'inactive';
         }
 
+        $originalPremium = (float) $validated['premium_amount'];
+        $premiumAmount = $originalPremium;
+        $discountAmount = 0;
+        $appliedPromoCode = null;
+        $promoResult = null;
+
+        if (! empty($promoCodeInput)) {
+            try {
+                $promoResult = $this->promoCodeService->validate(
+                    $promoCodeInput,
+                    (int) $validated['user_id'],
+                    PromoCode::FEATURE_INSURANCE,
+                    $originalPremium
+                );
+            } catch (ValidationException $e) {
+                return response()->json([
+                    'message' => collect($e->errors())->flatten()->first() ?? 'Kode promo tidak valid.',
+                ], 422);
+            }
+
+            $premiumAmount = (float) $promoResult['final_amount'];
+            $discountAmount = (float) $promoResult['discount_amount'];
+            $appliedPromoCode = $promoResult['code'];
+        }
+
         $insurancePolicy = InsurancePolicy::create([
             'user_id' => $validated['user_id'],
             'policy_number' => $validated['policy_number'],
             'insurance_type' => $validated['insurance_type'],
             'insured_name' => $validated['insured_name'],
-            'premium_amount' => $validated['premium_amount'],
+            'premium_amount' => $premiumAmount,
+            'original_premium_amount' => $appliedPromoCode ? $originalPremium : null,
+            'discount_amount' => $appliedPromoCode ? $discountAmount : null,
+            'promo_code' => $appliedPromoCode,
             'coverage_limit' => $validated['coverage_limit'] ?? 100000000,
             'start_date' => $validated['start_date'] ?? now()->toDateString(),
             'end_date' => $validated['end_date'] ?? now()->addYear()->toDateString(),
@@ -93,6 +133,25 @@ class InsurancePolicyController extends Controller
             'payment_proof_path' => $paymentProofPath,
             'payment_status' => $paymentStatus,
         ]);
+
+        if ($promoResult) {
+            if ($promoResult['source'] === 'admin') {
+                $this->promoCodeService->recordAdminUsage(
+                    PromoCode::findOrFail($promoResult['source_id']),
+                    (int) $validated['user_id'],
+                    PromoCode::FEATURE_INSURANCE,
+                    $originalPremium,
+                    $discountAmount,
+                    $premiumAmount,
+                    'insurance_policy',
+                    $insurancePolicy->id
+                );
+            } else {
+                $this->promoCodeService->recordReferralUsage(
+                    DiscountCoupon::findOrFail($promoResult['source_id'])
+                );
+            }
+        }
 
         return response()->json([
             'message' => 'Insurance policy created successfully.',

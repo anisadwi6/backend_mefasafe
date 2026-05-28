@@ -16,7 +16,12 @@ import Feedback from "./Feedback";
 import SupportPage from "./SupportPage";
 import TentangKami from "./TentangKami";
 import Monitor from "./Monitor";
+import PromoPage from "./PromoPage";
+import BannerCarousel from "./BannerCarousel";
+import UserTestimonials from "./UserTestimonials";
 import ReminderPopup from "./ReminderPopup";
+import AccessibilityPanel from "./AccessibilityPanel";
+import { useAccessibility } from "./useAccessibility";
 import ChatNotifToast from "./ChatNotifToast";
 import { useChatNotif } from "./useChatNotif";
 import axios from "axios";
@@ -47,6 +52,7 @@ import {
   TrendingDown,
   Sparkles,
   Loader2,
+  Info,
 } from "lucide-react";
 import logo from "../../../assets/logo.png";
 import family from "../../../assets/family.png";
@@ -65,6 +71,9 @@ export default function Home({ user, profile, onLogout }) {
   const [dashboardData, setDashboardData] = useState(null);
   const [dashboardLoading, setDashboardLoading] = useState(true);
   const [reminderBadge, setReminderBadge] = useState(0);
+  const [banners, setBanners] = useState([]);
+  const [showA11yPanel, setShowA11yPanel] = useState(false);
+  const { settings: a11ySettings, update: updateA11y, reset: resetA11y } = useAccessibility();
 
   // ── Chat Notifications ───────────────────────────────────────────────
   const [chatToasts, setChatToasts] = useState([]);
@@ -91,12 +100,35 @@ export default function Home({ user, profile, onLogout }) {
     if (user?.id) fetchDashboardData();
   }, [location.pathname, user?.id]); // re-fetch setiap pindah halaman atau user berubah
 
+  useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        const res = await axios.get("/api/v1/banners/active");
+        setBanners(res.data?.data || []);
+      } catch (error) {
+        console.error("Banners fetch error:", error);
+        setBanners([]);
+      }
+    };
+
+    fetchBanners();
+  }, []);
+
+  const openPromo = (url) => {
+    if (!url) return;
+    if (/^https?:\/\//i.test(url)) {
+      window.open(url, "_blank", "noopener,noreferrer");
+      return;
+    }
+    navigate(url);
+  };
+
   const fetchDashboardData = async () => {
     const userId = user?.id;
     if (!userId) return;
     try {
       const token = localStorage.getItem("mefasafe_token");
-      const res = await axios.get(`http://127.0.0.1:8000/api/v1/home-dashboard?user_id=${userId}`, {
+      const res = await axios.get(`/api/v1/home-dashboard?user_id=${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data.success) setDashboardData(res.data.data);
@@ -116,7 +148,7 @@ export default function Home({ user, profile, onLogout }) {
 
     try {
       const token = localStorage.getItem("mefasafe_token") || localStorage.getItem("token");
-      const res = await axios.get(`http://127.0.0.1:8000/api/v1/reminders/today`, {
+      const res = await axios.get(`/api/v1/reminders/today`, {
         headers: { Authorization: `Bearer ${token}` },
         params: { user_id: userId },
       });
@@ -627,6 +659,9 @@ export default function Home({ user, profile, onLogout }) {
                 ))}
               </div>
 
+              {/* Banner Iklan: Promo + Informasi */}
+              <BannerCarousel banners={banners} onNavigate={openPromo} />
+
               {/* Services Section */}
               <div>
                 <div className="flex items-center justify-between mb-8">
@@ -692,38 +727,9 @@ export default function Home({ user, profile, onLogout }) {
                 </div>
               </div>
 
-              {/* Promo Banner */}
-              <div>
-                <div className="relative group overflow-hidden rounded-3xl">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 animate-gradient-x"></div>
-                  <div className="relative bg-gradient-to-r from-blue-600/95 via-purple-600/95 to-pink-600/95 backdrop-blur-sm p-8 md:p-12">
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                      <div className="text-white max-w-2xl">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 rounded-full text-sm font-semibold mb-4 backdrop-blur-sm">
-                          <Sparkles className="w-4 h-4" />
-                          <span>Promo Spesial</span>
-                        </div>
-                        <h3 className="text-2xl md:text-3xl font-bold mb-3">
-                          Dapatkan Cashback 20% untuk Member Baru!
-                        </h3>
-                        <p className="text-white/90 mb-6">
-                          Ajak keluarga dan teman untuk bergabung. Nikmati perlindungan kesehatan terbaik dengan harga spesial.
-                        </p>
-                        <button className="px-6 py-3 bg-white text-purple-600 rounded-xl font-bold hover:bg-gray-100 hover:scale-105 transition-all duration-300 shadow-xl flex items-center gap-2">
-                          <span>Ajak Sekarang</span>
-                          <ArrowRight className="w-5 h-5" />
-                        </button>
-                      </div>
-                      <div className="hidden md:block">
-                        <div className="w-64 h-64 relative">
-                          <div className="absolute inset-0 bg-white/10 rounded-full blur-3xl animate-pulse-slow"></div>
-                          <img src={family} alt="Family" className="w-full h-full object-contain relative z-10 drop-shadow-2xl" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {/* Testimoni Pengguna */}
+              <UserTestimonials onNavigate={openPromo} />
+
             </div>
           } />
           <Route path="/notifikasi" element={<Notifikasi user={user} />} />
@@ -741,6 +747,7 @@ export default function Home({ user, profile, onLogout }) {
           <Route path="/konsul" element={<Konsultasi user={user} />} />
           <Route path="/feedback" element={<Feedback user={user} />} />
           <Route path="/monitor" element={<Monitor user={user} />} />
+          <Route path="/promo" element={<PromoPage user={user} />} />
           
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
@@ -817,6 +824,8 @@ export default function Home({ user, profile, onLogout }) {
                   { label: "Syarat & Ketentuan", path: "/dukungan/syarat-dan-ketentuan" },
                   { label: "Kebijakan Privasi", path: "/dukungan/kebijakan-privasi" },
                   { label: "FAQ", path: "/dukungan/faq" },
+                  { label: "Peta Situs", path: "/dukungan/peta-situs" },
+                  { label: "Kebijakan Cookie", path: "/dukungan/kebijakan-cookie" },
                 ].map((item) => (
                   <li key={item.label}>
                     <button
@@ -875,9 +884,27 @@ export default function Home({ user, profile, onLogout }) {
               © 2026 MefaSafe Insurance. Seluruh hak cipta dilindungi.
             </p>
             <div className="flex items-center gap-6 text-sm text-gray-400">
-              <button className="hover:text-white transition-colors duration-300">Peta Situs</button>
-              <button className="hover:text-white transition-colors duration-300">Aksesibilitas</button>
-              <button className="hover:text-white transition-colors duration-300">Cookie</button>
+              <button
+                type="button"
+                onClick={() => navigate("/dukungan/peta-situs")}
+                className="hover:text-white transition-colors duration-300"
+              >
+                Peta Situs
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowA11yPanel(true)}
+                className="hover:text-white transition-colors duration-300"
+              >
+                Aksesibilitas
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate("/dukungan/kebijakan-cookie")}
+                className="hover:text-white transition-colors duration-300"
+              >
+                Cookie
+              </button>
             </div>
           </div>
         </div>
@@ -1115,6 +1142,14 @@ export default function Home({ user, profile, onLogout }) {
           onOpen={() => { navigate("/konsul"); clearChatBadge(); }}
         />
       </div>
+
+      <AccessibilityPanel
+        open={showA11yPanel}
+        onClose={() => setShowA11yPanel(false)}
+        settings={a11ySettings}
+        onUpdate={updateA11y}
+        onReset={resetA11y}
+      />
     </div>
   );
 }

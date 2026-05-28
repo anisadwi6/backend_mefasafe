@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Bell, CalendarClock, Clock3, X, ArrowRight } from "lucide-react";
 
-const API = "http://127.0.0.1:8000/api/v1";
+const API = "/api/v1";
 
 export default function ReminderPopup({ userId }) {
   const navigate = useNavigate();

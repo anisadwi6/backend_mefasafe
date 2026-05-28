@@ -4,15 +4,24 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Claim;
+use App\Models\DiscountCoupon;
 use App\Models\DoctorConsultation;
 use App\Models\InsurancePolicy;
+use App\Models\PromoCode;
+use App\Services\PromoCodeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class DoctorConsultationController extends Controller
 {
+    private const CONSULTATION_BASE_PRICE = 75000;
+
+    public function __construct(private readonly PromoCodeService $promoCodeService)
+    {
+    }
     public function index(): JsonResponse
     {
         return response()->json([
@@ -30,10 +39,24 @@ class DoctorConsultationController extends Controller
             'specialist_type'      => ['required', 'string', 'max:255'],
             'consultation_type'    => ['required', 'in:chat,call'],
             'payment_method'       => ['required', 'in:saldo_asuransi,transfer'],
+            'promo_code'           => ['sometimes', 'nullable', 'string', 'max:50'],
             'session_duration_minutes' => ['sometimes', 'integer', 'min:1', 'max:240'],
         ]);
 
-        $consultationPrice = 75000;
+        try {
+            $pricing = $this->resolvePricing(
+                $validated['promo_code'] ?? null,
+                (int) $validated['user_id'],
+                self::CONSULTATION_BASE_PRICE
+            );
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => collect($e->errors())->flatten()->first() ?? 'Kode promo tidak valid.',
+            ], 422);
+        }
+
+        $consultationPrice = $pricing['final_amount'];
 
         // ── Saldo Asuransi ──────────────────────────────────────────────────
         if ($validated['payment_method'] === 'saldo_asuransi') {
@@ -66,7 +89,7 @@ class DoctorConsultationController extends Controller
                 ], 422);
             }
 
-            return DB::transaction(function () use ($validated, $consultationPrice) {
+            return DB::transaction(function () use ($validated, $consultationPrice, $pricing) {
                 $consultation = DoctorConsultation::create([
                     'user_id'                  => $validated['user_id'],
                     'insurance_policy_id'      => $validated['insurance_policy_id'],
@@ -75,11 +98,15 @@ class DoctorConsultationController extends Controller
                     'consultation_type'        => $validated['consultation_type'],
                     'payment_status'           => 'paid',
                     'payment_method'           => 'saldo_asuransi',
+                    'consultation_amount'      => $consultationPrice,
+                    'promo_code'               => $pricing['code'],
+                    'discount_amount'          => $pricing['discount_amount'],
                     'session_duration_minutes' => $validated['session_duration_minutes'] ?? 45,
                     'status'                   => 'waiting_approval',
                 ]);
 
-                // Kurangi saldo asuransi otomatis
+                $this->recordPromoUsage($pricing, (int) $validated['user_id'], $consultation->id);
+
                 Claim::create([
                     'user_id'             => $validated['user_id'],
                     'insurance_policy_id' => $validated['insurance_policy_id'],
@@ -97,7 +124,6 @@ class DoctorConsultationController extends Controller
         }
 
         // ── Transfer Bank ───────────────────────────────────────────────────
-        // Buat konsultasi dengan payment_status pending, tunggu upload bukti
         $consultation = DoctorConsultation::create([
             'user_id'                  => $validated['user_id'],
             'insurance_policy_id'      => null,
@@ -106,9 +132,14 @@ class DoctorConsultationController extends Controller
             'consultation_type'        => $validated['consultation_type'],
             'payment_status'           => 'pending',
             'payment_method'           => 'transfer',
+            'consultation_amount'      => $consultationPrice,
+            'promo_code'               => $pricing['code'],
+            'discount_amount'          => $pricing['discount_amount'],
             'session_duration_minutes' => $validated['session_duration_minutes'] ?? 45,
             'status'                   => 'waiting_approval',
         ]);
+
+        $this->recordPromoUsage($pricing, (int) $validated['user_id'], $consultation->id);
 
         return response()->json([
             'success' => true,
@@ -189,6 +220,55 @@ class DoctorConsultationController extends Controller
         return response()->json([
             'message' => 'Doctor consultation deleted successfully.',
         ], 200);
+    }
+
+    private function resolvePricing(?string $promoCode, int $userId, float $basePrice): array
+    {
+        if (! $promoCode) {
+            return [
+                'code' => null,
+                'source' => null,
+                'source_id' => null,
+                'discount_percent' => 0,
+                'original_amount' => $basePrice,
+                'discount_amount' => 0,
+                'final_amount' => $basePrice,
+            ];
+        }
+
+        return $this->promoCodeService->validate(
+            $promoCode,
+            $userId,
+            PromoCode::FEATURE_CONSULTATION,
+            $basePrice
+        );
+    }
+
+    private function recordPromoUsage(array $pricing, int $userId, int $consultationId): void
+    {
+        if (! $pricing['code']) {
+            return;
+        }
+
+        if ($pricing['source'] === 'admin') {
+            $this->promoCodeService->recordAdminUsage(
+                PromoCode::findOrFail($pricing['source_id']),
+                $userId,
+                PromoCode::FEATURE_CONSULTATION,
+                (float) $pricing['original_amount'],
+                (float) $pricing['discount_amount'],
+                (float) $pricing['final_amount'],
+                'doctor_consultation',
+                $consultationId
+            );
+            return;
+        }
+
+        if ($pricing['source'] === 'referral') {
+            $this->promoCodeService->recordReferralUsage(
+                DiscountCoupon::findOrFail($pricing['source_id'])
+            );
+        }
     }
 
     public function getMessages(string $id): JsonResponse

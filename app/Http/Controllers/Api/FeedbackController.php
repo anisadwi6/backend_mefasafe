@@ -9,6 +9,36 @@ use Illuminate\Http\Request;
 
 class FeedbackController extends Controller
 {
+    public function featured(): JsonResponse
+    {
+        $feedbacks = Feedback::with('user:id,name,profile_picture')
+            ->where('is_featured', true)
+            ->latest()
+            ->limit(12)
+            ->get()
+            ->map(function (Feedback $feedback) {
+                $cta = Feedback::CATEGORY_CTA[$feedback->category] ?? ['label' => 'Pelajari Lebih Lanjut', 'url' => '/home'];
+
+                return [
+                    'id' => $feedback->id,
+                    'content' => $feedback->content,
+                    'rating' => $feedback->rating,
+                    'category' => $feedback->category,
+                    'category_label' => Feedback::CATEGORY_LABELS[$feedback->category] ?? $feedback->category,
+                    'cta_label' => $cta['label'],
+                    'cta_url' => $cta['url'],
+                    'user_name' => $feedback->user?->name ?? 'Pengguna MefaSafe',
+                    'user_avatar' => $feedback->user?->profile_picture,
+                    'created_at' => $feedback->created_at,
+                ];
+            });
+
+        return response()->json([
+            'success' => true,
+            'data' => $feedbacks,
+        ]);
+    }
+
     public function index(): JsonResponse
     {
         return response()->json([

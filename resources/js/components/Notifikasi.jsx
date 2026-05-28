@@ -39,7 +39,7 @@ function Notification({ user }) {
   const fetchNotifications = async () => {
     try {
       const token = localStorage.getItem("mefasafe_token") || localStorage.getItem("token");
-      const response = await axios.get("http://127.0.0.1:8000/api/v1/notifications", {
+      const response = await axios.get("/api/v1/notifications", {
         params: { user_id: user?.id },
         headers: {
           Authorization: `Bearer ${token}`,
@@ -58,7 +58,7 @@ function Notification({ user }) {
   const fetchSummary = async () => {
     try {
       const token = localStorage.getItem("mefasafe_token") || localStorage.getItem("token");
-      const response = await axios.get("http://127.0.0.1:8000/api/v1/notifications/summary", {
+      const response = await axios.get("/api/v1/notifications/summary", {
         params: { user_id: user?.id },
         headers: {
           Authorization: `Bearer ${token}`,

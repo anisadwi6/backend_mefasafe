@@ -4,15 +4,23 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Claim;
+use App\Models\DiscountCoupon;
+use App\Models\HealthService;
 use App\Models\InsurancePolicy;
+use App\Models\PromoCode;
 use App\Models\ServiceRegistration;
+use App\Services\PromoCodeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Validation\ValidationException;
 
 class ServiceRegistrationController extends Controller
 {
+    public function __construct(private readonly PromoCodeService $promoCodeService)
+    {
+    }
     public function index(Request $request): JsonResponse
     {
         $userId = $request->query('user_id');
@@ -40,12 +48,40 @@ class ServiceRegistrationController extends Controller
             'service_name'        => ['required', 'string', 'max:255'],
             'schedule_date'       => ['required', 'date'],
             'schedule_time'       => ['required', 'string', 'max:100'],
-            'price'               => ['required', 'numeric', 'min:0'],
+            'price'               => ['sometimes', 'numeric', 'min:0'],
+            'promo_code'          => ['sometimes', 'nullable', 'string', 'max:50'],
             'queue_number'        => ['required', 'string', 'max:100'],
             'barcode_data'        => ['required', 'string', 'max:255'],
             'notes'               => ['nullable', 'string', 'max:1000'],
             'status'              => ['sometimes', 'in:registered,completed,canceled'],
         ]);
+
+        $healthService = HealthService::findOrFail($validated['health_service_id']);
+        $originalPrice = (float) $healthService->price;
+        $finalPrice = $originalPrice;
+        $discountAmount = 0;
+        $appliedPromoCode = null;
+        $promoResult = null;
+
+        if (! empty($validated['promo_code'])) {
+            try {
+                $promoResult = $this->promoCodeService->validate(
+                    $validated['promo_code'],
+                    (int) $validated['user_id'],
+                    PromoCode::FEATURE_SERVICE,
+                    $originalPrice
+                );
+            } catch (ValidationException $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => collect($e->errors())->flatten()->first() ?? 'Kode promo tidak valid.',
+                ], 422);
+            }
+
+            $finalPrice = (float) $promoResult['final_amount'];
+            $discountAmount = (float) $promoResult['discount_amount'];
+            $appliedPromoCode = $promoResult['code'];
+        }
 
         // Kalau pakai asuransi, validasi saldo mencukupi
         if (!empty($validated['insurance_policy_id'])) {
@@ -64,7 +100,7 @@ class ServiceRegistrationController extends Controller
 
             $remainingBalance = (float) $policy->coverage_limit - (float) $usedAmount;
 
-            if ($validated['price'] > $remainingBalance) {
+            if ($finalPrice > $remainingBalance) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Saldo asuransi tidak mencukupi. Sisa saldo: Rp ' . number_format($remainingBalance, 0, ',', '.'),
@@ -72,7 +108,7 @@ class ServiceRegistrationController extends Controller
             }
         }
 
-        return DB::transaction(function () use ($validated) {
+        return DB::transaction(function () use ($validated, $originalPrice, $finalPrice, $discountAmount, $appliedPromoCode, $promoResult) {
             $serviceRegistration = ServiceRegistration::create([
                 'user_id'             => $validated['user_id'],
                 'hospital_id'         => $validated['hospital_id'] ?? null,
@@ -82,19 +118,41 @@ class ServiceRegistrationController extends Controller
                 'service_name'        => $validated['service_name'],
                 'schedule_date'       => $validated['schedule_date'],
                 'schedule_time'       => $validated['schedule_time'],
-                'price'               => $validated['price'],
+                'price'               => $finalPrice,
+                'original_price'      => $appliedPromoCode ? $originalPrice : null,
+                'discount_amount'     => $appliedPromoCode ? $discountAmount : null,
+                'promo_code'          => $appliedPromoCode,
                 'queue_number'        => $validated['queue_number'],
                 'barcode_data'        => $validated['barcode_data'],
                 'notes'               => $validated['notes'] ?? null,
                 'status'              => $validated['status'] ?? 'registered',
             ]);
 
+            if ($promoResult) {
+                if ($promoResult['source'] === 'admin') {
+                    $this->promoCodeService->recordAdminUsage(
+                        PromoCode::findOrFail($promoResult['source_id']),
+                        (int) $validated['user_id'],
+                        PromoCode::FEATURE_SERVICE,
+                        $originalPrice,
+                        $discountAmount,
+                        $finalPrice,
+                        'service_registration',
+                        $serviceRegistration->id
+                    );
+                } else {
+                    $this->promoCodeService->recordReferralUsage(
+                        DiscountCoupon::findOrFail($promoResult['source_id'])
+                    );
+                }
+            }
+
             // Otomatis buat klaim & kurangi saldo asuransi
             if (!empty($validated['insurance_policy_id'])) {
                 Claim::create([
                     'user_id'             => $validated['user_id'],
                     'insurance_policy_id' => $validated['insurance_policy_id'],
-                    'claim_amount'        => $validated['price'],
+                    'claim_amount'        => $finalPrice,
                     'description'         => 'Klaim otomatis: ' . $validated['service_name'] . ' — ' . $validated['schedule_date'],
                     'status'              => 'approved',
                 ]);

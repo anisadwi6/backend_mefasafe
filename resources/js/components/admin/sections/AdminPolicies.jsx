@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Search, Loader2, CheckCircle2, XCircle, Clock, Shield, Eye } from "lucide-react";
 
-const API = "http://127.0.0.1:8000/api/v1/admin";
+const API = "/api/v1/admin";
 const token = () => localStorage.getItem("admin_token");
 const fmt = (n) => "Rp " + Number(n || 0).toLocaleString("id-ID");
 
@@ -87,7 +87,7 @@ export default function AdminPolicies() {
                             {detail.payment_proof_path && (
                                 <div>
                                     <span className="text-slate-500">Bukti Bayar: </span>
-                                    <a href={`http://127.0.0.1:8000/${detail.payment_proof_path}`} target="_blank" rel="noreferrer"
+                                    <a href={`/${detail.payment_proof_path}`} target="_blank" rel="noreferrer"
                                         className="text-blue-600 underline">Lihat Bukti</a>
                                 </div>
                             )}

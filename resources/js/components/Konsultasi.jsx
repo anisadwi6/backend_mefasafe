@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import axios from "axios";
+import PromoCodeInput from "./PromoCodeInput";
 import { 
     Stethoscope, Calendar, Clock, Video, MessageSquare, 
     ChevronLeft, Send, Search, Star, Shield, AlertCircle, 
@@ -46,6 +47,8 @@ export default function Konsultasi({ user }) {
     const [proofFile, setProofFile] = useState(null);
     const [uploadLoading, setUploadLoading] = useState(false);
     const [copiedNorek, setCopiedNorek] = useState(null);
+    const [promoCode, setPromoCode] = useState("");
+    const [appliedPromo, setAppliedPromo] = useState(null);
 
     // ── Insurance policy state ───────────────────────────────────────────
     const [userPolicy, setUserPolicy] = useState(null);
@@ -158,7 +161,11 @@ export default function Konsultasi({ user }) {
         setBookingError("");
         setPendingConsultId(null);
         setProofFile(null);
+        setPromoCode("");
+        setAppliedPromo(null);
     };
+
+    const consultationPayAmount = appliedPromo?.final_amount ?? CONSULTATION_PRICE;
 
     const handleSelectType = (type) => {
         setBookingType(type);
@@ -190,6 +197,11 @@ export default function Konsultasi({ user }) {
             if (paymentMethod === "saldo_asuransi" && userPolicy) {
                 payload.insurance_policy_id = userPolicy.id;
             }
+            if (appliedPromo?.code) {
+                payload.promo_code = appliedPromo.code;
+            } else if (promoCode.trim()) {
+                payload.promo_code = promoCode.trim().toUpperCase();
+            }
 
             const res = await axios.post(`/api/v1/doctor-consultations`, payload, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -204,7 +216,7 @@ export default function Konsultasi({ user }) {
                 } else {
                     // Saldo asuransi — langsung selesai
                     if (userPolicy) {
-                        setPolicyBalance(prev => prev !== null ? prev - CONSULTATION_PRICE : null);
+                        setPolicyBalance(prev => prev !== null ? prev - consultationPayAmount : null);
                     }
                     setSelectedDoctor(null);
                     setBookingStep(1);
@@ -783,11 +795,27 @@ export default function Konsultasi({ user }) {
                                                 <span className="font-semibold text-gray-800">{val}</span>
                                             </div>
                                         ))}
+                                        {appliedPromo && (
+                                            <div className="flex justify-between items-center px-4 py-3 text-sm">
+                                                <span className="text-gray-500">Diskon ({appliedPromo.discount_percent}%)</span>
+                                                <span className="font-semibold text-emerald-600">- {formatRupiah(appliedPromo.discount_amount)}</span>
+                                            </div>
+                                        )}
                                         <div className="flex justify-between items-center px-4 py-3">
                                             <span className="font-bold text-gray-900">Total Bayar</span>
-                                            <span className="font-black text-purple-600 text-lg">{formatRupiah(CONSULTATION_PRICE)}</span>
+                                            <span className="font-black text-purple-600 text-lg">{formatRupiah(consultationPayAmount)}</span>
                                         </div>
                                     </div>
+
+                                    <PromoCodeInput
+                                        userId={user?.id}
+                                        feature="consultation"
+                                        amount={CONSULTATION_PRICE}
+                                        value={promoCode}
+                                        onChange={setPromoCode}
+                                        onApplied={setAppliedPromo}
+                                        label="Kode Promo (opsional)"
+                                    />
 
                                     {/* Error */}
                                     {bookingError && (
@@ -824,15 +852,15 @@ export default function Konsultasi({ user }) {
                                                             {policyBalance !== null && (
                                                                 <p className="text-xs">
                                                                     Saldo:{" "}
-                                                                    <span className={`font-bold ${policyBalance < CONSULTATION_PRICE ? "text-red-500" : "text-emerald-600"}`}>
+                                                                    <span className={`font-bold ${policyBalance < consultationPayAmount ? "text-red-500" : "text-emerald-600"}`}>
                                                                         {formatRupiah(policyBalance)}
                                                                     </span>
-                                                                    {paymentMethod === "saldo_asuransi" && policyBalance >= CONSULTATION_PRICE && (
-                                                                        <span className="text-gray-400"> → {formatRupiah(policyBalance - CONSULTATION_PRICE)}</span>
+                                                                    {paymentMethod === "saldo_asuransi" && policyBalance >= consultationPayAmount && (
+                                                                        <span className="text-gray-400"> → {formatRupiah(policyBalance - consultationPayAmount)}</span>
                                                                     )}
                                                                 </p>
                                                             )}
-                                                            {policyBalance !== null && policyBalance < CONSULTATION_PRICE && (
+                                                            {policyBalance !== null && policyBalance < consultationPayAmount && (
                                                                 <p className="text-xs text-red-500 font-medium">Saldo tidak mencukupi</p>
                                                             )}
                                                         </div>
@@ -871,7 +899,7 @@ export default function Konsultasi({ user }) {
                                         Batal
                                     </button>
                                     <button onClick={bookConsultation}
-                                        disabled={!paymentMethod || bookingLoading || (paymentMethod === "saldo_asuransi" && (!userPolicy || policyBalance < CONSULTATION_PRICE))}
+                                        disabled={!paymentMethod || bookingLoading || (paymentMethod === "saldo_asuransi" && (!userPolicy || policyBalance < consultationPayAmount))}
                                         className="flex-1 py-3 font-bold text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
                                         {bookingLoading ? (
                                             <><Loader2 className="w-4 h-4 animate-spin" /> Memproses...</>
@@ -897,7 +925,7 @@ export default function Konsultasi({ user }) {
                                     {/* Nominal */}
                                     <div className="rounded-2xl bg-purple-50 border border-purple-200 p-4 text-center">
                                         <p className="text-xs text-purple-600 font-semibold uppercase tracking-wide mb-1">Nominal Transfer</p>
-                                        <p className="text-3xl font-black text-purple-700">{formatRupiah(CONSULTATION_PRICE)}</p>
+                                        <p className="text-3xl font-black text-purple-700">{formatRupiah(consultationPayAmount)}</p>
                                         <p className="text-xs text-purple-500 mt-1">Pastikan nominal tepat agar verifikasi lebih cepat</p>
                                     </div>
 

@@ -46,7 +46,7 @@ function ChatBot() {
   const fetchQuickReplies = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://127.0.0.1:8000/api/v1/chatbot/quick-replies", {
+      const response = await axios.get("/api/v1/chatbot/quick-replies", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -81,7 +81,7 @@ function ChatBot() {
       // Call backend API with Gemini
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/v1/chatbot/chat",
+        "/api/v1/chatbot/chat",
         {
           message: messageText,
           conversation_history: messages.slice(-10), // Send last 10 messages for context

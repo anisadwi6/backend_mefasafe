@@ -22,7 +22,23 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'referral_code',
     ];
+
+    public function referralsMade(): HasMany
+    {
+        return $this->hasMany(Referral::class, 'referrer_id');
+    }
+
+    public function referralReceived(): HasOne
+    {
+        return $this->hasOne(Referral::class, 'referred_user_id');
+    }
+
+    public function discountCoupons(): HasMany
+    {
+        return $this->hasMany(DiscountCoupon::class);
+    }
 
     protected $hidden = [
         'password',

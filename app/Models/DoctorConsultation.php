@@ -16,11 +16,16 @@ class DoctorConsultation extends Model
         'payment_status',
         'payment_method',
         'payment_proof_path',
+        'consultation_amount',
+        'promo_code',
+        'discount_amount',
         'session_duration_minutes',
         'status',
     ];
 
     protected $casts = [
+        'consultation_amount' => 'decimal:2',
+        'discount_amount' => 'decimal:2',
         'session_duration_minutes' => 'integer',
     ];
 

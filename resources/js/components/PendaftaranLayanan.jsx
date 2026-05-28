@@ -6,6 +6,7 @@ import {
   MapPin, CheckCircle2, Loader2, AlertCircle, ChevronRight,
   BadgeCheck, ArrowLeft, FileText, Sparkles, Phone, Building2
 } from "lucide-react";
+import PromoCodeInput from "./PromoCodeInput";
 
 // Meta konfigurasi tampilan kategori (ikon & gradient)
 const CATEGORY_META = {
@@ -73,6 +74,8 @@ export default function PendaftaranLayanan({ user }) {
   const [scheduleTime, setScheduleTime] = useState("");
   const [notes, setNotes] = useState("");
   const [useInsurance, setUseInsurance] = useState(false);
+  const [promoCode, setPromoCode] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState(null);
 
   // Data master
   const [categories, setCategories] = useState([]);
@@ -88,7 +91,7 @@ export default function PendaftaranLayanan({ user }) {
     const headers = { Authorization: `Bearer ${token}` };
 
     // Fetch Layanan Kesehatan Dinamis
-    axios.get("http://127.0.0.1:8000/api/v1/health-services", { headers })
+    axios.get("/api/v1/health-services", { headers })
       .then((res) => {
         if (res.data.success) {
           const rawServices = res.data.data;
@@ -126,7 +129,7 @@ export default function PendaftaranLayanan({ user }) {
       .finally(() => setLoadingServices(false));
 
     // Fetch Rumah Sakit Mitra
-    axios.get("http://127.0.0.1:8000/api/v1/hospitals", { headers })
+    axios.get("/api/v1/hospitals", { headers })
       .then((res) => {
         if (res.data.success) {
           setHospitals(res.data.data.filter(h => h.is_active));
@@ -137,14 +140,14 @@ export default function PendaftaranLayanan({ user }) {
 
     // Fetch Polis Asuransi Aktif + Saldo
     if (user?.id) {
-      axios.get(`http://127.0.0.1:8000/api/v1/my-policies?user_id=${user.id}`, { headers })
+      axios.get(`/api/v1/my-policies?user_id=${user.id}`, { headers })
         .then((res) => {
           const active = (res.data.data || []).find((p) => p.status === "active");
           setUserPolicy(active || null);
 
           // Fetch saldo dari monitor
           if (active) {
-            axios.get(`http://127.0.0.1:8000/api/v1/monitor/saldo-summary?user_id=${user.id}`, { headers })
+            axios.get(`/api/v1/monitor/saldo-summary?user_id=${user.id}`, { headers })
               .then((r) => {
                 if (r.data.success) {
                   // Cari saldo berdasarkan tipe polis yang aktif
@@ -186,6 +189,8 @@ export default function PendaftaranLayanan({ user }) {
     setStep(5);
   };
 
+  const payAmount = appliedPromo?.final_amount ?? selectedService?.price ?? 0;
+
   const handleSubmit = async () => {
     setSubmitting(true);
     setError("");
@@ -202,7 +207,8 @@ export default function PendaftaranLayanan({ user }) {
       service_name: selectedService.name,
       schedule_date: scheduleDate,
       schedule_time: scheduleTime,
-      price: selectedService.price,
+      price: payAmount,
+      ...(appliedPromo?.code ? { promo_code: appliedPromo.code } : promoCode.trim() ? { promo_code: promoCode.trim().toUpperCase() } : {}),
       queue_number: queueNum,
       barcode_data: barcodeStr,
       notes: notes,
@@ -211,7 +217,7 @@ export default function PendaftaranLayanan({ user }) {
 
     try {
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/v1/service-registrations",
+        "/api/v1/service-registrations",
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -548,11 +554,35 @@ export default function PendaftaranLayanan({ user }) {
                     <span className="text-slate-600 text-xs italic max-w-[200px] text-right">{notes}</span>
                   </div>
                 )}
+                {appliedPromo && (
+                  <>
+                    <div className="flex justify-between py-2.5 text-sm">
+                      <span className="text-slate-500">Harga Awal</span>
+                      <span className="text-slate-600 line-through">{formatRupiah(selectedService.price)}</span>
+                    </div>
+                    <div className="flex justify-between py-2.5 text-sm">
+                      <span className="text-slate-500">Diskon Promo ({appliedPromo.discount_percent}%)</span>
+                      <span className="font-bold text-emerald-600">- {formatRupiah(appliedPromo.discount_amount)}</span>
+                    </div>
+                  </>
+                )}
                 <div className="flex justify-between py-3 text-base font-black">
                   <span className="text-slate-900">Total Biaya</span>
-                  <span className="text-indigo-600">{formatRupiah(selectedService.price)}</span>
+                  <span className="text-indigo-600">{formatRupiah(payAmount)}</span>
                 </div>
               </div>
+            </div>
+
+            <div className="rounded-2xl bg-white border border-slate-200/60 p-5 shadow-sm">
+              <PromoCodeInput
+                userId={user?.id}
+                feature="service_registration"
+                amount={Number(selectedService.price)}
+                value={promoCode}
+                onChange={setPromoCode}
+                onApplied={setAppliedPromo}
+                label="Kode Promo (opsional)"
+              />
             </div>
 
             {/* Toggles Asuransi */}
@@ -584,8 +614,8 @@ export default function PendaftaranLayanan({ user }) {
                               <span className="text-slate-300">→</span>
                               <span className="text-xs text-slate-500">
                                 Setelah digunakan:{" "}
-                                <span className={`font-bold ${policyBalance - selectedService.price < 0 ? "text-red-500" : "text-blue-600"}`}>
-                                  {formatRupiah(Math.max(0, policyBalance - selectedService.price))}
+                                <span className={`font-bold ${policyBalance - payAmount < 0 ? "text-red-500" : "text-blue-600"}`}>
+                                  {formatRupiah(Math.max(0, policyBalance - payAmount))}
                                 </span>
                               </span>
                             </>
@@ -599,12 +629,12 @@ export default function PendaftaranLayanan({ user }) {
                   </div>
 
                   {/* Peringatan saldo tidak cukup */}
-                  {useInsurance && selectedService && policyBalance !== null && policyBalance < selectedService.price && (
+                  {useInsurance && selectedService && policyBalance !== null && policyBalance < payAmount && (
                     <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-700 text-xs px-4 py-3 rounded-xl">
                       <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                       <span>
                         Saldo asuransi tidak mencukupi. Kekurangan:{" "}
-                        <strong>{formatRupiah(selectedService.price - policyBalance)}</strong>.
+                        <strong>{formatRupiah(payAmount - policyBalance)}</strong>.
                         Silakan bayar mandiri atau isi ulang polis.
                       </span>
                     </div>

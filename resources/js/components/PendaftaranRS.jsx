@@ -41,17 +41,17 @@ export default function PendaftaranRS({ user }) {
   useEffect(() => {
     const headers = { Authorization: `Bearer ${token}` };
 
-    axios.get(`http://127.0.0.1:8000/api/v1/hospitals/${id}`, { headers })
+    axios.get(`/api/v1/hospitals/${id}`, { headers })
       .then((r) => { if (r.data.success) setHospital(r.data.data); })
       .catch(() => setError("Rumah sakit tidak ditemukan."))
       .finally(() => setLoadingHospital(false));
 
-    axios.get(`http://127.0.0.1:8000/api/v1/hospitals/${id}/doctors`, { headers })
+    axios.get(`/api/v1/hospitals/${id}/doctors`, { headers })
       .then((r) => { if (r.data.success) setDoctors(r.data.data); })
       .catch(() => setDoctors([]))
       .finally(() => setLoadingDoctors(false));
 
-    axios.get(`http://127.0.0.1:8000/api/v1/my-policies?user_id=${user?.id}`, { headers })
+    axios.get(`/api/v1/my-policies?user_id=${user?.id}`, { headers })
       .then((r) => {
         const active = (r.data.data || []).find((p) => p.status === "active");
         setUserPolicy(active || null);
@@ -76,7 +76,7 @@ export default function PendaftaranRS({ user }) {
     const barcodeData = generateBarcode(id, queueNumber);
     try {
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/v1/hospital-registrations",
+        "/api/v1/hospital-registrations",
         {
           user_id: user?.id,
           hospital_id: parseInt(id),

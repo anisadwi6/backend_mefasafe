@@ -14,7 +14,7 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
-const BASE = "http://127.0.0.1:8000/api/v1";
+const BASE = "/api/v1";
 
 export function useChatNotif({ role, userId, onNewMsg } = {}) {
     const [unreadCount, setUnreadCount] = useState(0);

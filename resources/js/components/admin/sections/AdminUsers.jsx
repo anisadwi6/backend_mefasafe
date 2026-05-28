@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Users, Search, Loader2, Trash2, Edit2, Check, X, Shield, User } from "lucide-react";
 
-const API = "http://127.0.0.1:8000/api/v1/admin";
+const API = "/api/v1/admin";
 const token = () => localStorage.getItem("admin_token");
 
 export default function AdminUsers() {

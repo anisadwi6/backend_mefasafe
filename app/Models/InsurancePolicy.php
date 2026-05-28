@@ -22,10 +22,15 @@ class InsurancePolicy extends Model
         'payment_method',
         'payment_proof_path',
         'payment_status',
+        'promo_code',
+        'original_premium_amount',
+        'discount_amount',
     ];
 
     protected $casts = [
         'premium_amount'  => 'decimal:2',
+        'original_premium_amount' => 'decimal:2',
+        'discount_amount' => 'decimal:2',
         'coverage_limit'  => 'decimal:2',
         'start_date'      => 'date',
         'end_date'        => 'date',

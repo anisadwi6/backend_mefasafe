@@ -17,6 +17,9 @@ class ServiceRegistration extends Model
         'schedule_date',
         'schedule_time',
         'price',
+        'promo_code',
+        'original_price',
+        'discount_amount',
         'queue_number',
         'barcode_data',
         'notes',
@@ -25,7 +28,9 @@ class ServiceRegistration extends Model
 
     protected $casts = [
         'schedule_date' => 'date',
-        'price'         => 'decimal:2',
+        'price'          => 'decimal:2',
+        'original_price' => 'decimal:2',
+        'discount_amount' => 'decimal:2',
     ];
 
     public function user(): BelongsTo

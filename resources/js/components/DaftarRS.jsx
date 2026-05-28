@@ -68,7 +68,7 @@ export default function DaftarRS({ user }) {
     try {
       const params = {};
       if (lat && lng) { params.lat = lat; params.lng = lng; }
-      const res = await axios.get("http://127.0.0.1:8000/api/v1/hospitals", {
+      const res = await axios.get("/api/v1/hospitals", {
         headers: { Authorization: `Bearer ${token}` },
         params,
       });

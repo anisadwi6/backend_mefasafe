@@ -33,14 +33,14 @@ export default function Feedback({ user }) {
         content,
       };
 
-      await axios.post("http://127.0.0.1:8000/api/v1/feedbacks", payload, {
+      await axios.post("/api/v1/feedbacks", payload, {
         headers: {
           Authorization: token ? `Bearer ${token}` : undefined,
           "Content-Type": "application/json",
         },
       });
 
-      setMessage("Terima kasih! Masukan Anda telah dikirim.");
+      setMessage("Terima kasih! Masukan Anda telah dikirim. Admin akan meninjau sebelum ditampilkan di beranda.");
       setContent("");
       setCategory("layanan");
     } catch (err) {

@@ -8,7 +8,7 @@ import {
   Syringe, AlarmClock, X, Loader2, AlertCircle,
 } from "lucide-react";
 
-const API = "http://127.0.0.1:8000/api/v1";
+const API = "/api/v1";
 
 const CATEGORY_META = {
   kontrol: { label: "Kontrol",  icon: Stethoscope, color: "from-blue-500 to-cyan-500",    bg: "bg-blue-50",   text: "text-blue-700",   border: "border-blue-200"   },
@@ -25,13 +25,32 @@ const MONTHS_ID = [
 
 function pad(n) { return String(n).padStart(2, "0"); }
 function toDateStr(d) { return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
+function reminderDateStr(value) {
+  if (!value) return "";
+
+  if (typeof value === "string") {
+    const datePart = value.slice(0, 10);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(datePart)) return datePart;
+  }
+
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "" : toDateStr(date);
+}
+
+function parseReminderDate(value) {
+  const dateStr = reminderDateStr(value);
+  if (!dateStr) return null;
+
+  const date = new Date(`${dateStr}T00:00:00`);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
 
 /* ─── Modal Tambah / Edit ─────────────────────────────────────────── */
 function ReminderModal({ initial, onClose, onSave, userId }) {
   const [form, setForm] = useState({
     title:         initial?.title         ?? "",
     description:   initial?.description   ?? "",
-    reminder_date: initial?.reminder_date ? initial.reminder_date.slice(0,10) : toDateStr(new Date()),
+    reminder_date: reminderDateStr(initial?.reminder_date) || toDateStr(new Date()),
     reminder_time: initial?.reminder_time ? initial.reminder_time.slice(0,5)  : "",
     category:      initial?.category      ?? "kontrol",
     repeat:        initial?.repeat        ?? "none",
@@ -197,7 +216,8 @@ export default function KalenderPengingat({ user }) {
   /* reminder per tanggal (map dateStr → array) */
   const reminderMap = {};
   reminders.forEach(r => {
-    const d = r.reminder_date.slice(0, 10);
+    const d = reminderDateStr(r.reminder_date);
+    if (!d) return;
     if (!reminderMap[d]) reminderMap[d] = [];
     reminderMap[d].push(r);
   });
@@ -443,16 +463,21 @@ export default function KalenderPengingat({ user }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               {reminders
                 .filter(r => !r.is_done)
-                .sort((a, b) => a.reminder_date.localeCompare(b.reminder_date))
+                .sort((a, b) => reminderDateStr(a.reminder_date).localeCompare(reminderDateStr(b.reminder_date)))
                 .map(r => {
                   const meta = CATEGORY_META[r.category] ?? CATEGORY_META.lainnya;
                   const Icon = meta.icon;
-                  const rDate = new Date(r.reminder_date + "T00:00:00");
-                  const isRToday = toDateStr(rDate) === toDateStr(today);
-                  const isPast  = rDate < today && !isRToday;
+                  const rDateStr = reminderDateStr(r.reminder_date);
+                  const rDate = parseReminderDate(r.reminder_date);
+                  const isRToday = rDate ? toDateStr(rDate) === toDateStr(today) : false;
+                  const isPast  = rDate ? rDate < today && !isRToday : false;
                   return (
                     <button key={r.id}
-                      onClick={() => { setSelected(r.reminder_date.slice(0,10)); setViewDate(new Date(rDate.getFullYear(), rDate.getMonth(), 1)); }}
+                      onClick={() => {
+                        if (!rDate || !rDateStr) return;
+                        setSelected(rDateStr);
+                        setViewDate(new Date(rDate.getFullYear(), rDate.getMonth(), 1));
+                      }}
                       className={`text-left rounded-2xl border p-3.5 transition-all hover:-translate-y-0.5 hover:shadow-md ${
                         isPast ? "bg-gray-50 border-gray-100 opacity-60" :
                         isRToday ? `${meta.bg} ${meta.border} ring-2 ring-orange-400` :
@@ -471,7 +496,7 @@ export default function KalenderPengingat({ user }) {
                       </div>
                       <p className="text-sm font-bold text-gray-900 truncate">{r.title}</p>
                       <p className="text-xs text-gray-500 mt-0.5">
-                        {rDate.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })}
+                        {rDate ? rDate.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }) : "Tanggal belum valid"}
                         {r.reminder_time ? ` • ${r.reminder_time.slice(0,5)}` : ""}
                       </p>
                     </button>

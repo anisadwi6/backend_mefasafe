@@ -14,7 +14,7 @@ export default function AdminLogin({ onLogin }) {
         setError("");
         setLoading(true);
         try {
-            const res = await axios.post("http://127.0.0.1:8000/api/login", { email, password });
+            const res = await axios.post("/api/login", { email, password });
             const { token, user } = res.data;
             if (user.role !== "admin") {
                 setError("Akses ditolak. Akun ini bukan admin.");

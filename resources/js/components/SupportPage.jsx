@@ -1,4 +1,5 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { ChevronRight } from "lucide-react";
 
 const pages = {
   "pusat-bantuan": {
@@ -85,16 +86,97 @@ const pages = {
       },
     ],
   },
+  "peta-situs": {
+    title: "Peta Situs",
+    intro: "Peta situs membantu Anda menemukan semua halaman dan fitur utama di MefaSafe dengan cepat. Klik menu di bawah untuk langsung menuju ke halaman yang diinginkan.",
+    sitemap: [
+      {
+        group: "Utama",
+        links: [
+          { label: "Beranda / Dashboard", path: "/home" },
+          { label: "Profil Saya", path: "/Profil" },
+          { label: "Notifikasi", path: "/notifikasi" },
+          { label: "Tentang Kami", path: "/tentang" },
+        ],
+      },
+      {
+        group: "Asuransi & Klaim",
+        links: [
+          { label: "Paket & Polis Asuransi", path: "/asuransi" },
+          { label: "Beli Polis (Health Service)", path: "/health-service" },
+          { label: "Ajukan Klaim", path: "/klaim" },
+          { label: "Monitor Saldo Polis", path: "/monitor" },
+        ],
+      },
+      {
+        group: "Layanan Kesehatan",
+        links: [
+          { label: "Daftar Rumah Sakit", path: "/daftarRS" },
+          { label: "Pendaftaran Layanan", path: "/pendaftaran-layanan" },
+          { label: "Konsultasi Dokter", path: "/konsul" },
+          { label: "Kalender Pengingat", path: "/kalender" },
+        ],
+      },
+      {
+        group: "Promo & Lainnya",
+        links: [
+          { label: "Program Promo & Referral", path: "/promo" },
+          { label: "Riwayat Aktivitas", path: "/riwayat" },
+          { label: "Feedback", path: "/feedback" },
+          { label: "ChatBot MefaBot", path: "/chatbot" },
+        ],
+      },
+      {
+        group: "Dukungan & Kebijakan",
+        links: [
+          { label: "Pusat Bantuan", path: "/dukungan/pusat-bantuan" },
+          { label: "FAQ", path: "/dukungan/faq" },
+          { label: "Syarat & Ketentuan", path: "/dukungan/syarat-dan-ketentuan" },
+          { label: "Kebijakan Privasi", path: "/dukungan/kebijakan-privasi" },
+          { label: "Kebijakan Cookie", path: "/dukungan/kebijakan-cookie" },
+        ],
+      },
+    ],
+  },
+  "kebijakan-cookie": {
+    title: "Kebijakan Cookie",
+    intro: "MefaSafe menggunakan cookie dan penyimpanan lokal (local storage) untuk meningkatkan pengalaman Anda, menjaga sesi login, dan menyimpan preferensi seperti pengaturan aksesibilitas.",
+    sections: [
+      {
+        heading: "Apa itu Cookie?",
+        body: "Cookie adalah file kecil yang disimpan di browser Anda saat mengunjungi situs web. Cookie membantu situs mengingat informasi seperti status login dan preferensi tampilan.",
+      },
+      {
+        heading: "Cookie yang Kami Gunakan",
+        body: "Cookie esensial untuk autentikasi (token login), cookie preferensi (pengaturan aksesibilitas), serta data sesi sementara agar navigasi antar halaman berjalan lancar.",
+      },
+      {
+        heading: "Penyimpanan Lokal (Local Storage)",
+        body: "Selain cookie, MefaSafe menyimpan beberapa data di local storage perangkat Anda, seperti token autentikasi, pengaturan aksesibilitas, dan preferensi tampilan. Data ini tidak dibagikan ke pihak ketiga.",
+      },
+      {
+        heading: "Mengelola Cookie",
+        body: "Anda dapat menghapus cookie melalui pengaturan browser. Namun, menghapus cookie esensial dapat membuat Anda harus login ulang dan preferensi tampilan kembali ke default.",
+      },
+      {
+        heading: "Persetujuan",
+        body: "Dengan terus menggunakan MefaSafe, Anda menyetujui penggunaan cookie sesuai kebijakan ini. Jika ada pertanyaan, hubungi bantuan@mefasafe.com.",
+      },
+    ],
+  },
 };
 
 export default function SupportPage() {
   const { page } = useParams();
+  const navigate = useNavigate();
   const content = pages[page] || pages["pusat-bantuan"];
 
   const allPages = [
     { label: "Pusat Bantuan", slug: "pusat-bantuan" },
     { label: "Syarat & Ketentuan", slug: "syarat-dan-ketentuan" },
     { label: "Kebijakan Privasi", slug: "kebijakan-privasi" },
+    { label: "Kebijakan Cookie", slug: "kebijakan-cookie" },
+    { label: "Peta Situs", slug: "peta-situs" },
     { label: "FAQ", slug: "faq" },
   ];
 
@@ -134,6 +216,30 @@ export default function SupportPage() {
                     </div>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {content.sitemap && (
+              <div className="space-y-4">
+                {content.sitemap.map((group) => (
+                  <div key={group.group} className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+                    <h2 className="text-lg font-bold text-slate-900">{group.group}</h2>
+                    <ul className="mt-4 space-y-2">
+                      {group.links.map((link) => (
+                        <li key={link.path}>
+                          <button
+                            type="button"
+                            onClick={() => navigate(link.path)}
+                            className="flex w-full items-center justify-between rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-left text-sm font-medium text-slate-700 transition hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-800"
+                          >
+                            {link.label}
+                            <ChevronRight className="h-4 w-4 shrink-0 text-slate-400" />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
             )}
           </div>

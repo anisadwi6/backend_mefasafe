@@ -58,15 +58,15 @@ export default function Monitor({ user }) {
       setError("");
       try {
         const [summaryRes, chartRes, historyRes] = await Promise.all([
-          axios.get("http://127.0.0.1:8000/api/v1/monitor/saldo-summary", {
+          axios.get("/api/v1/monitor/saldo-summary", {
             headers: { Authorization: `Bearer ${token}` },
             params: { user_id: user?.id },
           }),
-          axios.get("http://127.0.0.1:8000/api/v1/monitor/saldo-chart", {
+          axios.get("/api/v1/monitor/saldo-chart", {
             headers: { Authorization: `Bearer ${token}` },
             params: { user_id: user?.id },
           }),
-          axios.get("http://127.0.0.1:8000/api/v1/monitor/claims-history", {
+          axios.get("/api/v1/monitor/claims-history", {
             headers: { Authorization: `Bearer ${token}` },
             params: { user_id: user?.id },
           }),

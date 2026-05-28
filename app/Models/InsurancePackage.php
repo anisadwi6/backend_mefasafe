@@ -13,11 +13,13 @@ class InsurancePackage extends Model
         'coverage_limit',
         'premium_amount',
         'benefits',
+        'is_active',
     ];
 
     protected $casts = [
         'coverage_limit' => 'decimal:2',
         'premium_amount' => 'decimal:2',
         'benefits' => 'array',
+        'is_active' => 'boolean',
     ];
 }

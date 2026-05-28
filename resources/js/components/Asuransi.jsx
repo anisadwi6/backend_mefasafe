@@ -27,7 +27,7 @@ export default function Asuransi({ user }) {
     const fetchPolicies = async () => {
       setLoading(true);
       try {
-        const res = await axios.get("http://127.0.0.1:8000/api/v1/my-policies", {
+        const res = await axios.get("/api/v1/my-policies", {
           headers: { Authorization: `Bearer ${token}` },
           params: { user_id: user?.id },
         });

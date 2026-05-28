@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import PromoCodeInput from "./PromoCodeInput";
 import {
   Shield,
   Heart,
@@ -105,6 +106,8 @@ export default function HealthService({ user }) {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [paymentProof, setPaymentProof] = useState(null);
   const [paymentProofName, setPaymentProofName] = useState("");
+  const [discountCode, setDiscountCode] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState(null);
 
   const [form, setForm] = useState({
     insured_name: user?.name || "",
@@ -118,7 +121,7 @@ export default function HealthService({ user }) {
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const res = await axios.get("http://127.0.0.1:8000/api/v1/insurance-packages", {
+        const res = await axios.get("/api/v1/insurance-packages", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPackages(res.data.data || []);
@@ -135,7 +138,7 @@ export default function HealthService({ user }) {
   useEffect(() => {
     const fetchPolicies = async () => {
       try {
-        const res = await axios.get("http://127.0.0.1:8000/api/v1/my-policies", {
+        const res = await axios.get("/api/v1/my-policies", {
           headers: { Authorization: `Bearer ${token}` },
           params: { user_id: user?.id },
         });
@@ -219,8 +222,13 @@ export default function HealthService({ user }) {
       formData.append("status", "inactive");
       formData.append("payment_method", paymentMethod);
       formData.append("payment_proof", paymentProof);
+      if (appliedPromo?.code) {
+        formData.append("promo_code", appliedPromo.code);
+      } else if (discountCode.trim()) {
+        formData.append("promo_code", discountCode.trim().toUpperCase());
+      }
 
-      const res = await axios.post("http://127.0.0.1:8000/api/v1/insurance-policies", formData, {
+      const res = await axios.post("/api/v1/insurance-policies", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -433,7 +441,12 @@ export default function HealthService({ user }) {
                   { label: "Berlaku Mulai", value: form.start_date },
                   { label: "Berlaku Hingga", value: form.end_date },
                   { label: "Coverage Limit", value: formatRupiah(selectedPolis.coverage_limit) },
-                  { label: "Premi / Bulan", value: formatRupiah(selectedPolis.premium_amount), highlight: true },
+                  { label: "Premi / Bulan", value: formatRupiah(selectedPolis.premium_amount) },
+                  ...(appliedPromo ? [
+                    { label: "Diskon Promo", value: `- ${formatRupiah(appliedPromo.discount_amount)} (${appliedPromo.discount_percent}%)` },
+                    { label: "Total Bayar", value: formatRupiah(appliedPromo.final_amount), highlight: true },
+                    { label: "Kode Promo", value: appliedPromo.code },
+                  ] : [{ label: "Total Bayar", value: formatRupiah(selectedPolis.premium_amount), highlight: true }]),
                 ].map(({ label, value, highlight }) => (
                   <div key={label} className="flex justify-between items-center px-4 py-3">
                     <span className="text-sm text-slate-500">{label}</span>
@@ -464,6 +477,16 @@ export default function HealthService({ user }) {
                   ))}
                 </div>
               </div>
+
+              <PromoCodeInput
+                userId={user?.id}
+                feature="insurance"
+                amount={Number(selectedPolis?.premium_amount || 0)}
+                value={discountCode}
+                onChange={setDiscountCode}
+                onApplied={setAppliedPromo}
+                label="Kode Promo (opsional)"
+              />
 
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">Bukti Pembayaran</label>

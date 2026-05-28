@@ -8,6 +8,7 @@ export default function Register({ onAuthSuccess, onSwitchToLogin, onViewAgreeme
         address: '',
         email: '',
         password: '',
+        referral_code: '',
     });
     const [identityCard, setIdentityCard] = React.useState(null);
     const [digitalSignature, setDigitalSignature] = React.useState(null);
@@ -32,6 +33,9 @@ export default function Register({ onAuthSuccess, onSwitchToLogin, onViewAgreeme
         payload.append('address', form.address);
         payload.append('email', form.email);
         payload.append('password', form.password);
+        if (form.referral_code.trim()) {
+            payload.append('referral_code', form.referral_code.trim().toUpperCase());
+        }
 
         if (identityCard) {
             payload.append('identity_card', identityCard);
@@ -216,6 +220,12 @@ export default function Register({ onAuthSuccess, onSwitchToLogin, onViewAgreeme
                             {errors.password?.map((item) => <div key={item} style={{ color: '#dc2626', fontSize: '0.86rem', marginTop: '6px' }}>{item}</div>)}
                         </label>
                     </div>
+
+                    <label style={{ display: 'block', marginTop: '16px' }}>
+                        <span style={labelStyle}>Kode Undangan (opsional)</span>
+                        <input name="referral_code" value={form.referral_code} onChange={handleChange} style={inputStyle} placeholder="Contoh: HANN0001" />
+                        {errors.referral_code?.map((item) => <div key={item} style={{ color: '#dc2626', fontSize: '0.86rem', marginTop: '6px' }}>{item}</div>)}
+                    </label>
 
                     <div style={{ ...gridStyle, marginTop: '16px' }}>
                         <label style={{ display: 'block' }}>

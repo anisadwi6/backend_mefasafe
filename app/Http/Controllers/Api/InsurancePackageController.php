@@ -12,7 +12,7 @@ class InsurancePackageController extends Controller
     {
         return response()->json([
             'message' => 'Insurance packages retrieved successfully.',
-            'data' => InsurancePackage::orderBy('id', 'asc')->get(),
+            'data' => InsurancePackage::where('is_active', true)->orderBy('id', 'asc')->get(),
         ], 200);
     }
 }

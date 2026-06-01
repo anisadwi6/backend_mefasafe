@@ -3,7 +3,7 @@ import axios from "axios";
 import {
     LayoutDashboard, Users, Shield, FileText, CreditCard,
     Hospital, Stethoscope, Star, Calendar,
-    Settings, LogOut, Menu, X, ChevronRight, Bell, Megaphone, Info, Tag
+    Settings, LogOut, Menu, X, ChevronRight, Bell, Tag
 } from "lucide-react";
 import AdminOverview    from "./sections/AdminOverview";
 import AdminUsers       from "./sections/AdminUsers";
@@ -16,8 +16,6 @@ import AdminConsultations from "./sections/AdminConsultations";
 import AdminFeedbacks   from "./sections/AdminFeedbacks";
 import AdminRegistrations from "./sections/AdminRegistrations";
 import AdminPackages    from "./sections/AdminPackages";
-import AdminPromotions  from "./sections/AdminPromotions";
-import AdminAnnouncements from "./sections/AdminAnnouncements";
 import AdminPromoCodes from "./sections/AdminPromoCodes";
 import ChatNotifToast   from "../ChatNotifToast";
 import { useChatNotif } from "../useChatNotif";
@@ -34,8 +32,6 @@ const NAV = [
     { id: "registrations",  label: "Registrasi",         icon: Calendar },
     { id: "feedbacks",      label: "Feedback",           icon: Star },
     { id: "packages",       label: "Paket Asuransi",     icon: Settings },
-    { id: "promotions",     label: "Promo",              icon: Megaphone },
-    { id: "announcements",  label: "Informasi",          icon: Info },
     { id: "promo_codes",    label: "Kode Promo",         icon: Tag },
 ];
 
@@ -104,8 +100,6 @@ export default function AdminDashboard({ admin, onLogout }) {
         registrations: stats?.pending_registrations || 0,
         feedbacks: stats?.total_feedbacks || 0,
         packages: stats?.total_packages || 0,
-        promotions: stats?.active_promotions || stats?.total_promotions || 0,
-        announcements: stats?.active_announcements || stats?.total_announcements || 0,
         promo_codes: stats?.active_promo_codes || stats?.total_promo_codes || 0,
     }), [stats, chatUnread]);
 
@@ -129,8 +123,6 @@ export default function AdminDashboard({ admin, onLogout }) {
         registrations: AdminRegistrations,
         feedbacks:     AdminFeedbacks,
         packages:      AdminPackages,
-        promotions:    AdminPromotions,
-        announcements: AdminAnnouncements,
         promo_codes:   AdminPromoCodes,
     }[active] || AdminOverview;
 

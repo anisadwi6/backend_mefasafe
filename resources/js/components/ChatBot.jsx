@@ -131,11 +131,11 @@ function ChatBot() {
   };
 
   return (
-    <div className="animate-fadeIn" style={{ background: "linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #eef2ff 100%)" }}>
+    <div className="animate-fadeIn relative" style={{ background: "linear-gradient(135deg, #dbeafe 0%, #bae6fd 50%, #e0f2fe 100%)" }}>
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-140px] right-[-80px] h-72 w-72 rounded-full bg-blue-200/40 blur-3xl" />
-        <div className="absolute bottom-[-120px] left-[-60px] h-80 w-80 rounded-full bg-violet-200/40 blur-3xl" />
+        <div className="absolute top-[-140px] right-[-80px] h-72 w-72 rounded-full bg-cyan-200/40 blur-3xl" />
+        <div className="absolute bottom-[-120px] left-[-60px] h-80 w-80 rounded-full bg-sky-200/40 blur-3xl" />
       </div>
 
       <div className="relative max-w-5xl mx-auto px-4 py-6 md:px-8 md:py-8 flex flex-col" style={{ height: "calc(100vh - 73px)" }}>
@@ -143,7 +143,7 @@ function ChatBot() {
         <div className="mb-6">
           <div className="flex items-center gap-4 mb-2">
             <div className="relative">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 via-sky-500 to-blue-600 flex items-center justify-center shadow-lg">
                 <Bot className="w-8 h-8 text-white" />
               </div>
               <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
@@ -159,7 +159,7 @@ function ChatBot() {
         </div>
 
         {/* Chat Container */}
-        <div className="flex-1 rounded-[28px] border border-white/70 bg-white/85 backdrop-blur-xl shadow-[0_30px_80px_-40px_rgba(15,23,42,0.28)] flex flex-col overflow-hidden">
+        <div className="flex-1 rounded-[28px] border border-white/80 bg-white/95 backdrop-blur-xl shadow-[0_30px_80px_-40px_rgba(15,23,42,0.16)] flex flex-col overflow-hidden">
           {/* Messages Area */}
           <div className="flex-1 overflow-y-auto p-6 space-y-4 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
             {messages.map((message) => (
@@ -170,7 +170,7 @@ function ChatBot() {
                 {/* Avatar */}
                 <div className="flex-shrink-0">
                   {message.type === "bot" ? (
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-md">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 via-sky-500 to-blue-600 flex items-center justify-center shadow-md">
                       <Bot className="w-5 h-5 text-white" />
                     </div>
                   ) : (
@@ -185,7 +185,7 @@ function ChatBot() {
                   <div
                     className={`rounded-2xl px-4 py-3 shadow-md ${
                       message.type === "user"
-                        ? "bg-gradient-to-br from-blue-500 to-purple-500 text-white"
+                        ? "bg-gradient-to-br from-cyan-500 via-sky-500 to-blue-600 text-white"
                         : "bg-white border border-slate-100 text-slate-800"
                     }`}
                   >
@@ -202,7 +202,7 @@ function ChatBot() {
             {/* Typing Indicator */}
             {isTyping && (
               <div className="flex gap-3 animate-slide-up">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-md">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 via-sky-500 to-blue-600 flex items-center justify-center shadow-md">
                   <Bot className="w-5 h-5 text-white" />
                 </div>
                 <div className="bg-white border border-slate-100 rounded-2xl px-4 py-3 shadow-md">
@@ -230,7 +230,7 @@ function ChatBot() {
                   <button
                     key={index}
                     onClick={() => handleQuickReply(reply)}
-                    className="px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-full hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:border-blue-200 hover:text-blue-600 transition-all duration-300 shadow-sm hover:shadow-md"
+                    className="px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-full hover:bg-gradient-to-r hover:from-cyan-50 hover:to-sky-50 hover:border-cyan-200 hover:text-cyan-600 transition-all duration-300 shadow-sm hover:shadow-md"
                   >
                     {reply}
                   </button>
@@ -257,7 +257,7 @@ function ChatBot() {
               <button
                 onClick={() => handleSendMessage()}
                 disabled={!inputMessage.trim() || isTyping}
-                className="flex-shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-500 text-white flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-300"
+                className="flex-shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500 via-sky-500 to-blue-600 text-white flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-300"
               >
                 {isTyping ? (
                   <Loader2 className="w-5 h-5 animate-spin" />

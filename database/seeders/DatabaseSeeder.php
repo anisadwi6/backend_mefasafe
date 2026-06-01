@@ -17,10 +17,23 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Test User',
+                'password' => 'password',
+                'role' => 'pengguna',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'admin@mefasafe.com'],
+            [
+                'name' => 'Admin MefaSafe',
+                'password' => 'Admin12345',
+                'role' => 'admin',
+            ]
+        );
 
         $this->call([
             HospitalSeeder::class,

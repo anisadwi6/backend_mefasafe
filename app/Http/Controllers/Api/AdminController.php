@@ -11,9 +11,7 @@ use App\Models\Hospital;
 use App\Models\HospitalRegistration;
 use App\Models\InsurancePackage;
 use App\Models\InsurancePolicy;
-use App\Models\Announcement;
 use App\Models\PromoCode;
-use App\Models\Promotion;
 use App\Models\ServiceRegistration;
 use App\Models\Transaction;
 use App\Models\User;
@@ -73,10 +71,6 @@ class AdminController extends Controller
         $waitingConsultations = DoctorConsultation::where('status', 'waiting_approval')->count();
         $totalFeedbacks     = Feedback::count();
         $totalPackages      = InsurancePackage::count();
-        $totalPromotions    = Promotion::count();
-        $activePromotions   = Promotion::where('is_active', true)->count();
-        $totalAnnouncements = Announcement::count();
-        $activeAnnouncements = Announcement::where('is_active', true)->count();
         $totalPromoCodes     = PromoCode::count();
         $activePromoCodes    = PromoCode::where('is_active', true)->count();
         $pendingRegistrations = HospitalRegistration::where('status', 'registered')->count()
@@ -130,10 +124,6 @@ class AdminController extends Controller
                 'pending_registrations'=> $pendingRegistrations,
                 'total_feedbacks'      => $totalFeedbacks,
                 'total_packages'       => $totalPackages,
-                'total_promotions'     => $totalPromotions,
-                'active_promotions'    => $activePromotions,
-                'total_announcements'  => $totalAnnouncements,
-                'active_announcements' => $activeAnnouncements,
                 'total_promo_codes'    => $totalPromoCodes,
                 'active_promo_codes'   => $activePromoCodes,
                 'avg_rating'           => round($avgRating, 1),
@@ -591,220 +581,7 @@ class AdminController extends Controller
         return response()->json(['success' => true, 'message' => 'Package deleted.']);
     }
 
-    // ─── PROMOTIONS ──────────────────────────────────────────────────────────
 
-    public function promotions(Request $request): JsonResponse
-    {
-        $query = Promotion::query()
-            ->when($request->search, fn($q) => $q->where('title', 'like', "%{$request->search}%")
-                ->orWhere('badge', 'like', "%{$request->search}%"))
-            ->when($request->filled('is_active'), fn($q) => $q->where('is_active', $request->boolean('is_active')))
-            ->orderBy('sort_order')
-            ->latest();
-
-        return response()->json(['success' => true, 'data' => $query->paginate($request->per_page ?? 15)]);
-    }
-
-    public function storePromotion(Request $request): JsonResponse
-    {
-        $validated = $request->validate([
-            'badge'              => ['required', 'string', 'max:255'],
-            'title'              => ['required', 'string', 'max:255'],
-            'description'        => ['required', 'string'],
-            'discount_percent'   => ['required', 'integer', 'min:1', 'max:100'],
-            'required_referrals' => ['required', 'integer', 'min:1', 'max:50'],
-            'button_label'       => ['required', 'string', 'max:255'],
-            'button_url'         => ['required', 'string', 'max:255'],
-            'image_file'         => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
-            'is_active'          => ['sometimes', 'boolean'],
-            'sort_order'         => ['sometimes', 'integer', 'min:0'],
-        ]);
-
-        if ($request->hasFile('image_file')) {
-            $validated['image'] = $this->uploadPromotionImage($request->file('image_file'));
-        }
-
-        unset($validated['image_file']);
-
-        $promotion = Promotion::create($validated);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Promo berhasil ditambahkan.',
-            'data'    => $promotion,
-        ], 201);
-    }
-
-    public function updatePromotion(Request $request, string $id): JsonResponse
-    {
-        $promotion = Promotion::findOrFail($id);
-
-        $validated = $request->validate([
-            'badge'              => ['sometimes', 'string', 'max:255'],
-            'title'              => ['sometimes', 'string', 'max:255'],
-            'description'        => ['sometimes', 'string'],
-            'discount_percent'   => ['sometimes', 'integer', 'min:1', 'max:100'],
-            'required_referrals' => ['sometimes', 'integer', 'min:1', 'max:50'],
-            'button_label'       => ['sometimes', 'string', 'max:255'],
-            'button_url'         => ['sometimes', 'string', 'max:255'],
-            'image_file'         => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
-            'remove_image'       => ['sometimes', 'boolean'],
-            'is_active'          => ['sometimes', 'boolean'],
-            'sort_order'         => ['sometimes', 'integer', 'min:0'],
-        ]);
-
-        if ($request->boolean('remove_image')) {
-            $this->deletePromotionImage($promotion->image);
-            $validated['image'] = null;
-        } elseif ($request->hasFile('image_file')) {
-            $this->deletePromotionImage($promotion->image);
-            $validated['image'] = $this->uploadPromotionImage($request->file('image_file'));
-        }
-
-        unset($validated['image_file'], $validated['remove_image']);
-
-        $promotion->update($validated);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Promo berhasil diperbarui.',
-            'data'    => $promotion->fresh(),
-        ]);
-    }
-
-    public function deletePromotion(string $id): JsonResponse
-    {
-        $promotion = Promotion::findOrFail($id);
-        $this->deletePromotionImage($promotion->image);
-        $promotion->delete();
-
-        return response()->json(['success' => true, 'message' => 'Promo berhasil dihapus.']);
-    }
-
-    private function uploadPromotionImage($file): string
-    {
-        return $this->uploadPublicImage($file, 'promotions');
-    }
-
-    private function deletePromotionImage(?string $path): void
-    {
-        $this->deletePublicImage($path);
-    }
-
-    // ─── ANNOUNCEMENTS / INFORMASI ───────────────────────────────────────────
-
-    public function announcements(Request $request): JsonResponse
-    {
-        $query = Announcement::query()
-            ->when($request->search, fn ($q) => $q->where('title', 'like', "%{$request->search}%")
-                ->orWhere('badge', 'like', "%{$request->search}%"))
-            ->when($request->filled('is_active'), fn ($q) => $q->where('is_active', $request->boolean('is_active')))
-            ->orderBy('sort_order')
-            ->latest();
-
-        return response()->json(['success' => true, 'data' => $query->paginate($request->per_page ?? 15)]);
-    }
-
-    public function storeAnnouncement(Request $request): JsonResponse
-    {
-        $validated = $request->validate([
-            'badge'        => ['required', 'string', 'max:255'],
-            'title'        => ['required', 'string', 'max:255'],
-            'description'  => ['required', 'string'],
-            'button_label' => ['nullable', 'string', 'max:255'],
-            'button_url'   => ['nullable', 'string', 'max:255'],
-            'image_file'   => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
-            'is_active'    => ['sometimes', 'boolean'],
-            'sort_order'   => ['sometimes', 'integer', 'min:0'],
-        ]);
-
-        if ($request->hasFile('image_file')) {
-            $validated['image'] = $this->uploadPublicImage($request->file('image_file'), 'announcements');
-        }
-
-        unset($validated['image_file']);
-
-        $announcement = Announcement::create($validated);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Informasi berhasil ditambahkan.',
-            'data'    => $announcement,
-        ], 201);
-    }
-
-    public function updateAnnouncement(Request $request, string $id): JsonResponse
-    {
-        $announcement = Announcement::findOrFail($id);
-
-        $validated = $request->validate([
-            'badge'        => ['sometimes', 'string', 'max:255'],
-            'title'        => ['sometimes', 'string', 'max:255'],
-            'description'  => ['sometimes', 'string'],
-            'button_label' => ['nullable', 'string', 'max:255'],
-            'button_url'   => ['nullable', 'string', 'max:255'],
-            'image_file'   => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
-            'remove_image' => ['sometimes', 'boolean'],
-            'is_active'    => ['sometimes', 'boolean'],
-            'sort_order'   => ['sometimes', 'integer', 'min:0'],
-        ]);
-
-        if ($request->boolean('remove_image')) {
-            $this->deletePublicImage($announcement->image);
-            $validated['image'] = null;
-        } elseif ($request->hasFile('image_file')) {
-            $this->deletePublicImage($announcement->image);
-            $validated['image'] = $this->uploadPublicImage($request->file('image_file'), 'announcements');
-        }
-
-        unset($validated['image_file'], $validated['remove_image']);
-
-        $announcement->update($validated);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Informasi berhasil diperbarui.',
-            'data'    => $announcement->fresh(),
-        ]);
-    }
-
-    public function deleteAnnouncement(string $id): JsonResponse
-    {
-        $announcement = Announcement::findOrFail($id);
-        $this->deletePublicImage($announcement->image);
-        $announcement->delete();
-
-        return response()->json(['success' => true, 'message' => 'Informasi berhasil dihapus.']);
-    }
-
-    private function uploadPublicImage($file, string $folder): string
-    {
-        $directory = public_path($folder);
-
-        if (! is_dir($directory)) {
-            mkdir($directory, 0777, true);
-        }
-
-        $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
-        $file->move($directory, $filename);
-
-        return $folder . '/' . $filename;
-    }
-
-    private function deletePublicImage(?string $path): void
-    {
-        if (! $path || str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
-            return;
-        }
-
-        $fullPath = public_path($path);
-
-        if (is_file($fullPath)) {
-            unlink($fullPath);
-        }
-    }
-
-    // ─── PROMO CODES (KODE DISKON PEMBAYARAN) ────────────────────────────────
 
     public function promoCodes(Request $request): JsonResponse
     {

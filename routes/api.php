@@ -13,10 +13,8 @@ use App\Http\Controllers\Api\HospitalRegistrationController;
 use App\Http\Controllers\Api\InsurancePackageController;
 use App\Http\Controllers\Api\InsurancePolicyController;
 use App\Http\Controllers\Api\NotificationController;
-use App\Http\Controllers\Api\AnnouncementController;
 use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\PromoCodeController;
-use App\Http\Controllers\Api\PromotionController;
 use App\Http\Controllers\Api\ReferralController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserController;
@@ -57,8 +55,6 @@ Route::prefix('v1')->group(function (): void {
 
     // Home Dashboard route
     Route::get('/home-dashboard', [HomeDashboardController::class, 'index']);
-    Route::get('/promotions/active', [PromotionController::class, 'active']);
-    Route::get('/announcements/active', [AnnouncementController::class, 'active']);
     Route::get('/banners/active', [BannerController::class, 'active']);
     Route::get('/referrals/me', [ReferralController::class, 'me']);
     Route::post('/referrals/apply', [ReferralController::class, 'apply']);
@@ -150,18 +146,6 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/packages', [AdminController::class, 'storePackage']);
         Route::put('/packages/{id}', [AdminController::class, 'updatePackage']);
         Route::delete('/packages/{id}', [AdminController::class, 'deletePackage']);
-
-        // Promotions
-        Route::get('/promotions', [AdminController::class, 'promotions']);
-        Route::post('/promotions', [AdminController::class, 'storePromotion']);
-        Route::put('/promotions/{id}', [AdminController::class, 'updatePromotion']);
-        Route::delete('/promotions/{id}', [AdminController::class, 'deletePromotion']);
-
-        // Announcements / Informasi
-        Route::get('/announcements', [AdminController::class, 'announcements']);
-        Route::post('/announcements', [AdminController::class, 'storeAnnouncement']);
-        Route::put('/announcements/{id}', [AdminController::class, 'updateAnnouncement']);
-        Route::delete('/announcements/{id}', [AdminController::class, 'deleteAnnouncement']);
 
         // Kode Promo (diskon pembayaran)
         Route::get('/promo-codes', [AdminController::class, 'promoCodes']);

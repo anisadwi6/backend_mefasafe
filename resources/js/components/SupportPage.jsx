@@ -77,8 +77,8 @@ const pages = {
         answer: "MefaSafe menyediakan konsultasi dokter yang dapat dipesan melalui menu Konsultasi. Pengguna dapat memilih dokter mitra dan mengatur jadwal konsultasi online.",
       },
       {
-        question: "Bagaimana cara menggunakan pengingat kesehatan?",
-        answer: "Gunakan menu Kalender Pengingat untuk membuat notifikasi kontrol dokter, jadwal minum obat, atau vaksinasi. Anda juga dapat menandai pengingat sebagai selesai.",
+        question: "Bagaimana cara menggunakan layanan MefaSafe?",
+        answer: "Untuk memulai, gunakan menu Dashboard untuk mengakses layanan asuransi, klaim, konsultasi dokter, dan rumah sakit mitra. Hubungi tim dukungan jika Anda membutuhkan bantuan lebih lanjut.",
       },
       {
         question: "Bagaimana jika saya lupa password?",
@@ -105,16 +105,13 @@ const pages = {
           { label: "Paket & Polis Asuransi", path: "/asuransi" },
           { label: "Beli Polis (Health Service)", path: "/health-service" },
           { label: "Ajukan Klaim", path: "/klaim" },
-          { label: "Monitor Saldo Polis", path: "/monitor" },
         ],
       },
       {
         group: "Layanan Kesehatan",
         links: [
           { label: "Daftar Rumah Sakit", path: "/daftarRS" },
-          { label: "Pendaftaran Layanan", path: "/pendaftaran-layanan" },
           { label: "Konsultasi Dokter", path: "/konsul" },
-          { label: "Kalender Pengingat", path: "/kalender" },
         ],
       },
       {
@@ -122,7 +119,6 @@ const pages = {
         links: [
           { label: "Program Promo & Referral", path: "/promo" },
           { label: "Riwayat Aktivitas", path: "/riwayat" },
-          { label: "Feedback", path: "/feedback" },
           { label: "ChatBot MefaBot", path: "/chatbot" },
         ],
       },

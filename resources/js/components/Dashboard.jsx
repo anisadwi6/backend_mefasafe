@@ -6,20 +6,13 @@ import ChatBot from "./ChatBot";
 import HealthService from "./HealthService";
 import DaftarRS from "./DaftarRS";
 import PendaftaranRS from "./PendaftaranRS";
-import PendaftaranLayanan from "./PendaftaranLayanan";
 import Riwayat from "./Riwayat";
 import Asuransi from "./Asuransi";
 import Klaim from "./Klaim";
-import KalenderPengingat from "./KalenderPengingat";
 import Konsultasi from "./Konsultasi";
-import Feedback from "./Feedback";
 import SupportPage from "./SupportPage";
 import TentangKami from "./TentangKami";
-import Monitor from "./Monitor";
-import PromoPage from "./PromoPage";
-import BannerCarousel from "./BannerCarousel";
 import UserTestimonials from "./UserTestimonials";
-import ReminderPopup from "./ReminderPopup";
 import AccessibilityPanel from "./AccessibilityPanel";
 import { useAccessibility } from "./useAccessibility";
 import ChatNotifToast from "./ChatNotifToast";
@@ -70,8 +63,6 @@ export default function Home({ user, profile, onLogout }) {
   // ── Home Dashboard Data ──────────────────────────────────────────────
   const [dashboardData, setDashboardData] = useState(null);
   const [dashboardLoading, setDashboardLoading] = useState(true);
-  const [reminderBadge, setReminderBadge] = useState(0);
-  const [banners, setBanners] = useState([]);
   const [showA11yPanel, setShowA11yPanel] = useState(false);
   const { settings: a11ySettings, update: updateA11y, reset: resetA11y } = useAccessibility();
 
@@ -100,20 +91,6 @@ export default function Home({ user, profile, onLogout }) {
     if (user?.id) fetchDashboardData();
   }, [location.pathname, user?.id]); // re-fetch setiap pindah halaman atau user berubah
 
-  useEffect(() => {
-    const fetchBanners = async () => {
-      try {
-        const res = await axios.get("/api/v1/banners/active");
-        setBanners(res.data?.data || []);
-      } catch (error) {
-        console.error("Banners fetch error:", error);
-        setBanners([]);
-      }
-    };
-
-    fetchBanners();
-  }, []);
-
   const openPromo = (url) => {
     if (!url) return;
     if (/^https?:\/\//i.test(url)) {
@@ -138,37 +115,6 @@ export default function Home({ user, profile, onLogout }) {
       setDashboardLoading(false);
     }
   };
-
-  const fetchReminderBadge = async () => {
-    const userId = user?.id;
-    if (!userId) {
-      setReminderBadge(0);
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem("mefasafe_token") || localStorage.getItem("token");
-      const res = await axios.get(`/api/v1/reminders/today`, {
-        headers: { Authorization: `Bearer ${token}` },
-        params: { user_id: userId },
-      });
-
-      if (res.data.success) {
-        setReminderBadge(Array.isArray(res.data.data) ? res.data.data.length : 0);
-      }
-    } catch (error) {
-      console.error("Reminder badge fetch error:", error);
-      setReminderBadge(0);
-    }
-  };
-
-  useEffect(() => {
-    fetchReminderBadge();
-
-    const intervalId = window.setInterval(fetchReminderBadge, 60000);
-
-    return () => window.clearInterval(intervalId);
-  }, [user?.id]);
 
   // Helper: format rupiah
   const formatRupiah = (num) =>
@@ -211,7 +157,7 @@ export default function Home({ user, profile, onLogout }) {
       icon: <Hospital className="w-7 h-7" />,
       label: "Daftar Rumah Sakit",
       onClick: () => navigate("/daftarRS"),
-      gradient: "from-blue-500 via-blue-600 to-cyan-600",
+      gradient: "from-cyan-500 via-sky-500 to-blue-600",
       color: "blue",
       description: "Cari RS terdekat",
     },
@@ -219,58 +165,60 @@ export default function Home({ user, profile, onLogout }) {
       icon: <Stethoscope className="w-7 h-7" />,
       label: "Konsultasi Dokter",
       onClick: () => { navigate("/konsul"); clearChatBadge(); },
-      gradient: "from-purple-500 via-purple-600 to-pink-600",
-      color: "purple",
+      gradient: "from-sky-500 via-cyan-500 to-blue-600",
+      color: "cyan",
       description: "Chat dengan dokter",
       badge: chatUnread > 0 ? chatUnread : null,
     },
     {
       icon: <Calendar className="w-7 h-7" />,
       label: "Kalender Pengingat",
-      onClick: () => navigate("/kalender"),
-      gradient: "from-orange-500 via-orange-600 to-amber-600",
-      color: "orange",
-      description: "Atur jadwal kontrol",
-      badge: reminderBadge,
+      onClick: () => {},
+      gradient: "from-slate-500 via-slate-400 to-slate-300",
+      color: "slate",
+      description: "Fitur ini tidak tersedia",
+      disabled: true,
     },
     {
       icon: <MessageSquare className="w-7 h-7" />,
       label: "Feedback & Saran",
-      onClick: () => navigate("/feedback"),
-      gradient: "from-green-500 via-green-600 to-emerald-600",
-      color: "green",
-      description: "Berikan masukan",
+      onClick: () => {},
+      gradient: "from-slate-500 via-slate-400 to-slate-300",
+      color: "slate",
+      description: "Fitur ini tidak tersedia",
+      disabled: true,
+    },
+    {
+      icon: <Clock className="w-7 h-7" />,
+      label: "Pendaftaran Layanan",
+      onClick: () => {},
+      gradient: "from-slate-500 via-slate-400 to-slate-300",
+      color: "slate",
+      description: "Fitur ini tidak tersedia",
+      disabled: true,
     },
     {
       icon: <Clock className="w-7 h-7" />,
       label: "Riwayat",
       onClick: () => navigate("/riwayat"),
-      gradient: "from-indigo-500 via-indigo-600 to-blue-600",
-      color: "indigo",
+      gradient: "from-cyan-500 via-sky-500 to-blue-600",
+      color: "cyan",
       description: "Lihat riwayat pendaftaran dan transaksi",
     },
     {
       icon: <Activity className="w-7 h-7" />,
       label: "Health Tracking",
       onClick: () => navigate("/health-service"),
-      gradient: "from-red-500 via-red-600 to-rose-600",
-      color: "red",
+      gradient: "from-sky-500 via-cyan-500 to-blue-600",
+      color: "sky",
       description: "Monitor kesehatan",
-    },
-    {
-      icon: <FileText className="w-7 h-7" />,
-      label: "Pendaftaran Layanan",
-      onClick: () => navigate("/pendaftaran-layanan"),
-      gradient: "from-yellow-500 via-yellow-600 to-orange-500",
-      color: "yellow",
-      description: "Daftar layanan baru",
     },
     {
       icon: <Users className="w-7 h-7" />,
       label: "Tentang Kami",
       onClick: () => navigate("/tentang"),
-      gradient: "from-teal-500 via-teal-600 to-cyan-600",
-      color: "teal",
+      gradient: "from-cyan-500 via-sky-500 to-blue-600",
+      color: "cyan",
       description: "Kenali lebih jauh",
     },
   ];
@@ -286,22 +234,17 @@ export default function Home({ user, profile, onLogout }) {
     { icon: <MessageSquare className="w-5 h-5" />, label: "ChatBot", onClick: () => navigate("/chatbot") },
   ];
 
-  const stats = [
-    { icon: <Shield className="w-6 h-6" />, label: "Perlindungan",    value: dashboardData?.stats?.perlindungan        ?? "—", colorClass: "from-blue-500 to-blue-600"   },
-    { icon: <Heart  className="w-6 h-6" />, label: "Klaim Disetujui", value: dashboardData?.stats?.claim_approval_rate ?? "—", colorClass: "from-red-500 to-red-600"    },
-    { icon: <Users  className="w-6 h-6" />, label: "Member Aktif",    value: dashboardData?.stats?.active_members      ?? "—", colorClass: "from-purple-500 to-purple-600" },
-    { icon: <Award  className="w-6 h-6" />, label: "Rating",          value: dashboardData?.stats?.rating              ?? "—", colorClass: "from-yellow-500 to-yellow-600" },
-  ];
+  const stats = []; 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 relative overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-100 via-sky-100 to-blue-100 relative overflow-x-hidden">
       {/* Enhanced Animated Background with Parallax */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {/* Gradient Orbs */}
         <div 
-          className="absolute w-[500px] h-[500px] rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"
+          className="absolute w-[500px] h-[500px] rounded-full mix-blend-multiply filter blur-3xl opacity-35 animate-float"
           style={{
-            background: "radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(56, 189, 248, 0.35) 0%, transparent 70%)",
             top: `${-200 + scrollY * 0.1}px`,
             right: `${-200 + mousePosition.x * 0.01}px`,
           }}
@@ -309,7 +252,7 @@ export default function Home({ user, profile, onLogout }) {
         <div 
           className="absolute w-[500px] h-[500px] rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float-delayed"
           style={{
-            background: "radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(14, 165, 233, 0.3) 0%, transparent 70%)",
             bottom: `${-200 + scrollY * 0.15}px`,
             left: `${-200 - mousePosition.x * 0.01}px`,
           }}
@@ -317,7 +260,7 @@ export default function Home({ user, profile, onLogout }) {
         <div 
           className="absolute w-[400px] h-[400px] rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-float-slow"
           style={{
-            background: "radial-gradient(circle, rgba(236, 72, 153, 0.3) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(125, 211, 252, 0.3) 0%, transparent 70%)",
             top: "40%",
             left: "50%",
             transform: `translate(-50%, -50%) translateY(${scrollY * 0.05}px)`,
@@ -365,10 +308,10 @@ export default function Home({ user, profile, onLogout }) {
 
               <div className="flex items-center gap-3 group cursor-pointer">
                 <div className="relative">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg opacity-0 group-hover:opacity-20 blur transition-opacity duration-300"></div>
+                  <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg opacity-0 group-hover:opacity-20 blur transition-opacity duration-300"></div>
                 </div>
                 <div>
-                  <div className="font-bold text-lg bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  <div className="font-bold text-lg bg-gradient-to-r from-cyan-600 to-blue-700 bg-clip-text text-transparent">
                     MefaSafe
                   </div>
                   <div className="text-xs text-gray-500">
@@ -379,21 +322,20 @@ export default function Home({ user, profile, onLogout }) {
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-1 absolute left-1/2 transform -translate-x-1/2">
+            <nav className="hidden md:flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
               {sidebarMenu.map((item, index) => (
                 <button
                   key={index}
                   onClick={item.onClick}
-                  className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 group hover:bg-white/60"
+                  className="relative flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white/90 text-slate-700 hover:text-sky-700 font-semibold transition-all duration-300 group shadow-sm border border-slate-200 hover:border-sky-200"
                 >
                   <span className="group-hover:scale-110 transition-transform duration-300">{item.icon}</span>
                   <span>{item.label}</span>
                   {item.badge && (
-                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-lg animate-bounce">
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-sky-500 to-blue-500 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-lg animate-bounce">
                       {item.badge}
                     </span>
                   )}
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
                 </button>
               ))}
             </nav>
@@ -413,17 +355,17 @@ export default function Home({ user, profile, onLogout }) {
                       className="w-11 h-11 rounded-full object-cover border-2 border-white shadow-lg group-hover:scale-105 transition-transform duration-300" 
                       onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
                     />
-                    <div className="w-11 h-11 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 items-center justify-center text-white font-bold text-sm shadow-lg hidden">
+                    <div className="w-11 h-11 rounded-full bg-gradient-to-br from-cyan-500 via-sky-500 to-blue-600 items-center justify-center text-white font-bold text-sm shadow-lg hidden">
                       {getInitials(user?.name)}
                     </div>
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
                   </div>
                 ) : (
                   <div className="relative">
-                    <div className="w-11 h-11 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
+                    <div className="w-11 h-11 rounded-full bg-gradient-to-br from-cyan-500 via-sky-500 to-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
                       {getInitials(user?.name)}
                     </div>
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-30 blur transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 opacity-0 group-hover:opacity-30 blur transition-opacity duration-300"></div>
                   </div>
                 )}
               </button>
@@ -445,7 +387,7 @@ export default function Home({ user, profile, onLogout }) {
                         setShowProfileMenu(false);
                         navigate("/Profil");
                       }}
-                      className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:text-blue-600 transition-all duration-300 flex items-center gap-3 group"
+                      className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-cyan-50 hover:to-sky-50 hover:text-sky-700 transition-all duration-300 flex items-center gap-3 group"
                     >
                       <User className="w-4 h-4 group-hover:scale-110 transition-transform" />
                       <span>Edit Profil</span>
@@ -480,32 +422,32 @@ export default function Home({ user, profile, onLogout }) {
               <div className="animate-fade-in-up">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="relative inline-flex">
-                    <div className="px-4 py-2 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-full border border-blue-200/50 backdrop-blur-sm">
-                      <span className="text-sm font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex items-center gap-2">
+                    <div className="px-4 py-2 bg-gradient-to-r from-cyan-500/10 via-sky-500/10 to-blue-500/10 rounded-full border border-cyan-200/50 backdrop-blur-sm">
+                      <span className="text-sm font-semibold bg-gradient-to-r from-cyan-600 to-blue-700 bg-clip-text text-transparent flex items-center gap-2">
                         <Sparkles className="w-4 h-4 text-blue-500 animate-pulse" />
                         {getGreeting()}
                       </span>
                     </div>
-                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full opacity-20 blur-md animate-pulse-slow"></div>
+                    <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full opacity-20 blur-md animate-pulse-slow"></div>
                   </div>
                 </div>
                 
-                <h1 className="text-4xl md:text-6xl font-bold mb-3 animate-gradient bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent">
+                <h1 className="text-4xl md:text-6xl font-bold mb-3 animate-gradient bg-gradient-to-r from-slate-900 via-cyan-900 to-blue-900 bg-clip-text text-transparent">
                   {user?.name || "Pengguna MefaSafe"}
                 </h1>
                 <p className="text-gray-600 text-lg md:text-xl flex items-center gap-2">
                   <span>Kelola kesehatan keluarga dengan</span>
-                  <span className="font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">mudah & aman</span>
+                  <span className="font-semibold bg-gradient-to-r from-cyan-600 to-blue-700 bg-clip-text text-transparent">mudah & aman</span>
                 </p>
               </div>
 
               {/* Enhanced Balance Card with 3D Effect */}
               <div className="animate-fade-in-up animation-delay-200">
                 <div className="group relative">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-3xl opacity-20 group-hover:opacity-30 blur-xl transition-opacity duration-500"></div>
+                  <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 rounded-3xl opacity-20 group-hover:opacity-30 blur-xl transition-opacity duration-500"></div>
                   <div className="relative bg-gradient-to-br from-white via-white to-blue-50/30 rounded-3xl p-8 md:p-10 border border-white/60 shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden group-hover:scale-[1.01]">
                     <div className="absolute inset-0 opacity-5">
-                      <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-500"></div>
+                      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500 to-blue-600"></div>
                       <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
                         <defs>
                           <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
@@ -573,7 +515,7 @@ export default function Home({ user, profile, onLogout }) {
                               )}
                             </>
                           ) : (
-                            <div className="px-4 py-2 bg-gradient-to-r from-red-400 to-red-500 text-white text-xs font-bold rounded-xl">
+                            <div className="px-4 py-2 bg-slate-300 text-slate-800 text-xs font-bold rounded-xl">
                               BELUM ADA POLIS
                             </div>
                           )}
@@ -590,7 +532,7 @@ export default function Home({ user, profile, onLogout }) {
                         </div>
                         <div className="relative h-3 bg-gray-200/50 rounded-full overflow-hidden">
                           <div
-                            className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full shadow-lg transition-all duration-1000"
+                            className="absolute inset-y-0 left-0 bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 rounded-full shadow-lg transition-all duration-1000"
                             style={{ width: `${dashboardData?.balance?.usage_percent ?? 0}%` }}
                           ></div>
                         </div>
@@ -620,47 +562,16 @@ export default function Home({ user, profile, onLogout }) {
                           onClick={() => navigate("/asuransi")}
                           className="flex flex-col items-center gap-2 p-3 rounded-xl bg-white/60 hover:bg-white transition-all duration-300 group/action border border-gray-100"
                         >
-                          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center group-hover/action:scale-110 transition-transform duration-300">
+                          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center group-hover/action:scale-110 transition-transform duration-300">
                             <Shield className="w-5 h-5 text-white" />
                           </div>
                           <span className="text-xs font-medium text-gray-700">Asuransi</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => navigate("/monitor")}
-                          className="flex flex-col items-center gap-2 p-3 rounded-xl bg-white/60 hover:bg-white transition-all duration-300 group/action border border-gray-100"
-                        >
-                          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center group-hover/action:scale-110 transition-transform duration-300">
-                            <Activity className="w-5 h-5 text-white" />
-                          </div>
-                          <span className="text-xs font-medium text-gray-700">Monitor</span>
                         </button>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-
-              {/* Stats Section */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {stats.map((stat, index) => (
-                  <div 
-                    key={index}
-                    className="group relative bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 hover:border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-                    style={{ animationDelay: `${index * 100}ms` }}
-                  >
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.colorClass} flex items-center justify-center mb-3 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
-                      <span className="text-white">{stat.icon}</span>
-                    </div>
-                    <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
-                    <div className="text-sm text-gray-600">{stat.label}</div>
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-500 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Banner Iklan: Promo + Informasi */}
-              <BannerCarousel banners={banners} onNavigate={openPromo} />
 
               {/* Services Section */}
               <div>
@@ -680,7 +591,8 @@ export default function Home({ user, profile, onLogout }) {
                     <button
                       key={index}
                       onClick={item.onClick}
-                      className="group relative bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 hover:border-gray-200 transition-all duration-500 shadow-md hover:shadow-2xl hover:-translate-y-2 overflow-hidden"
+                      disabled={item.disabled}
+                      className={`group relative bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 transition-all duration-500 shadow-md overflow-hidden ${item.disabled ? "opacity-70 cursor-not-allowed border-slate-200" : "hover:border-gray-200 hover:shadow-2xl hover:-translate-y-2"}`}
                       style={{ animationDelay: `${index * 50}ms` }}
                     >
                       {/* Hover Gradient Background */}
@@ -699,14 +611,14 @@ export default function Home({ user, profile, onLogout }) {
                           </div>
                           <div className={`absolute inset-0 w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-50 blur-xl transition-opacity duration-500`}></div>
                           {item.badge && item.badge > 0 && (
-                            <span className="absolute -top-2 -right-2 min-w-6 h-6 px-1.5 bg-gradient-to-r from-red-500 to-pink-500 text-white text-[11px] font-bold rounded-full flex items-center justify-center shadow-lg animate-bounce">
+                            <span className="absolute -top-2 -right-2 min-w-6 h-6 px-1.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-[11px] font-bold rounded-full flex items-center justify-center shadow-lg animate-bounce">
                               {item.badge}
                             </span>
                           )}
                         </div>
 
                         {/* Label */}
-                        <p className="text-sm font-bold text-gray-900 text-center leading-snug mb-1 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-300">
+                        <p className="text-sm font-bold text-gray-900 text-center leading-snug mb-1 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-cyan-600 group-hover:to-blue-700 group-hover:bg-clip-text transition-all duration-300">
                           {item.label}
                         </p>
 
@@ -717,7 +629,7 @@ export default function Home({ user, profile, onLogout }) {
 
                         {/* Arrow Icon */}
                         <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                          <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center group-hover:translate-x-1 transition-transform duration-300">
+                          <div className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center group-hover:translate-x-1 transition-transform duration-300">
                             <ArrowRight className="w-3 h-3 text-white" />
                           </div>
                         </div>
@@ -739,16 +651,10 @@ export default function Home({ user, profile, onLogout }) {
           <Route path="/dukungan/:page" element={<SupportPage />} />
           <Route path="/daftarRS" element={<DaftarRS user={user} />} />
           <Route path="/daftar-rs/:id" element={<PendaftaranRS user={user} />} />
-          <Route path="/pendaftaran-layanan" element={<PendaftaranLayanan user={user} />} />
           <Route path="/riwayat" element={<Riwayat user={user} />} />
           <Route path="/asuransi" element={<Asuransi user={user} />} />
           <Route path="/klaim" element={<Klaim user={user} />} />
-          <Route path="/kalender" element={<KalenderPengingat user={user} />} />
           <Route path="/konsul" element={<Konsultasi user={user} />} />
-          <Route path="/feedback" element={<Feedback user={user} />} />
-          <Route path="/monitor" element={<Monitor user={user} />} />
-          <Route path="/promo" element={<PromoPage user={user} />} />
-          
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </main>
@@ -756,7 +662,7 @@ export default function Home({ user, profile, onLogout }) {
 
 
       {/* Enhanced Footer */}
-      {!isChatBot && <footer className="relative z-10 mt-20 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white overflow-hidden">
+      {!isChatBot && <footer className="relative z-10 mt-20 bg-gradient-to-br from-slate-900 via-cyan-900 to-blue-900 text-white overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-5">
           <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
@@ -794,7 +700,7 @@ export default function Home({ user, profile, onLogout }) {
             {/* Quick Services */}
             <div>
               <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-wider flex items-center gap-2">
-                <div className="w-1 h-4 bg-gradient-to-b from-blue-500 to-purple-500 rounded"></div>
+                <div className="w-1 h-4 bg-gradient-to-b from-cyan-500 to-blue-600 rounded"></div>
                 Layanan
               </h3>
               <ul className="space-y-3">
@@ -815,7 +721,7 @@ export default function Home({ user, profile, onLogout }) {
             {/* Help & Support */}
             <div>
               <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-wider flex items-center gap-2">
-                <div className="w-1 h-4 bg-gradient-to-b from-purple-500 to-pink-500 rounded"></div>
+                <div className="w-1 h-4 bg-gradient-to-b from-cyan-500 to-blue-600 rounded"></div>
                 Dukungan
               </h3>
               <ul className="space-y-3 text-sm text-gray-400">
@@ -843,7 +749,7 @@ export default function Home({ user, profile, onLogout }) {
             {/* Contact */}
             <div>
               <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-wider flex items-center gap-2">
-                <div className="w-1 h-4 bg-gradient-to-b from-pink-500 to-red-500 rounded"></div>
+                <div className="w-1 h-4 bg-gradient-to-b from-sky-500 to-blue-600 rounded"></div>
                 Hubungi Kami
               </h3>
               <div className="space-y-4">
@@ -940,7 +846,7 @@ export default function Home({ user, profile, onLogout }) {
           </div>
 
           {/* User Info */}
-          <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl">
+          <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-cyan-50 to-sky-50 rounded-xl">
             {user?.profile_picture && user.profile_picture !== '' ? (
               <img 
                 src={user.profile_picture} 
@@ -950,7 +856,7 @@ export default function Home({ user, profile, onLogout }) {
               />
             ) : null}
             {(!user?.profile_picture || user.profile_picture === '') && (
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold shadow">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold shadow">
                 {getInitials(user?.name)}
               </div>
             )}
@@ -970,25 +876,25 @@ export default function Home({ user, profile, onLogout }) {
                 item.onClick();
                 setShowSidebar(false);
               }}
-              className="relative w-full flex items-center gap-3 px-4 py-3.5 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-300 text-gray-700 font-medium group overflow-hidden"
+              className="relative w-full flex items-center gap-3 px-4 py-3.5 rounded-xl hover:bg-gradient-to-r hover:from-cyan-50 hover:to-sky-50 transition-all duration-300 text-gray-700 font-medium group overflow-hidden"
             >
               <span className="relative z-10 group-hover:text-blue-600 group-hover:scale-110 transition-all duration-300">
                 {item.icon}
               </span>
               <span className="relative z-10 group-hover:text-blue-600 transition-colors duration-300">{item.label}</span>
               {item.badge && (
-                <span className="relative z-10 ml-auto w-6 h-6 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold rounded-full flex items-center justify-center shadow">
+                <span className="relative z-10 ml-auto w-6 h-6 bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-xs font-bold rounded-full flex items-center justify-center shadow">
                   {item.badge}
                 </span>
               )}
               <ChevronRight className="relative z-10 w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
             </button>
           ))}
         </nav>
 
         {/* Sidebar Footer */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-100 bg-gradient-to-r from-blue-50/50 to-purple-50/50">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-100 bg-gradient-to-r from-cyan-50/50 to-sky-50/50">
           <div className="text-center text-xs text-gray-500 mb-2">MefaSafe v2.0</div>
           <div className="text-center text-xs text-gray-400">© 2026 All rights reserved</div>
         </div>
@@ -1135,7 +1041,6 @@ export default function Home({ user, profile, onLogout }) {
       
       {/* Global Overlays */}
       <div className="relative z-[99999]">
-        <ReminderPopup userId={user?.id} />
         <ChatNotifToast
           toasts={chatToasts}
           onDismiss={(id) => setChatToasts((prev) => prev.filter((t) => t.id !== id))}

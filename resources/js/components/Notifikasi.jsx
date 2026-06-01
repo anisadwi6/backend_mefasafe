@@ -73,26 +73,26 @@ function Notification({ user }) {
   };
 
   const summaryCards = [
-    { label: "Notif belum dibaca", value: summary.unread_count.toString(), icon: BellRing, color: "text-indigo-600" },
-    { label: "Sudah diverifikasi", value: summary.verified_count.toString(), icon: ShieldCheck, color: "text-emerald-600" },
-    { label: "Butuh perhatian", value: summary.needs_attention_count.toString(), icon: Clock3, color: "text-amber-600" },
+    { label: "Notif belum dibaca", value: summary.unread_count.toString(), icon: BellRing, color: "text-cyan-600" },
+    { label: "Sudah diverifikasi", value: summary.verified_count.toString(), icon: ShieldCheck, color: "text-sky-600" },
+    { label: "Butuh perhatian", value: summary.needs_attention_count.toString(), icon: Clock3, color: "text-blue-600" },
   ];
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/40 to-indigo-50/70 relative overflow-hidden animate-fadeIn">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-100 via-sky-100 to-blue-100 relative overflow-hidden animate-fadeIn">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-140px] right-[-80px] h-72 w-72 rounded-full bg-blue-200/40 blur-3xl" />
-        <div className="absolute bottom-[-120px] left-[-60px] h-80 w-80 rounded-full bg-violet-200/40 blur-3xl" />
+        <div className="absolute top-[-140px] right-[-80px] h-72 w-72 rounded-full bg-cyan-200/40 blur-3xl" />
+        <div className="absolute bottom-[-120px] left-[-60px] h-80 w-80 rounded-full bg-blue-200/40 blur-3xl" />
       </div>
 
       <div className="relative max-w-6xl mx-auto px-4 py-6 md:px-8 md:py-8">
 
         <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-6">
-          <section className="rounded-[28px] border border-white/70 bg-white/85 backdrop-blur-xl p-6 md:p-7 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.28)]">
+          <section className="rounded-[28px] border border-white/70 bg-white/95 backdrop-blur-xl p-6 md:p-7 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.18)]">
             <div className="flex flex-wrap gap-4 items-start justify-between">
               <div>
-                <p className="text-sm font-semibold text-indigo-600 uppercase tracking-[0.25em]">Notifikasi</p>
+                <p className="text-sm font-semibold text-cyan-600 uppercase tracking-[0.25em]">Notifikasi</p>
                 <h1 className="mt-2 text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
                   Ringkasan aktivitas terbaru
                 </h1>
@@ -110,7 +110,7 @@ function Notification({ user }) {
 
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
               {summaryCards.map((item) => (
-                <div key={item.label} className="rounded-2xl border border-slate-100 bg-slate-50/80 px-4 py-4">
+                <div key={item.label} className="rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm">
                   <div className="flex items-center justify-between gap-3">
                     <div>
                       <p className="text-[11px] uppercase tracking-[0.2em] text-slate-400">{item.label}</p>
@@ -130,7 +130,7 @@ function Notification({ user }) {
                   className={`rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 ${
                     idx === 0
                       ? 'bg-slate-950 text-white shadow-lg'
-                      : 'bg-white border border-slate-200 text-slate-600 hover:border-indigo-200 hover:text-indigo-600'
+                      : 'bg-white border border-slate-200 text-slate-600 hover:border-cyan-200 hover:text-cyan-600'
                   }`}
                 >
                   {tab}
@@ -194,7 +194,7 @@ function Notification({ user }) {
 
           <aside className="rounded-[28px] border border-white/70 bg-white/90 backdrop-blur-xl p-6 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.28)]">
             <div className="flex items-center gap-3 mb-5">
-              <div className="rounded-xl bg-indigo-50 p-2 text-indigo-600">
+              <div className="rounded-xl bg-cyan-50 p-2 text-cyan-600">
                 <CheckCircle2 className="w-5 h-5" />
               </div>
               <div>

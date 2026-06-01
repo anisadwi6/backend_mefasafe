@@ -30,7 +30,6 @@ const FEATURES = [
   { icon: Bot, title: "MefaBot AI", desc: "Asisten virtual berbasis AI untuk tanya jawab seputar asuransi & kesehatan.", color: "from-slate-600 to-slate-800" },
   { icon: Gift, title: "Program Referral", desc: "Ajak teman bergabung dan dapatkan kode diskon setelah target undangan terpenuhi.", color: "from-pink-500 to-rose-500" },
   { icon: TicketPercent, title: "Kode Promo", desc: "Gunakan kode diskon saat pembayaran asuransi, konsultasi, atau layanan kesehatan.", color: "from-fuchsia-500 to-purple-500" },
-  { icon: Megaphone, title: "Promo & Informasi", desc: "Banner promo dan pengumuman terbaru langsung di dashboard pengguna.", color: "from-teal-500 to-emerald-500" },
   { icon: Star, title: "Testimoni Pengguna", desc: "Ulasan pengguna terpilih ditampilkan setelah disetujui admin.", color: "from-yellow-500 to-amber-500" },
 ];
 
@@ -182,22 +181,6 @@ export default function TentangKami() {
           </div>
 
           <div className="space-y-6">
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-              <MessageSquare className="h-7 w-7 text-blue-600 mb-3" />
-              <h3 className="text-lg font-bold text-slate-900">Feedback Pengguna</h3>
-              <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-                Sampaikan masukan Anda melalui menu Feedback. Ulasan terbaik dapat ditampilkan di beranda
-                setelah disetujui admin.
-              </p>
-              <button
-                type="button"
-                onClick={() => navigate("/feedback")}
-                className="mt-4 text-sm font-bold text-blue-600 hover:text-blue-700"
-              >
-                Kirim Feedback →
-              </button>
-            </div>
-
             <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6">
               <h3 className="text-lg font-bold text-slate-900">Teknologi</h3>
               <div className="mt-4 flex flex-wrap gap-2">

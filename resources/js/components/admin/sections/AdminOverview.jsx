@@ -7,7 +7,6 @@ import {
     CreditCard,
     Hospital,
     Stethoscope,
-    Star,
     TrendingUp,
     TrendingDown,
     Loader2,
@@ -73,7 +72,6 @@ export default function AdminOverview() {
         { label: "Total Klaim Keluar", value: fmt(data.total_payout), icon: TrendingDown, color: "red", sub: "Klaim dibayar" },
         { label: "Rumah Sakit", value: data.total_hospitals, icon: Hospital, color: "cyan", sub: "Mitra RS" },
         { label: "Konsultasi", value: data.total_consultations, icon: Stethoscope, color: "purple", sub: "Total sesi" },
-        { label: "Rating Rata-rata", value: `${data.avg_rating}/5`, icon: Star, color: "yellow", sub: "Dari feedback" },
         { label: "Pembayaran Pending", value: data.pending_payments, icon: Clock, color: "orange", sub: "Menunggu verifikasi" },
     ];
 

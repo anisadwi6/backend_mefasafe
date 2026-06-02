@@ -459,7 +459,7 @@ export default function DaftarRS({ user }) {
                 {/* Tombol daftar */}
                 <div className="mt-4 pt-4 border-t border-slate-100">
                   <button
-                    onClick={() => navigate("/daftar-rs/" + selectedHospital.id)}
+                    // onClick={() => navigate("/daftar-rs/" + selectedHospital.id)}
                     className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold text-sm hover:shadow-lg hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2"
                   >
                     <Building2 className="w-4 h-4" />

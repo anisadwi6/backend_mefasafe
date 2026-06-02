@@ -14,12 +14,6 @@ const TYPE_CONFIG = {
     iconColor: "text-blue-600",
     label: "Pendaftaran RS",
   },
-  service_registration: {
-    icon: FileText,
-    iconBg: "bg-yellow-100",
-    iconColor: "text-yellow-600",
-    label: "Pendaftaran Layanan",
-  },
   transaction: {
     icon: CreditCard,
     iconBg: "bg-purple-100",
@@ -102,19 +96,19 @@ export default function Riwayat({ user }) {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const requestedFilter = params.get("filter");
-    const validFilters = ["all", "registration", "service_registration", "transaction"];
+    const validFilters = ["all", "registration", "transaction"];
     if (requestedFilter && validFilters.includes(requestedFilter)) {
       setFilter(requestedFilter);
     }
   }, [location.search]);
 
-  const filtered = filter === "all" ? items : items.filter((i) => i.type === filter);
+  const visibleItems = items.filter((i) => i.type !== "service_registration");
+  const filtered = filter === "all" ? visibleItems : visibleItems.filter((i) => i.type === filter);
 
   const counts = {
-    all: items.length,
-    registration: items.filter((i) => i.type === "registration").length,
-    service_registration: items.filter((i) => i.type === "service_registration").length,
-    transaction: items.filter((i) => i.type === "transaction").length,
+    all: visibleItems.length,
+    registration: visibleItems.filter((i) => i.type === "registration").length,
+    transaction: visibleItems.filter((i) => i.type === "transaction").length,
   };
 
   return (
@@ -136,7 +130,6 @@ export default function Riwayat({ user }) {
           {[
             { key: "all", label: "Semua" },
             { key: "registration", label: "Pendaftaran RS" },
-            { key: "service_registration", label: "Pendaftaran Layanan" },
             { key: "transaction", label: "Transaksi" },
           ].map(({ key, label }) => (
             <button

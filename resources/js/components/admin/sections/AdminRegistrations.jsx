@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Search, Loader2, Calendar, Activity } from "lucide-react";
+import { Search, Loader2, Calendar } from "lucide-react";
 
 const API = "/api/v1/admin";
 const token = () => localStorage.getItem("admin_token");
@@ -12,7 +12,6 @@ const STATUS_COLOR = {
 };
 
 export default function AdminRegistrations() {
-    const [tab, setTab]         = useState("hospital");
     const [items, setItems]     = useState([]);
     const [meta, setMeta]       = useState({});
     const [loading, setLoading] = useState(true);
@@ -22,9 +21,8 @@ export default function AdminRegistrations() {
 
     const fetchItems = async () => {
         setLoading(true);
-        const endpoint = tab === "hospital" ? "hospital-registrations" : "service-registrations";
         try {
-            const res = await axios.get(`${API}/${endpoint}`, {
+            const res = await axios.get(`${API}/hospital-registrations`, {
                 headers: { Authorization: `Bearer ${token()}` },
                 params: { search, status, page, per_page: 12 },
             });
@@ -34,27 +32,12 @@ export default function AdminRegistrations() {
         finally { setLoading(false); }
     };
 
-    useEffect(() => { fetchItems(); }, [tab, search, status, page]);
-
-    const switchTab = (t) => { setTab(t); setPage(1); setSearch(""); setStatus(""); };
+    useEffect(() => { fetchItems(); }, [search, status, page]);
 
     return (
         <div className="space-y-4">
             {/* Tabs */}
-            <div className="flex gap-2">
-                <button onClick={() => switchTab("hospital")}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all
-                        ${tab === "hospital" ? "bg-blue-600 text-white shadow" : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"}`}>
-                    <Calendar className="w-4 h-4" /> Kunjungan RS
-                </button>
-                <button onClick={() => switchTab("service")}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all
-                        ${tab === "service" ? "bg-blue-600 text-white shadow" : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"}`}>
-                    <Activity className="w-4 h-4" /> Layanan Kesehatan
-                </button>
-            </div>
-
-            {/* Filters */}
+                    {/* Filters */}
             <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-wrap gap-3 items-center">
                 <div className="relative flex-1 min-w-48">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -78,19 +61,9 @@ export default function AdminRegistrations() {
                         <thead className="bg-slate-50 border-b border-slate-200">
                             <tr>
                                 <th className="text-left px-4 py-3 font-semibold text-slate-600">Pengguna</th>
-                                {tab === "hospital" ? (
-                                    <>
-                                        <th className="text-left px-4 py-3 font-semibold text-slate-600">Rumah Sakit</th>
-                                        <th className="text-left px-4 py-3 font-semibold text-slate-600">Dokter</th>
-                                        <th className="text-left px-4 py-3 font-semibold text-slate-600">No. Antrian</th>
-                                    </>
-                                ) : (
-                                    <>
-                                        <th className="text-left px-4 py-3 font-semibold text-slate-600">Layanan</th>
-                                        <th className="text-left px-4 py-3 font-semibold text-slate-600">Jadwal</th>
-                                        <th className="text-left px-4 py-3 font-semibold text-slate-600">No. Antrian</th>
-                                    </>
-                                )}
+                                    <th className="text-left px-4 py-3 font-semibold text-slate-600">Rumah Sakit</th>
+                                    <th className="text-left px-4 py-3 font-semibold text-slate-600">Dokter</th>
+                                    <th className="text-left px-4 py-3 font-semibold text-slate-600">No. Antrian</th>
                                 <th className="text-left px-4 py-3 font-semibold text-slate-600">Status</th>
                                 <th className="text-left px-4 py-3 font-semibold text-slate-600">Tanggal</th>
                             </tr>
@@ -105,19 +78,9 @@ export default function AdminRegistrations() {
                             ) : items.map((item) => (
                                 <tr key={item.id} className="hover:bg-slate-50 transition-colors">
                                     <td className="px-4 py-3 font-medium text-slate-800">{item.user?.name || "-"}</td>
-                                    {tab === "hospital" ? (
-                                        <>
-                                            <td className="px-4 py-3 text-slate-600">{item.hospital_name || item.hospital?.name || "-"}</td>
-                                            <td className="px-4 py-3 text-slate-500">{item.doctor_name || "-"}</td>
-                                            <td className="px-4 py-3 font-mono text-xs text-slate-600">{item.queue_number}</td>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <td className="px-4 py-3 text-slate-600">{item.service_name || "-"}</td>
-                                            <td className="px-4 py-3 text-slate-500 text-xs">{item.schedule_date} {item.schedule_time}</td>
-                                            <td className="px-4 py-3 font-mono text-xs text-slate-600">{item.queue_number}</td>
-                                        </>
-                                    )}
+                                        <td className="px-4 py-3 text-slate-600">{item.hospital_name || item.hospital?.name || "-"}</td>
+                                        <td className="px-4 py-3 text-slate-500">{item.doctor_name || "-"}</td>
+                                        <td className="px-4 py-3 font-mono text-xs text-slate-600">{item.queue_number}</td>
                                     <td className="px-4 py-3">
                                         <span className={`px-2 py-1 rounded-full text-xs font-semibold ${STATUS_COLOR[item.status] || "bg-slate-100 text-slate-600"}`}>
                                             {item.status}

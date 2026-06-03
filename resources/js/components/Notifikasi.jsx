@@ -80,15 +80,15 @@ function Notification({ user }) {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-100 via-sky-100 to-blue-100 relative overflow-hidden animate-fadeIn">
+    <div className="bg-gradient-to-br relative overflow-hidden animate-fadeIn">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-140px] right-[-80px] h-72 w-72 rounded-full bg-cyan-200/40 blur-3xl" />
-        <div className="absolute bottom-[-120px] left-[-60px] h-80 w-80 rounded-full bg-blue-200/40 blur-3xl" />
+        <div className="absolute top-[-140px] right-[-80px] h-72 w-72 rounded-full" />
+        <div className="absolute bottom-[-120px] left-[-60px] h-80 w-80 rounded-full " />
       </div>
 
-      <div className="relative max-w-6xl mx-auto px-4 py-6 md:px-8 md:py-8">
+      <div className="relative max-w-6xl mx-auto">
 
-        <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-6">
+        <div>
           <section className="rounded-[28px] border border-white/70 bg-white/95 backdrop-blur-xl p-6 md:p-7 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.18)]">
             <div className="flex flex-wrap gap-4 items-start justify-between">
               <div>
@@ -99,12 +99,6 @@ function Notification({ user }) {
                 <p className="mt-3 max-w-2xl text-sm md:text-base text-slate-500">
                   Pantau pembaruan penting dengan tampilan dashboard yang lebih rapi, ringan, dan mudah dibaca.
                 </p>
-              </div>
-
-              <div className="rounded-2xl bg-slate-950 px-4 py-3 text-white min-w-[180px] shadow-lg">
-                <p className="text-[11px] uppercase tracking-[0.2em] text-slate-300">Hari ini</p>
-                <p className="mt-2 text-2xl font-black">{summary.today_notifications}</p>
-                <p className="text-sm text-slate-200">Notifikasi aktif</p>
               </div>
             </div>
 
@@ -192,43 +186,7 @@ function Notification({ user }) {
             </div>
           </section>
 
-          <aside className="rounded-[28px] border border-white/70 bg-white/90 backdrop-blur-xl p-6 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.28)]">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="rounded-xl bg-cyan-50 p-2 text-cyan-600">
-                <CheckCircle2 className="w-5 h-5" />
-              </div>
-              <div>
-                <h2 className="text-lg font-bold text-slate-900">Status keamanan</h2>
-                <p className="text-sm text-slate-500">Data akun Anda aman dan selalu terpantau.</p>
-              </div>
-            </div>
-
-            <div className="rounded-[22px] bg-gradient-to-br from-slate-950 to-slate-800 p-4 text-white">
-              <p className="text-[11px] uppercase tracking-[0.2em] text-slate-300">Prioritas</p>
-              <p className="mt-3 text-lg font-bold">{summary.needs_attention_count} notifikasi perlu ditindaklanjuti</p>
-              <p className="mt-2 text-sm text-slate-200 leading-6">
-                Tetap pastikan pembayaran dan claim Anda berstatus aman agar tidak ada kendala layanan.
-              </p>
-            </div>
-
-            <div className="mt-6 rounded-[22px] border border-slate-100 bg-slate-50/70 p-4">
-              <p className="text-sm font-bold text-slate-900">Aktivitas minggu ini</p>
-              <ul className="mt-4 space-y-3 text-sm text-slate-600">
-                <li className="flex justify-between gap-3">
-                  <span>Claim diajukan</span>
-                  <span className="font-semibold text-slate-900">{summary.weekly_activity.claims_submitted}</span>
-                </li>
-                <li className="flex justify-between gap-3">
-                  <span>Pembayaran berhasil</span>
-                  <span className="font-semibold text-slate-900">{summary.weekly_activity.successful_payments}</span>
-                </li>
-                <li className="flex justify-between gap-3">
-                  <span>Reminder aktif</span>
-                  <span className="font-semibold text-slate-900">{summary.weekly_activity.active_reminders}</span>
-                </li>
-              </ul>
-            </div>
-          </aside>
+          
         </div>
       </div>
     </div>

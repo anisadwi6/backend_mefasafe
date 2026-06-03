@@ -4,16 +4,17 @@ import Profile from "./Profile";
 import Notifikasi from "./Notifikasi";
 import ChatBot from "./ChatBot";
 import HealthService from "./HealthService";
+import KalenderPengingat from "./KalenderPengingat";
+import Feedback from "./Feedback";
+import PendaftaranLayanan from "./PendaftaranLayanan";
 import DaftarRS from "./DaftarRS";
-import PendaftaranRS from "./PendaftaranRS";
 import Riwayat from "./Riwayat";
 import Asuransi from "./Asuransi";
 import Klaim from "./Klaim";
 import Konsultasi from "./Konsultasi";
-import SupportPage from "./SupportPage";
+// import SupportPage from "./SupportPage";
 import TentangKami from "./TentangKami";
 import UserTestimonials from "./UserTestimonials";
-import AccessibilityPanel from "./AccessibilityPanel";
 import { useAccessibility } from "./useAccessibility";
 import ChatNotifToast from "./ChatNotifToast";
 import { useChatNotif } from "./useChatNotif";
@@ -48,6 +49,7 @@ import {
   Info,
 } from "lucide-react";
 import logo from "../../../assets/logo.png";
+import mefasafe from "../../../assets/mefasafe.png";
 import family from "../../../assets/family.png";
 
 export default function Home({ user, profile, onLogout }) {
@@ -173,29 +175,26 @@ export default function Home({ user, profile, onLogout }) {
     {
       icon: <Calendar className="w-7 h-7" />,
       label: "Kalender Pengingat",
-      onClick: () => {},
-      gradient: "from-slate-500 via-slate-400 to-slate-300",
-      color: "slate",
-      description: "Fitur ini tidak tersedia",
-      disabled: true,
+      onClick: () => navigate("/kalender-pengingat"),
+      gradient: "from-orange-500 via-yellow-500 to-orange-600",
+      color: "cyan",
+      description: "Atur pengingat kesehatan Anda",
     },
     {
       icon: <MessageSquare className="w-7 h-7" />,
       label: "Feedback & Saran",
-      onClick: () => {},
-      gradient: "from-slate-500 via-slate-400 to-slate-300",
-      color: "slate",
-      description: "Fitur ini tidak tersedia",
-      disabled: true,
+      onClick: () => navigate("/feedback"),
+      gradient: "from-green-500 via-emerald-500 to-lime-500",
+      color: "green",
+      description: "Kirim masukan dan saran untuk layanan",
     },
     {
       icon: <Clock className="w-7 h-7" />,
       label: "Pendaftaran Layanan",
-      onClick: () => {},
-      gradient: "from-slate-500 via-slate-400 to-slate-300",
-      color: "slate",
-      description: "Fitur ini tidak tersedia",
-      disabled: true,
+      onClick: () => navigate("/pendaftaran-layanan"),
+      gradient: "from-violet-500 via-fuchsia-500 to-pink-500",
+      color: "purple",
+      description: "Daftarkan layanan kesehatan Anda",
     },
     {
       icon: <Clock className="w-7 h-7" />,
@@ -308,6 +307,7 @@ export default function Home({ user, profile, onLogout }) {
 
               <div className="flex items-center gap-3 group cursor-pointer">
                 <div className="relative">
+                  <img src={mefasafe} alt="Mefasafe" className="w-10 h-10 rounded-lg object-cover group-hover:scale-105 transition-transform duration-300" />
                   <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg opacity-0 group-hover:opacity-20 blur transition-opacity duration-300"></div>
                 </div>
                 <div>
@@ -487,18 +487,7 @@ export default function Home({ user, profile, onLogout }) {
                                 : <EyeOff className="w-5 h-5 group-hover/eye:scale-110 transition-transform" />}
                             </button>
                           </div>
-                          {/* Trend */}
-                          {!dashboardLoading && dashboardData?.balance && (
-                            <div className={`flex items-center gap-2 text-sm font-medium ${dashboardData.balance.trend_up ? "text-green-600" : "text-red-500"}`}>
-                              {dashboardData.balance.trend_up
-                                ? <TrendingUp className="w-4 h-4" />
-                                : <TrendingDown className="w-4 h-4" />}
-                              <span>
-                                {dashboardData.balance.trend_up ? "+" : "-"}
-                                {dashboardData.balance.trend_percent}% dari bulan lalu
-                              </span>
-                            </div>
-                          )}
+                          
                         </div>
 
                         <div className="flex flex-col items-end gap-2">
@@ -522,24 +511,9 @@ export default function Home({ user, profile, onLogout }) {
                         </div>
                       </div>
 
-                      {/* Progress Bar */}
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-600 font-medium">Penggunaan Limit</span>
-                          <span className="font-bold text-gray-900">
-                            {dashboardLoading ? "—" : `${dashboardData?.balance?.usage_percent ?? 0}%`}
-                          </span>
-                        </div>
-                        <div className="relative h-3 bg-gray-200/50 rounded-full overflow-hidden">
-                          <div
-                            className="absolute inset-y-0 left-0 bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 rounded-full shadow-lg transition-all duration-1000"
-                            style={{ width: `${dashboardData?.balance?.usage_percent ?? 0}%` }}
-                          ></div>
-                        </div>
-                      </div>
 
                       {/* Quick Actions */}
-                      <div className="grid grid-cols-3 gap-3 mt-6">
+                      <div className="grid grid-cols-2 gap-3 mt-6">
                         <button
                           type="button"
                           onClick={() => navigate("/klaim")}
@@ -648,9 +622,11 @@ export default function Home({ user, profile, onLogout }) {
           <Route path="/chatbot" element={<ChatBot />} />
           <Route path="/health-service" element={<HealthService user={user} />} />
           <Route path="/tentang" element={<TentangKami />} />
-          <Route path="/dukungan/:page" element={<SupportPage />} />
+          <Route path="/kalender-pengingat" element={<KalenderPengingat />} />
+          <Route path="/feedback" element={<Feedback />} />
+          <Route path="/pendaftaran-layanan" element={<PendaftaranLayanan />} />
+          {/* <Route path="/dukungan/:page" element={<SupportPage />} /> */}
           <Route path="/daftarRS" element={<DaftarRS user={user} />} />
-          <Route path="/daftar-rs/:id" element={<PendaftaranRS user={user} />} />
           <Route path="/riwayat" element={<Riwayat user={user} />} />
           <Route path="/asuransi" element={<Asuransi user={user} />} />
           <Route path="/klaim" element={<Klaim user={user} />} />
@@ -680,7 +656,8 @@ export default function Home({ user, profile, onLogout }) {
             {/* Brand */}
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <img src={logo} alt="MefaSafe" className="h-8 brightness-0 invert" />
+                <img src={mefasafe} alt="MefaSafe" className="h-8" />
+                <p className="text-sm font-semibold">Mefasafe Insurance</p>
               </div>
               <p className="text-gray-400 text-sm mb-6 leading-relaxed">
                 Platform asuransi kesehatan digital terpercaya untuk melindungi keluarga Indonesia.
@@ -689,9 +666,9 @@ export default function Home({ user, profile, onLogout }) {
                 {["facebook", "twitter", "instagram", "linkedin"].map((social) => (
                   <button
                     key={social}
-                    className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all duration-300 hover:scale-110"
+                    className="w-30 h-10 p-2 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all duration-300 hover:scale-110"
                   >
-                    <span className="text-xs">{social[0].toUpperCase()}</span>
+                    <span className="text-xs">{social.toUpperCase()}</span>
                   </button>
                 ))}
               </div>
@@ -726,12 +703,12 @@ export default function Home({ user, profile, onLogout }) {
               </h3>
               <ul className="space-y-3 text-sm text-gray-400">
                 {[
-                  { label: "Pusat Bantuan", path: "/dukungan/pusat-bantuan" },
-                  { label: "Syarat & Ketentuan", path: "/dukungan/syarat-dan-ketentuan" },
-                  { label: "Kebijakan Privasi", path: "/dukungan/kebijakan-privasi" },
-                  { label: "FAQ", path: "/dukungan/faq" },
-                  { label: "Peta Situs", path: "/dukungan/peta-situs" },
-                  { label: "Kebijakan Cookie", path: "/dukungan/kebijakan-cookie" },
+                  { label: "Pusat Bantuan"},
+                  { label: "Syarat & Ketentuan"},
+                  { label: "Kebijakan Privasi"},
+                  { label: "FAQ"},
+                  { label: "Peta Situs"},
+                  { label: "Kebijakan Cookie"},
                 ].map((item) => (
                   <li key={item.label}>
                     <button
@@ -757,7 +734,7 @@ export default function Home({ user, profile, onLogout }) {
                   href="mailto:bantuan@mefasafe.com" 
                   className="flex items-center gap-3 text-gray-400 hover:text-white transition-all duration-300 group"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-white/10 group-hover:bg-white/20 flex items-center justify-center transition-all duration-300">
+                  <div className="w-10 h-10 p-2 rounded-lg bg-white/10 group-hover:bg-white/20 flex items-center justify-center transition-all duration-300">
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
@@ -792,7 +769,7 @@ export default function Home({ user, profile, onLogout }) {
             <div className="flex items-center gap-6 text-sm text-gray-400">
               <button
                 type="button"
-                onClick={() => navigate("/dukungan/peta-situs")}
+                
                 className="hover:text-white transition-colors duration-300"
               >
                 Peta Situs
@@ -806,7 +783,7 @@ export default function Home({ user, profile, onLogout }) {
               </button>
               <button
                 type="button"
-                onClick={() => navigate("/dukungan/kebijakan-cookie")}
+                
                 className="hover:text-white transition-colors duration-300"
               >
                 Cookie
@@ -1047,14 +1024,6 @@ export default function Home({ user, profile, onLogout }) {
           onOpen={() => { navigate("/konsul"); clearChatBadge(); }}
         />
       </div>
-
-      <AccessibilityPanel
-        open={showA11yPanel}
-        onClose={() => setShowA11yPanel(false)}
-        settings={a11ySettings}
-        onUpdate={updateA11y}
-        onReset={resetA11y}
-      />
     </div>
   );
 }

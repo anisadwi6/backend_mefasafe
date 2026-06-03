@@ -131,41 +131,41 @@ export default function Asuransi({ user }) {
                     <div className="border-t border-slate-100 bg-slate-50/70 px-6 py-5 space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Nomor Polis</p>
+                          <p className="text-[10px] font-semibold uppercase Service-wider text-slate-500">Nomor Polis</p>
                           <p className="text-sm font-bold text-slate-900">{policy.policy_number}</p>
                         </div>
                         <div>
-                          <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Jenis Polis</p>
+                          <p className="text-[10px] font-semibold uppercase Service-wider text-slate-500">Jenis Polis</p>
                           <p className="text-sm font-bold text-slate-900">{TYPE_LABEL[policy.insurance_type] || policy.insurance_type}</p>
                         </div>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Premi</p>
+                          <p className="text-[10px] font-semibold uppercase Service-wider text-slate-500">Premi</p>
                           <p className="text-sm font-bold text-slate-900">{formatRupiah(policy.premium_amount)}</p>
                         </div>
                         <div>
-                          <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Limit Coverage</p>
+                          <p className="text-[10px] font-semibold uppercase Service-wider text-slate-500">Limit Coverage</p>
                           <p className="text-sm font-bold text-slate-900">{formatRupiah(policy.coverage_limit)}</p>
                         </div>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Periode</p>
+                          <p className="text-[10px] font-semibold uppercase Service-wider text-slate-500">Periode</p>
                           <p className="text-sm font-bold text-slate-900">{policy.start_date || "-"} - {policy.end_date || "-"}</p>
                         </div>
                         <div>
-                          <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Metode Pembayaran</p>
+                          <p className="text-[10px] font-semibold uppercase Service-wider text-slate-500">Metode Pembayaran</p>
                           <p className="text-sm font-bold text-slate-900">{policy.payment_method || "Belum dipilih"}</p>
                         </div>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Status Pembayaran</p>
+                          <p className="text-[10px] font-semibold uppercase Service-wider text-slate-500">Status Pembayaran</p>
                           <p className="text-sm font-bold text-slate-900">{policy.payment_status ? (STATUS_META[policy.payment_status]?.label || policy.payment_status) : "-"}</p>
                         </div>
                         <div>
-                          <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Status Polis</p>
+                          <p className="text-[10px] font-semibold uppercase Service-wider text-slate-500">Status Polis</p>
                           <p className="text-sm font-bold text-slate-900">{policy.status === "active" ? "Aktif" : "Tidak Aktif"}</p>
                         </div>
                       </div>

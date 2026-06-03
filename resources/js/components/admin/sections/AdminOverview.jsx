@@ -36,7 +36,7 @@ function Panel({ title, subtitle, children, className = "" }) {
     return (
         <section className={`rounded-[1.35rem] border border-slate-200/80 bg-white p-5 shadow-sm shadow-slate-200/70 ${className}`}>
             <div className="mb-4">
-                <h3 className="text-sm font-black tracking-tight text-slate-950">{title}</h3>
+                <h3 className="text-sm font-black Service-tight text-slate-950">{title}</h3>
                 {subtitle && <p className="mt-0.5 text-xs text-slate-500">{subtitle}</p>}
             </div>
             {children}
@@ -101,8 +101,8 @@ export default function AdminOverview() {
             <section className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm shadow-slate-200/70">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div>
-                        <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">Ringkasan Operasional</p>
-                        <h2 className="mt-1 text-2xl font-black tracking-tight text-slate-950">Dashboard Admin</h2>
+                        <p className="text-xs font-bold uppercase Service-[0.18em] text-blue-600">Ringkasan Operasional</p>
+                        <h2 className="mt-1 text-2xl font-black Service-tight text-slate-950">Dashboard Admin</h2>
                         <p className="mt-1 max-w-2xl text-sm text-slate-500">
                             Pantau performa polis, klaim, pembayaran, rumah sakit, dan konsultasi dari satu tempat.
                         </p>
@@ -129,7 +129,7 @@ export default function AdminOverview() {
                             </div>
                             <span className="rounded-full bg-slate-50 px-2 py-1 text-[11px] font-bold text-slate-400 ring-1 ring-slate-100">Live</span>
                         </div>
-                        <p className="truncate text-2xl font-black tracking-tight text-slate-950">{value}</p>
+                        <p className="truncate text-2xl font-black Service-tight text-slate-950">{value}</p>
                         <p className="mt-1 text-xs font-bold text-slate-700">{label}</p>
                         <p className="mt-0.5 text-xs text-slate-500">{sub}</p>
                     </div>

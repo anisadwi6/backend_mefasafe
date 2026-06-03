@@ -911,7 +911,7 @@ export default function Konsultasi({ user }) {
                                 <div className="p-6 space-y-5 overflow-y-auto">
                                     {/* Nominal */}
                                     <div className="rounded-2xl bg-purple-50 border border-purple-200 p-4 text-center">
-                                        <p className="text-xs text-purple-600 font-semibold uppercase tracking-wide mb-1">Nominal Transfer</p>
+                                        <p className="text-xs text-purple-600 font-semibold uppercase Service-wide mb-1">Nominal Transfer</p>
                                         <p className="text-3xl font-black text-purple-700">{formatRupiah(consultationPayAmount)}</p>
                                         <p className="text-xs text-purple-500 mt-1">Pastikan nominal tepat agar verifikasi lebih cepat</p>
                                     </div>
@@ -927,7 +927,7 @@ export default function Konsultasi({ user }) {
                                                     </div>
                                                     <div className="flex-1 min-w-0">
                                                         <p className="font-bold text-gray-900 text-sm">{acc.bank}</p>
-                                                        <p className="text-base font-mono font-semibold text-gray-700 tracking-wider">{acc.norek}</p>
+                                                        <p className="text-base font-mono font-semibold text-gray-700 Service-wider">{acc.norek}</p>
                                                         <p className="text-xs text-gray-400">{acc.atas_nama}</p>
                                                     </div>
                                                     <button onClick={() => copyNorek(acc.norek)}

@@ -428,7 +428,7 @@ FITUR UTAMA:
 - Konsultasi Dokter: Chat/video call dengan dokter 24/7 (gratis untuk umum, Rp 50.000 untuk spesialis)
 - Riwayat Transaksi: Lihat semua transaksi, klaim, dan pembayaran
 - Kalender Pengingat: Atur jadwal kontrol dokter, reminder minum obat, jadwal vaksin — notifikasi otomatis di hari H
-- Health Tracking: Monitor kesehatan harian
+- Health Service: Monitor kesehatan harian
 - Feedback & Saran: Berikan masukan untuk layanan
 - Notifikasi: Pusat pemberitahuan untuk klaim, transaksi, pendaftaran RS, konsultasi, dan pengingat kalender
 

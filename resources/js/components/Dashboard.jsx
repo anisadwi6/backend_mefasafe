@@ -12,9 +12,7 @@ import Riwayat from "./Riwayat";
 import Asuransi from "./Asuransi";
 import Klaim from "./Klaim";
 import Konsultasi from "./Konsultasi";
-// import SupportPage from "./SupportPage";
 import TentangKami from "./TentangKami";
-import UserTestimonials from "./UserTestimonials";
 import { useAccessibility } from "./useAccessibility";
 import ChatNotifToast from "./ChatNotifToast";
 import { useChatNotif } from "./useChatNotif";
@@ -175,7 +173,7 @@ export default function Home({ user, profile, onLogout }) {
     },
     {
       icon: <Activity className="w-7 h-7" />,
-      label: "Health Tracking",
+      label: "Health Service",
       onClick: () => navigate("/health-service"),
       gradient: "from-sky-500 via-cyan-500 to-blue-600",
       color: "sky",
@@ -467,7 +465,7 @@ export default function Home({ user, profile, onLogout }) {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <Wallet className="w-5 h-5 text-blue-600" />
-                            <p className="text-gray-600 text-sm font-semibold uppercase tracking-wide">Saldo Asuransi</p>
+                            <p className="text-gray-600 text-sm font-semibold uppercase Service-wide">Saldo Asuransi</p>
                           </div>
                           <div className="flex items-center gap-4 mb-3">
                             {dashboardLoading ? (
@@ -616,10 +614,6 @@ export default function Home({ user, profile, onLogout }) {
                   ))}
                 </div>
               </div>
-
-              {/* Testimoni Pengguna */}
-              <UserTestimonials onNavigate={openPromo} />
-
             </div>
           } />
           <Route path="/notifikasi" element={<Notifikasi user={user} />} />
@@ -680,7 +674,7 @@ export default function Home({ user, profile, onLogout }) {
 
             {/* Quick Services */}
             <div>
-              <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-sm font-bold text-white mb-6 uppercase Service-wider flex items-center gap-2">
                 <div className="w-1 h-4 bg-gradient-to-b from-cyan-500 to-blue-600 rounded"></div>
                 Layanan
               </h3>
@@ -701,7 +695,7 @@ export default function Home({ user, profile, onLogout }) {
 
             {/* Help & Support */}
             <div>
-              <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-sm font-bold text-white mb-6 uppercase Service-wider flex items-center gap-2">
                 <div className="w-1 h-4 bg-gradient-to-b from-cyan-500 to-blue-600 rounded"></div>
                 Dukungan
               </h3>
@@ -729,7 +723,7 @@ export default function Home({ user, profile, onLogout }) {
 
             {/* Contact */}
             <div>
-              <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-sm font-bold text-white mb-6 uppercase Service-wider flex items-center gap-2">
                 <div className="w-1 h-4 bg-gradient-to-b from-sky-500 to-blue-600 rounded"></div>
                 Hubungi Kami
               </h3>

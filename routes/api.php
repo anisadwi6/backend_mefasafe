@@ -18,7 +18,6 @@ use App\Http\Controllers\Api\PromoCodeController;
 use App\Http\Controllers\Api\ReferralController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\MonitorController;
 use App\Http\Controllers\Api\ServiceRegistrationController;
 use App\Http\Controllers\Api\HealthServiceController;
 use App\Http\Controllers\Api\AdminController;
@@ -67,11 +66,6 @@ Route::prefix('v1')->group(function (): void {
 
     // My policies
     Route::get('/my-policies', [InsurancePolicyController::class, 'myPolicies']);
-
-    // Monitor - Saldo Polis dan Grafik Penggunaan
-    Route::get('/monitor/saldo-summary', [MonitorController::class, 'getPolicySaldoSummary']);
-    Route::get('/monitor/claims-history', [MonitorController::class, 'getClaimsHistory']);
-    Route::get('/monitor/saldo-chart', [MonitorController::class, 'getSaldoChart']);
 
     // Riwayat (registrasi RS + transaksi + klaim)
     Route::get('/riwayat', [RiwayatController::class, 'index']);

@@ -26,7 +26,6 @@ const FEATURES = [
   { icon: Hospital, title: "Rumah Sakit Mitra", desc: "Daftar RS mitra di peta interaktif dan registrasi kunjungan online.", color: "from-emerald-500 to-teal-500" },
   { icon: Sparkles, title: "Layanan Kesehatan", desc: "MCU, lab, vaksin, home care — pilih jadwal dan dapatkan nomor antrian.", color: "from-amber-500 to-orange-500" },
   { icon: CalendarDays, title: "Pengingat Kesehatan", desc: "Atur jadwal kontrol, minum obat, dan vaksin dengan notifikasi otomatis.", color: "from-indigo-500 to-blue-500" },
-  { icon: BarChart3, title: "Monitor Polis", desc: "Grafik penggunaan saldo, riwayat klaim, dan ringkasan perlindungan Anda.", color: "from-cyan-500 to-sky-500" },
   { icon: Bot, title: "MefaBot AI", desc: "Asisten virtual berbasis AI untuk tanya jawab seputar asuransi & kesehatan.", color: "from-slate-600 to-slate-800" },
   { icon: Gift, title: "Program Referral", desc: "Ajak teman bergabung dan dapatkan kode diskon setelah target undangan terpenuhi.", color: "from-pink-500 to-rose-500" },
   { icon: TicketPercent, title: "Kode Promo", desc: "Gunakan kode diskon saat pembayaran asuransi, konsultasi, atau layanan kesehatan.", color: "from-fuchsia-500 to-purple-500" },
@@ -62,8 +61,8 @@ export default function TentangKami() {
           <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 px-8 py-12 md:px-12 md:py-14 text-white">
             <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
               <div className="max-w-2xl">
-                <p className="text-xs font-bold uppercase tracking-[0.3em] text-blue-200">Tentang Kami</p>
-                <h1 className="mt-4 text-4xl font-black tracking-tight md:text-5xl">
+                <p className="text-xs font-bold uppercase Service-[0.3em] text-blue-200">Tentang Kami</p>
+                <h1 className="mt-4 text-4xl font-black Service-tight md:text-5xl">
                   MefaSafe
                 </h1>
                 <p className="mt-2 text-xl font-semibold text-blue-100">

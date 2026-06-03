@@ -92,8 +92,8 @@ function Notification({ user }) {
           <section className="rounded-[28px] border border-white/70 bg-white/95 backdrop-blur-xl p-6 md:p-7 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.18)]">
             <div className="flex flex-wrap gap-4 items-start justify-between">
               <div>
-                <p className="text-sm font-semibold text-cyan-600 uppercase tracking-[0.25em]">Notifikasi</p>
-                <h1 className="mt-2 text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
+                <p className="text-sm font-semibold text-cyan-600 uppercase Service-[0.25em]">Notifikasi</p>
+                <h1 className="mt-2 text-3xl md:text-4xl font-black text-slate-900 Service-tight">
                   Ringkasan aktivitas terbaru
                 </h1>
                 <p className="mt-3 max-w-2xl text-sm md:text-base text-slate-500">
@@ -107,7 +107,7 @@ function Notification({ user }) {
                 <div key={item.label} className="rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm">
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-[11px] uppercase tracking-[0.2em] text-slate-400">{item.label}</p>
+                      <p className="text-[11px] uppercase Service-[0.2em] text-slate-400">{item.label}</p>
                       <p className="mt-2 text-2xl font-black text-slate-900">{item.value}</p>
                     </div>
                     <item.icon className={`w-6 h-6 ${item.color}`} />
@@ -166,7 +166,7 @@ function Notification({ user }) {
                           <div>
                             <div className="flex flex-wrap items-center gap-2">
                               <h2 className="text-base md:text-lg font-bold text-slate-900">{item.title}</h2>
-                              <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600">
+                              <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold uppercase Service-[0.2em] text-slate-600">
                                 {item.status}
                               </span>
                             </div>

@@ -216,8 +216,8 @@ export default function Riwayat({ user }) {
                         <div className="rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 p-4 text-white">
                           <div className="flex items-center justify-between">
                             <div>
-                              <p className="text-[10px] font-semibold opacity-80 uppercase tracking-wider mb-1">Nomor Antrian</p>
-                              <p className="text-3xl font-black tracking-widest">{item.queue_number}</p>
+                              <p className="text-[10px] font-semibold opacity-80 uppercase Service-wider mb-1">Nomor Antrian</p>
+                              <p className="text-3xl font-black Service-widest">{item.queue_number}</p>
                             </div>
                             <div className="text-right">
                               <QrCode className="w-10 h-10 opacity-60 ml-auto mb-1" />

@@ -61,7 +61,7 @@ Dibangun menggunakan **Laravel 13** sebagai backend REST API dan **React 19** se
 
 ### 💰 Klaim Asuransi
 - Pengajuan klaim dengan upload dokumen pendukung
-- Tracking status klaim (menunggu, diproses, disetujui, ditolak)
+- Service status klaim (menunggu, diproses, disetujui, ditolak)
 - Riwayat klaim lengkap
 
 ### 🏨 Daftar & Pendaftaran Rumah Sakit
@@ -436,7 +436,7 @@ http://127.0.0.1:8000/api
 - ✅ **Kalender Pengingat** dengan popup notifikasi otomatis
 - ✅ Sistem notifikasi terintegrasi
 - ✅ MefaBot — chatbot AI berbasis Gemini
-- ✅ Health Tracking
+- ✅ Health Service
 - ✅ Feedback & rating sistem
 - ✅ Manajemen profil dengan foto dan tanda tangan digital
 - ✅ Halaman Tentang Kami & Pusat Bantuan

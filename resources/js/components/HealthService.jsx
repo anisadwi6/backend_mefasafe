@@ -261,7 +261,7 @@ export default function HealthService({ user }) {
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
           <div>
-            <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+            <h1 className="text-2xl md:text-3xl font-black text-slate-900 Service-tight flex items-center gap-2">
               <Sparkles className="w-6 h-6 text-indigo-500" />
               Health Service
             </h1>
@@ -326,7 +326,7 @@ export default function HealthService({ user }) {
                       </ul>
 
                       <div className="border-t border-slate-100 pt-4">
-                        <p className="text-[11px] text-slate-400 uppercase tracking-wider mb-1">Premi / bulan</p>
+                        <p className="text-[11px] text-slate-400 uppercase Service-wider mb-1">Premi / bulan</p>
                         <p className={`text-xl font-black ${style.textColor}`}>{formatRupiah(pkg.premium_amount)}</p>
                       </div>
 
@@ -355,7 +355,7 @@ export default function HealthService({ user }) {
                 })()}
               </div>
               <div>
-                <p className="text-xs font-semibold opacity-80 uppercase tracking-wider">Polis Dipilih</p>
+                <p className="text-xs font-semibold opacity-80 uppercase Service-wider">Polis Dipilih</p>
                 <p className="text-lg font-black">{selectedPolis.label}</p>
                 <p className="text-sm opacity-90">Premi {formatRupiah(selectedPolis.premium_amount)}/bulan</p>
               </div>
@@ -542,8 +542,8 @@ export default function HealthService({ user }) {
 
               {/* Nomor polis */}
               <div className="rounded-2xl bg-gradient-to-br from-blue-500 to-purple-500 p-5 text-white mb-6">
-                <p className="text-xs font-semibold opacity-80 uppercase tracking-wider mb-1">Nomor Polis</p>
-                <p className="text-2xl font-black tracking-widest">{successData.policy_number}</p>
+                <p className="text-xs font-semibold opacity-80 uppercase Service-wider mb-1">Nomor Polis</p>
+                <p className="text-2xl font-black Service-widest">{successData.policy_number}</p>
                 <p className="text-sm opacity-90 mt-2">{selectedPolis?.label}</p>
               </div>
 

@@ -155,7 +155,7 @@ export default function Klaim({ user }) {
                     <div className="text-right">
                       <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full ${statusCfg.color}`}>
                         <StatusIcon className="w-3.5 h-3.5" />
-                        <span className="text-xs font-bold uppercase tracking-wide">{c.status}</span>
+                        <span className="text-xs font-bold uppercase Service-wide">{c.status}</span>
                       </div>
                     </div>
                   </div>

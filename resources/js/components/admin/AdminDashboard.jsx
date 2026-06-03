@@ -134,7 +134,7 @@ export default function AdminDashboard({ admin, onLogout }) {
                         <img src={mefasafe} className="h-5 w-5" />
                     </div>
                     <div className="min-w-0">
-                        <p className="text-base font-black leading-tight tracking-tight">MefaSafe</p>
+                        <p className="text-base font-black leading-tight Service-tight">MefaSafe</p>
                         <p className="text-xs font-medium text-slate-500">Admin Control Center</p>
                     </div>
                     <button
@@ -147,7 +147,7 @@ export default function AdminDashboard({ admin, onLogout }) {
 
                 {/* Nav */}
                 <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
-                    <p className="px-3 pb-2 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">Menu</p>
+                    <p className="px-3 pb-2 text-[11px] font-bold uppercase Service-[0.18em] text-slate-400">Menu</p>
                     {NAV.map(({ id, label, icon: Icon }) => (
                         (() => {
                             const rawBadge = navBadges[id] || 0;
@@ -228,8 +228,8 @@ export default function AdminDashboard({ admin, onLogout }) {
                         <Menu className="h-5 w-5" />
                     </button>
                     <div className="min-w-0">
-                        <p className="hidden text-xs font-semibold uppercase tracking-[0.16em] text-slate-400 sm:block">MefaSafe Admin</p>
-                        <h1 className="truncate text-xl font-black tracking-tight text-slate-950">{currentNav?.label}</h1>
+                        <p className="hidden text-xs font-semibold uppercase Service-[0.16em] text-slate-400 sm:block">MefaSafe Admin</p>
+                        <h1 className="truncate text-xl font-black Service-tight text-slate-950">{currentNav?.label}</h1>
                     </div>
                     <div className="ml-auto flex items-center gap-2">
                         {chatUnread > 0 && (

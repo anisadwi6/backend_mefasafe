@@ -149,7 +149,7 @@ function ChatBot() {
               <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
             </div>
             <div>
-              <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">MefaBot</h1>
+              <h1 className="text-2xl md:text-3xl font-black text-slate-900 Service-tight">MefaBot</h1>
               <p className="text-sm text-slate-500 flex items-center gap-1">
                 <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                 Online - Siap membantu Anda

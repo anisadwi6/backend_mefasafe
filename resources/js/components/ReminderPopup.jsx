@@ -77,7 +77,7 @@ export default function ReminderPopup({ userId }) {
           <div className="min-w-0 flex-1">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-orange-500">Pengingat Hari Ini</p>
+                <p className="text-[11px] font-bold uppercase Service-[0.25em] text-orange-500">Pengingat Hari Ini</p>
                 <h2 className="mt-1 text-base font-black text-slate-900">{visibleReminders.length} reminder aktif</h2>
               </div>
               <button

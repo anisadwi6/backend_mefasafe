@@ -105,7 +105,7 @@ function HospitalModal({ hospital, onClose, onSaved }) {
             <div className="w-full max-w-3xl rounded-2xl bg-white shadow-2xl">
                 <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
                     <div>
-                        <p className="text-xs font-semibold uppercase tracking-wide text-blue-500">Rumah Sakit</p>
+                        <p className="text-xs font-semibold uppercase Service-wide text-blue-500">Rumah Sakit</p>
                         <h3 className="text-lg font-bold text-slate-900">{isEdit ? "Edit Rumah Sakit" : "Tambah Rumah Sakit"}</h3>
                     </div>
                     <button onClick={onClose} className="rounded-xl p-2 text-slate-500 hover:bg-slate-100">

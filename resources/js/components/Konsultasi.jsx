@@ -496,10 +496,6 @@ export default function Konsultasi({ user }) {
                     
                     <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
                         <div>
-                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-sm font-semibold mb-4 border border-white/20">
-                                <Stethoscope className="w-4 h-4 text-purple-300" />
-                                <span className="text-purple-100">Layanan Medis MefaSafe</span>
-                            </div>
                             <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
                                 Konsultasi Dokter <br/> 
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-blue-300">Tanpa Antre</span>
@@ -542,10 +538,7 @@ export default function Konsultasi({ user }) {
                                     className="w-full bg-white border border-gray-200 rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all shadow-sm"
                                 />
                             </div>
-                            <button className="bg-white border border-gray-200 px-6 py-4 rounded-2xl font-semibold text-gray-700 hover:bg-gray-50 transition-all shadow-sm flex items-center justify-center gap-2">
-                                <Clock className="w-5 h-5" />
-                                Tersedia Hari Ini
-                            </button>
+                            
                         </div>
 
                         {/* Doctors Grid */}
@@ -605,12 +598,6 @@ export default function Konsultasi({ user }) {
                                 <Info className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                                 <h3 className="text-lg font-semibold text-gray-700 mb-2">Belum ada konsultasi</h3>
                                 <p className="text-gray-500">Anda belum pernah melakukan konsultasi dokter. Mulai cari dokter sekarang!</p>
-                                <button 
-                                    onClick={() => setActiveTab("doctors")}
-                                    className="mt-6 px-6 py-2.5 bg-purple-600 text-white font-medium rounded-xl hover:bg-purple-700 transition-all"
-                                >
-                                    Cari Dokter
-                                </button>
                             </div>
                         ) : (
                             <div className="space-y-4">

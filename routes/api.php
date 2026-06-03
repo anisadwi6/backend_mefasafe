@@ -131,10 +131,6 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/consultations/{id}/verify-payment', [AdminController::class, 'verifyConsultationPayment']);
         Route::post('/consultations/{id}/messages', [AdminController::class, 'sendConsultationMessage']);
 
-        // Feedbacks
-        Route::get('/feedbacks', [AdminController::class, 'feedbacks']);
-        Route::put('/feedbacks/{id}/featured', [AdminController::class, 'updateFeedbackFeatured']);
-
         // Hospital Registrations
         Route::get('/hospital-registrations', [AdminController::class, 'hospitalRegistrations']);
 
@@ -147,10 +143,5 @@ Route::prefix('v1')->group(function (): void {
         Route::put('/packages/{id}', [AdminController::class, 'updatePackage']);
         Route::delete('/packages/{id}', [AdminController::class, 'deletePackage']);
 
-        // Kode Promo (diskon pembayaran)
-        Route::get('/promo-codes', [AdminController::class, 'promoCodes']);
-        Route::post('/promo-codes', [AdminController::class, 'storePromoCode']);
-        Route::put('/promo-codes/{id}', [AdminController::class, 'updatePromoCode']);
-        Route::delete('/promo-codes/{id}', [AdminController::class, 'deletePromoCode']);
     });
 });

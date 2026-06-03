@@ -6,12 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Claim;
 use App\Models\Doctor;
 use App\Models\DoctorConsultation;
-use App\Models\Feedback;
 use App\Models\Hospital;
 use App\Models\HospitalRegistration;
 use App\Models\InsurancePackage;
 use App\Models\InsurancePolicy;
-use App\Models\PromoCode;
 use App\Models\ServiceRegistration;
 use App\Models\Transaction;
 use App\Models\User;
@@ -69,13 +67,9 @@ class AdminController extends Controller
         $inactiveDoctors   = Doctor::where('availability', 'unavailable')->count();
         $totalConsultations = DoctorConsultation::count();
         $waitingConsultations = DoctorConsultation::where('status', 'waiting_approval')->count();
-        $totalFeedbacks     = Feedback::count();
         $totalPackages      = InsurancePackage::count();
-        $totalPromoCodes     = PromoCode::count();
-        $activePromoCodes    = PromoCode::where('is_active', true)->count();
         $pendingRegistrations = HospitalRegistration::where('status', 'registered')->count()
             + ServiceRegistration::where('status', 'registered')->count();
-        $avgRating         = Feedback::avg('rating') ?? 0;
 
         // Monthly revenue (last 6 months) — uses substr() which works on SQLite & MySQL
         $monthlyRevenue = Transaction::select(
@@ -122,11 +116,7 @@ class AdminController extends Controller
                 'total_consultations'  => $totalConsultations,
                 'pending_consultations'=> $pendingConsultations + $waitingConsultations,
                 'pending_registrations'=> $pendingRegistrations,
-                'total_feedbacks'      => $totalFeedbacks,
                 'total_packages'       => $totalPackages,
-                'total_promo_codes'    => $totalPromoCodes,
-                'active_promo_codes'   => $activePromoCodes,
-                'avg_rating'           => round($avgRating, 1),
                 'monthly_revenue'      => $monthlyRevenue,
                 'claims_by_status'     => $claimsByStatus,
                 'policies_by_type'     => $policiesByType,
@@ -468,37 +458,6 @@ class AdminController extends Controller
         return response()->json(['success' => true, 'data' => $msg, 'message' => 'Message sent.']);
     }
 
-    // ─── FEEDBACKS ───────────────────────────────────────────────────────────
-
-    public function feedbacks(Request $request): JsonResponse
-    {
-        $query = Feedback::with('user')
-            ->when($request->category, fn($q) => $q->where('category', $request->category))
-            ->when($request->filled('is_featured'), fn($q) => $q->where('is_featured', $request->boolean('is_featured')))
-            ->latest();
-
-        return response()->json(['success' => true, 'data' => $query->paginate($request->per_page ?? 15)]);
-    }
-
-    public function updateFeedbackFeatured(Request $request, string $id): JsonResponse
-    {
-        $feedback = Feedback::findOrFail($id);
-
-        $validated = $request->validate([
-            'is_featured' => ['required', 'boolean'],
-        ]);
-
-        $feedback->update($validated);
-
-        return response()->json([
-            'success' => true,
-            'message' => $validated['is_featured']
-                ? 'Feedback ditampilkan di halaman pengguna.'
-                : 'Feedback disembunyikan dari halaman pengguna.',
-            'data' => $feedback->fresh('user'),
-        ]);
-    }
-
     // ─── HOSPITAL REGISTRATIONS ──────────────────────────────────────────────
 
     public function hospitalRegistrations(Request $request): JsonResponse
@@ -579,80 +538,5 @@ class AdminController extends Controller
         InsurancePackage::findOrFail($id)->delete();
 
         return response()->json(['success' => true, 'message' => 'Package deleted.']);
-    }
-
-
-
-    public function promoCodes(Request $request): JsonResponse
-    {
-        $query = PromoCode::query()
-            ->when($request->search, fn ($q) => $q->where('code', 'like', "%{$request->search}%")
-                ->orWhere('title', 'like', "%{$request->search}%"))
-            ->orderByDesc('id');
-
-        return response()->json(['success' => true, 'data' => $query->paginate($request->per_page ?? 15)]);
-    }
-
-    public function storePromoCode(Request $request): JsonResponse
-    {
-        $validated = $this->validatePromoCodePayload($request);
-        $validated['code'] = strtoupper($validated['code']);
-
-        $promoCode = PromoCode::create($validated);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Kode promo berhasil ditambahkan.',
-            'data'    => $promoCode,
-        ], 201);
-    }
-
-    public function updatePromoCode(Request $request, string $id): JsonResponse
-    {
-        $promoCode = PromoCode::findOrFail($id);
-        $validated = $this->validatePromoCodePayload($request, true);
-
-        if (isset($validated['code'])) {
-            $validated['code'] = strtoupper($validated['code']);
-        }
-
-        $promoCode->update($validated);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Kode promo berhasil diperbarui.',
-            'data'    => $promoCode->fresh(),
-        ]);
-    }
-
-    public function deletePromoCode(string $id): JsonResponse
-    {
-        PromoCode::findOrFail($id)->delete();
-
-        return response()->json(['success' => true, 'message' => 'Kode promo berhasil dihapus.']);
-    }
-
-    private function validatePromoCodePayload(Request $request, bool $isUpdate = false): array
-    {
-        $rules = [
-            'code'                => [$isUpdate ? 'sometimes' : 'required', 'string', 'max:50'],
-            'title'               => [$isUpdate ? 'sometimes' : 'required', 'string', 'max:255'],
-            'discount_percent'    => [$isUpdate ? 'sometimes' : 'required', 'integer', 'min:1', 'max:100'],
-            'applicable_features' => [$isUpdate ? 'sometimes' : 'required', 'array', 'min:1'],
-            'applicable_features.*' => ['string', 'in:' . implode(',', array_keys(PromoCode::FEATURE_LABELS))],
-            'usage_limit'         => ['nullable', 'integer', 'min:1'],
-            'per_user_limit'      => ['sometimes', 'integer', 'min:1', 'max:100'],
-            'starts_at'           => ['nullable', 'date'],
-            'ends_at'             => ['nullable', 'date', 'after_or_equal:starts_at'],
-            'is_active'           => ['sometimes', 'boolean'],
-        ];
-
-        if ($isUpdate) {
-            $rules['code'][] = 'unique:promo_codes,code,' . $request->route('id');
-        } else {
-            $rules['code'][] = 'unique:promo_codes,code';
-        }
-
-        return $request->validate($rules);
     }
 }

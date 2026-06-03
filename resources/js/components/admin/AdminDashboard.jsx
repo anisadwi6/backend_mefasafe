@@ -13,12 +13,11 @@ import AdminTransactions from "./sections/AdminTransactions";
 import AdminHospitals   from "./sections/AdminHospitals";
 import AdminDoctors     from "./sections/AdminDoctors";
 import AdminConsultations from "./sections/AdminConsultations";
-import AdminFeedbacks   from "./sections/AdminFeedbacks";
 import AdminRegistrations from "./sections/AdminRegistrations";
-import AdminPackages    from "./sections/AdminPackages";
-import AdminPromoCodes from "./sections/AdminPromoCodes";
+import AdminPackages    from "./sections/AdminAsurance";
 import ChatNotifToast   from "../ChatNotifToast";
 import { useChatNotif } from "../useChatNotif";
+import mefasafe from "../../../../assets/mefasafe.png";
 
 const NAV = [
     { id: "overview",       label: "Overview",          icon: LayoutDashboard },
@@ -30,9 +29,7 @@ const NAV = [
     { id: "doctors",        label: "Dokter",             icon: Stethoscope },
     { id: "consultations",  label: "Konsultasi Dokter",  icon: Stethoscope },
     { id: "registrations",  label: "Registrasi",         icon: Calendar },
-    { id: "feedbacks",      label: "Feedback",           icon: Star },
     { id: "packages",       label: "Paket Asuransi",     icon: Settings },
-    { id: "promo_codes",    label: "Kode Promo",         icon: Tag },
 ];
 
 const API = "/api/v1/admin";
@@ -98,9 +95,7 @@ export default function AdminDashboard({ admin, onLogout }) {
         doctors: stats?.inactive_doctors || stats?.total_doctors || 0,
         consultations: Math.max(Number(stats?.pending_consultations || 0), Number(chatUnread || 0)),
         registrations: stats?.pending_registrations || 0,
-        feedbacks: stats?.total_feedbacks || 0,
         packages: stats?.total_packages || 0,
-        promo_codes: stats?.active_promo_codes || stats?.total_promo_codes || 0,
     }), [stats, chatUnread]);
 
     const navBadgeTone = (id, value, isActive) => {
@@ -121,9 +116,7 @@ export default function AdminDashboard({ admin, onLogout }) {
         doctors:       AdminDoctors,
         consultations: AdminConsultations,
         registrations: AdminRegistrations,
-        feedbacks:     AdminFeedbacks,
         packages:      AdminPackages,
-        promo_codes:   AdminPromoCodes,
     }[active] || AdminOverview;
 
     const currentNav = NAV.find((n) => n.id === active);
@@ -138,7 +131,7 @@ export default function AdminDashboard({ admin, onLogout }) {
                 {/* Brand */}
                 <div className="flex items-center gap-3 border-b border-slate-100 px-5 py-5">
                     <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 shadow-lg shadow-slate-900/20">
-                        <Shield className="h-5 w-5 text-white" />
+                        <img src={mefasafe} className="h-5 w-5" />
                     </div>
                     <div className="min-w-0">
                         <p className="text-base font-black leading-tight tracking-tight">MefaSafe</p>

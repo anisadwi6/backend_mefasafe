@@ -101,7 +101,7 @@ export default function Klaim({ user }) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
+    <div className="min-h-screen bg-white p-6">
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center justify-between">
           <div>
@@ -132,12 +132,6 @@ export default function Klaim({ user }) {
               </div>
               <p className="font-semibold text-slate-600">Belum ada pengajuan klaim</p>
               <p className="text-sm mt-1">Ajukan klaim jika Anda butuh penggantian biaya</p>
-              <button 
-                onClick={() => setIsModalOpen(true)}
-                className="mt-6 px-5 py-2 bg-slate-900 text-white rounded-lg text-sm font-semibold hover:bg-slate-800 transition shadow-md"
-              >
-                Buat Pengajuan Baru
-              </button>
             </div>
           ) : (
             claims.map((c) => {
@@ -161,7 +155,7 @@ export default function Klaim({ user }) {
                     <div className="text-right">
                       <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full ${statusCfg.color}`}>
                         <StatusIcon className="w-3.5 h-3.5" />
-                        <span className="text-xs font-bold uppercase tracking-wide">{c.status}</span>
+                        <span className="text-xs font-bold uppercase Service-wide">{c.status}</span>
                       </div>
                     </div>
                   </div>

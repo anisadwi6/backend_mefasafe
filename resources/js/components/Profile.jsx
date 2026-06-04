@@ -131,8 +131,8 @@ export default function Profile({ user, profile, onUpdate }) {
       <div className="mb-8 animate-[fadeInUp_0.55s_ease-out]">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold text-indigo-600 uppercase tracking-[0.3em]">Profil</p>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mt-2">
+            <p className="text-sm font-semibold text-indigo-600 uppercase Service-[0.3em]">Profil</p>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 Service-tight mt-2">
               Kelola identitas Anda
             </h2>
             <p className="text-slate-500 mt-2 max-w-2xl text-sm md:text-base">
@@ -188,7 +188,7 @@ export default function Profile({ user, profile, onUpdate }) {
             </div>
 
             <div className="pb-2 flex-1">
-              <h3 className="text-2xl md:text-3xl font-black tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.18)]">
+              <h3 className="text-2xl md:text-3xl font-black Service-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.18)]">
                 {user?.name || 'Pengguna'}
               </h3>
               <p className="mt-2 text-sm md:text-base text-indigo-100/90 drop-shadow-[0_1px_6px_rgba(0,0,0,0.18)]">
@@ -197,15 +197,15 @@ export default function Profile({ user, profile, onUpdate }) {
 
               <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl">
                 <div className="rounded-2xl border border-slate-100 bg-slate-50/80 px-4 py-3">
-                  <p className="text-[11px] uppercase tracking-[0.2em] text-slate-400">Status</p>
+                  <p className="text-[11px] uppercase Service-[0.2em] text-slate-400">Status</p>
                   <p className="mt-2 text-sm font-bold text-slate-800">Siap disimpan</p>
                 </div>
                 <div className="rounded-2xl border border-slate-100 bg-slate-50/80 px-4 py-3">
-                  <p className="text-[11px] uppercase tracking-[0.2em] text-slate-400">Akun</p>
+                  <p className="text-[11px] uppercase Service-[0.2em] text-slate-400">Akun</p>
                   <p className="mt-2 text-sm font-bold text-slate-800">{user?.name ? 'Aktif' : 'Belum lengkap'}</p>
                 </div>
                 <div className="rounded-2xl border border-slate-100 bg-slate-50/80 px-4 py-3">
-                  <p className="text-[11px] uppercase tracking-[0.2em] text-slate-400">Dokumen</p>
+                  <p className="text-[11px] uppercase Service-[0.2em] text-slate-400">Dokumen</p>
                   <p className="mt-2 text-sm font-bold text-slate-800">{hasKtp && hasSignature ? '2/2 siap' : 'Perlu melengkapi'}</p>
                 </div>
               </div>
@@ -228,7 +228,7 @@ export default function Profile({ user, profile, onUpdate }) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <label className="block">
-                  <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-2">Username</span>
+                  <span className="block text-[11px] font-bold uppercase Service-[0.2em] text-slate-500 mb-2">Username</span>
                   <div className="relative group">
                     <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400 group-focus-within:text-indigo-600 transition-colors">
                       <User className="w-4 h-4" />
@@ -246,7 +246,7 @@ export default function Profile({ user, profile, onUpdate }) {
                 </label>
 
                 <label className="block">
-                  <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-2">Email</span>
+                  <span className="block text-[11px] font-bold uppercase Service-[0.2em] text-slate-500 mb-2">Email</span>
                   <div className="relative group">
                     <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400 group-focus-within:text-indigo-600 transition-colors">
                       <Mail className="w-4 h-4" />
@@ -276,7 +276,7 @@ export default function Profile({ user, profile, onUpdate }) {
 
               <div className="space-y-4">
                 <label className="block">
-                  <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-2">Nama lengkap</span>
+                  <span className="block text-[11px] font-bold uppercase Service-[0.2em] text-slate-500 mb-2">Nama lengkap</span>
                   <input
                     type="text"
                     name="full_name"
@@ -288,7 +288,7 @@ export default function Profile({ user, profile, onUpdate }) {
                 </label>
 
                 <label className="block">
-                  <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-2">Tempat, tanggal lahir</span>
+                  <span className="block text-[11px] font-bold uppercase Service-[0.2em] text-slate-500 mb-2">Tempat, tanggal lahir</span>
                   <div className="relative group">
                     <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400 group-focus-within:text-violet-600 transition-colors">
                       <Calendar className="w-4 h-4" />
@@ -305,7 +305,7 @@ export default function Profile({ user, profile, onUpdate }) {
                 </label>
 
                 <label className="block">
-                  <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-2">Alamat lengkap</span>
+                  <span className="block text-[11px] font-bold uppercase Service-[0.2em] text-slate-500 mb-2">Alamat lengkap</span>
                   <div className="relative group">
                     <span className="pointer-events-none absolute left-3 top-3 text-slate-400 group-focus-within:text-violet-600 transition-colors">
                       <MapPin className="w-4 h-4" />
@@ -395,7 +395,7 @@ export default function Profile({ user, profile, onUpdate }) {
               </button>
 
               <div className="rounded-[20px] bg-gradient-to-br from-slate-950 to-slate-800 p-4 text-white">
-                <p className="text-[11px] uppercase tracking-[0.2em] text-slate-300">Tips cepat</p>
+                <p className="text-[11px] uppercase Service-[0.2em] text-slate-300">Tips cepat</p>
                 <p className="mt-3 text-sm leading-6 text-slate-100">
                   Gunakan dokumen dengan kontras yang baik agar verifikasi lebih cepat dan hasil unggahan terlihat lebih rapi.
                 </p>

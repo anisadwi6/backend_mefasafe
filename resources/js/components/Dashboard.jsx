@@ -12,9 +12,7 @@ import Riwayat from "./Riwayat";
 import Asuransi from "./Asuransi";
 import Klaim from "./Klaim";
 import Konsultasi from "./Konsultasi";
-// import SupportPage from "./SupportPage";
 import TentangKami from "./TentangKami";
-import UserTestimonials from "./UserTestimonials";
 import { useAccessibility } from "./useAccessibility";
 import ChatNotifToast from "./ChatNotifToast";
 import { useChatNotif } from "./useChatNotif";
@@ -38,6 +36,7 @@ import {
   Home as HomeIcon,
   ArrowRight,
   ChevronRight,
+  Wallet,
   Shield,
   Heart,
   Users,
@@ -173,6 +172,22 @@ export default function Home({ user, profile, onLogout }) {
       badge: chatUnread > 0 ? chatUnread : null,
     },
     {
+      icon: <Activity className="w-7 h-7" />,
+      label: "Health Service",
+      onClick: () => navigate("/health-service"),
+      gradient: "from-sky-500 via-cyan-500 to-blue-600",
+      color: "sky",
+      description: "Monitor kesehatan",
+    },
+    {
+      icon: <Clock className="w-7 h-7" />,
+      label: "Riwayat",
+      onClick: () => navigate("/riwayat"),
+      gradient: "from-cyan-500 via-sky-500 to-blue-600",
+      color: "cyan",
+      description: "Lihat riwayat pendaftaran dan transaksi",
+    },
+    {
       icon: <Calendar className="w-7 h-7" />,
       label: "Kalender Pengingat",
       onClick: () => navigate("/kalender-pengingat"),
@@ -180,6 +195,7 @@ export default function Home({ user, profile, onLogout }) {
       color: "cyan",
       description: "Atur pengingat kesehatan Anda",
     },
+    
     {
       icon: <MessageSquare className="w-7 h-7" />,
       label: "Feedback & Saran",
@@ -196,22 +212,8 @@ export default function Home({ user, profile, onLogout }) {
       color: "purple",
       description: "Daftarkan layanan kesehatan Anda",
     },
-    {
-      icon: <Clock className="w-7 h-7" />,
-      label: "Riwayat",
-      onClick: () => navigate("/riwayat"),
-      gradient: "from-cyan-500 via-sky-500 to-blue-600",
-      color: "cyan",
-      description: "Lihat riwayat pendaftaran dan transaksi",
-    },
-    {
-      icon: <Activity className="w-7 h-7" />,
-      label: "Health Tracking",
-      onClick: () => navigate("/health-service"),
-      gradient: "from-sky-500 via-cyan-500 to-blue-600",
-      color: "sky",
-      description: "Monitor kesehatan",
-    },
+    
+    
     {
       icon: <Users className="w-7 h-7" />,
       label: "Tentang Kami",
@@ -462,8 +464,8 @@ export default function Home({ user, profile, onLogout }) {
                       <div className="flex items-start justify-between mb-8">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
-                            <Shield className="w-5 h-5 text-blue-600" />
-                            <p className="text-gray-600 text-sm font-semibold uppercase tracking-wide">Saldo Asuransi</p>
+                            <Wallet className="w-5 h-5 text-blue-600" />
+                            <p className="text-gray-600 text-sm font-semibold uppercase Service-wide">Saldo Asuransi</p>
                           </div>
                           <div className="flex items-center gap-4 mb-3">
                             {dashboardLoading ? (
@@ -551,10 +553,10 @@ export default function Home({ user, profile, onLogout }) {
               <div>
                 <div className="flex items-center justify-between mb-8">
                   <div>
-                    <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-2">
+                    <h2 className="text-3xl font-bold">
                       Layanan Unggulan
                     </h2>
-                    <p className="text-gray-600">Akses cepat ke semua layanan kesehatan Anda</p>
+                    <p className="mt-2 text-gray-600">Akses cepat ke semua layanan kesehatan Anda</p>
                   </div>
                   
                 </div>
@@ -612,10 +614,6 @@ export default function Home({ user, profile, onLogout }) {
                   ))}
                 </div>
               </div>
-
-              {/* Testimoni Pengguna */}
-              <UserTestimonials onNavigate={openPromo} />
-
             </div>
           } />
           <Route path="/notifikasi" element={<Notifikasi user={user} />} />
@@ -657,7 +655,7 @@ export default function Home({ user, profile, onLogout }) {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <img src={mefasafe} alt="MefaSafe" className="h-8" />
-                <p className="text-sm font-semibold">Mefasafe Insurance</p>
+                <p className="text-sm font-semibold">Mefasafe <br></br> Insurance</p>
               </div>
               <p className="text-gray-400 text-sm mb-6 leading-relaxed">
                 Platform asuransi kesehatan digital terpercaya untuk melindungi keluarga Indonesia.
@@ -676,7 +674,7 @@ export default function Home({ user, profile, onLogout }) {
 
             {/* Quick Services */}
             <div>
-              <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-sm font-bold text-white mb-6 uppercase Service-wider flex items-center gap-2">
                 <div className="w-1 h-4 bg-gradient-to-b from-cyan-500 to-blue-600 rounded"></div>
                 Layanan
               </h3>
@@ -697,7 +695,7 @@ export default function Home({ user, profile, onLogout }) {
 
             {/* Help & Support */}
             <div>
-              <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-sm font-bold text-white mb-6 uppercase Service-wider flex items-center gap-2">
                 <div className="w-1 h-4 bg-gradient-to-b from-cyan-500 to-blue-600 rounded"></div>
                 Dukungan
               </h3>
@@ -725,7 +723,7 @@ export default function Home({ user, profile, onLogout }) {
 
             {/* Contact */}
             <div>
-              <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-sm font-bold text-white mb-6 uppercase Service-wider flex items-center gap-2">
                 <div className="w-1 h-4 bg-gradient-to-b from-sky-500 to-blue-600 rounded"></div>
                 Hubungi Kami
               </h3>

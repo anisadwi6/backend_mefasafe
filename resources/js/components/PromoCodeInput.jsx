@@ -72,7 +72,7 @@ export default function PromoCodeInput({
             setError("");
           }}
           placeholder="Contoh: MEFA10"
-          className="flex-1 rounded-xl border border-slate-200 px-4 py-3 text-sm font-bold uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="flex-1 rounded-xl border border-slate-200 px-4 py-3 text-sm font-bold uppercase Service-wider focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
         {applied ? (
           <button

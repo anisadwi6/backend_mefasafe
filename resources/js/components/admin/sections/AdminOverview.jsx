@@ -36,7 +36,7 @@ function Panel({ title, subtitle, children, className = "" }) {
     return (
         <section className={`rounded-[1.35rem] border border-slate-200/80 bg-white p-5 shadow-sm shadow-slate-200/70 ${className}`}>
             <div className="mb-4">
-                <h3 className="text-sm font-black tracking-tight text-slate-950">{title}</h3>
+                <h3 className="text-sm font-black Service-tight text-slate-950">{title}</h3>
                 {subtitle && <p className="mt-0.5 text-xs text-slate-500">{subtitle}</p>}
             </div>
             {children}
@@ -101,8 +101,8 @@ export default function AdminOverview() {
             <section className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm shadow-slate-200/70">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div>
-                        <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">Ringkasan Operasional</p>
-                        <h2 className="mt-1 text-2xl font-black tracking-tight text-slate-950">Dashboard Admin</h2>
+                        <p className="text-xs font-bold uppercase Service-[0.18em] text-blue-600">Ringkasan Operasional</p>
+                        <h2 className="mt-1 text-2xl font-black Service-tight text-slate-950">Dashboard Admin</h2>
                         <p className="mt-1 max-w-2xl text-sm text-slate-500">
                             Pantau performa polis, klaim, pembayaran, rumah sakit, dan konsultasi dari satu tempat.
                         </p>
@@ -120,7 +120,7 @@ export default function AdminOverview() {
                 </div>
             </section>
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {statCards.map(({ label, value, icon: Icon, color, sub }) => (
                     <div key={label} className="group rounded-[1.35rem] border border-slate-200/80 bg-white p-4 shadow-sm shadow-slate-200/70 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-200">
                         <div className="mb-4 flex items-start justify-between gap-3">
@@ -129,64 +129,11 @@ export default function AdminOverview() {
                             </div>
                             <span className="rounded-full bg-slate-50 px-2 py-1 text-[11px] font-bold text-slate-400 ring-1 ring-slate-100">Live</span>
                         </div>
-                        <p className="truncate text-2xl font-black tracking-tight text-slate-950">{value}</p>
+                        <p className="truncate text-2xl font-black Service-tight text-slate-950">{value}</p>
                         <p className="mt-1 text-xs font-bold text-slate-700">{label}</p>
                         <p className="mt-0.5 text-xs text-slate-500">{sub}</p>
                     </div>
                 ))}
-            </div>
-
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-                <Panel title="Pendapatan vs Klaim" subtitle="Tren 6 bulan terakhir" className="lg:col-span-2">
-                    {barData.length === 0 ? (
-                        <p className="py-10 text-center text-sm text-slate-400">Belum ada data transaksi.</p>
-                    ) : (
-                        <ResponsiveContainer width="100%" height={280}>
-                            <BarChart data={barData} margin={{ top: 0, right: 10, left: 0, bottom: 0 }}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-                                <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} />
-                                <YAxis tick={{ fontSize: 11, fill: "#64748b" }} tickFormatter={(v) => `${(v / 1e6).toFixed(0)}jt`} axisLine={false} tickLine={false} />
-                                <Tooltip formatter={(v) => fmt(v)} contentStyle={{ borderRadius: 16, border: "1px solid #e2e8f0", boxShadow: "0 18px 45px rgba(15,23,42,.12)" }} />
-                                <Bar dataKey="Premi" fill="#2563eb" radius={[8, 8, 0, 0]} />
-                                <Bar dataKey="Klaim" fill="#dc2626" radius={[8, 8, 0, 0]} />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    )}
-                </Panel>
-
-                <div className="space-y-4">
-                    <Panel title="Status Klaim">
-                        {claimPie.length === 0 ? (
-                            <p className="py-6 text-center text-xs text-slate-400">Belum ada klaim.</p>
-                        ) : (
-                            <ResponsiveContainer width="100%" height={150}>
-                                <PieChart>
-                                    <Pie data={claimPie} cx="50%" cy="50%" innerRadius={38} outerRadius={60} dataKey="value">
-                                        {claimPie.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
-                                    </Pie>
-                                    <Legend iconSize={8} wrapperStyle={{ fontSize: 11 }} />
-                                    <Tooltip contentStyle={{ borderRadius: 14, border: "1px solid #e2e8f0" }} />
-                                </PieChart>
-                            </ResponsiveContainer>
-                        )}
-                    </Panel>
-
-                    <Panel title="Polis per Tipe">
-                        {policyPie.length === 0 ? (
-                            <p className="py-6 text-center text-xs text-slate-400">Belum ada polis.</p>
-                        ) : (
-                            <ResponsiveContainer width="100%" height={150}>
-                                <PieChart>
-                                    <Pie data={policyPie} cx="50%" cy="50%" innerRadius={38} outerRadius={60} dataKey="value">
-                                        {policyPie.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
-                                    </Pie>
-                                    <Legend iconSize={8} wrapperStyle={{ fontSize: 11 }} />
-                                    <Tooltip contentStyle={{ borderRadius: 14, border: "1px solid #e2e8f0" }} />
-                                </PieChart>
-                            </ResponsiveContainer>
-                        )}
-                    </Panel>
-                </div>
             </div>
         </div>
     );

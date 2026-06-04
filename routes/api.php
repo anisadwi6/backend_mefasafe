@@ -18,7 +18,6 @@ use App\Http\Controllers\Api\PromoCodeController;
 use App\Http\Controllers\Api\ReferralController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\MonitorController;
 use App\Http\Controllers\Api\ServiceRegistrationController;
 use App\Http\Controllers\Api\HealthServiceController;
 use App\Http\Controllers\Api\AdminController;
@@ -67,11 +66,6 @@ Route::prefix('v1')->group(function (): void {
 
     // My policies
     Route::get('/my-policies', [InsurancePolicyController::class, 'myPolicies']);
-
-    // Monitor - Saldo Polis dan Grafik Penggunaan
-    Route::get('/monitor/saldo-summary', [MonitorController::class, 'getPolicySaldoSummary']);
-    Route::get('/monitor/claims-history', [MonitorController::class, 'getClaimsHistory']);
-    Route::get('/monitor/saldo-chart', [MonitorController::class, 'getSaldoChart']);
 
     // Riwayat (registrasi RS + transaksi + klaim)
     Route::get('/riwayat', [RiwayatController::class, 'index']);
@@ -131,10 +125,6 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/consultations/{id}/verify-payment', [AdminController::class, 'verifyConsultationPayment']);
         Route::post('/consultations/{id}/messages', [AdminController::class, 'sendConsultationMessage']);
 
-        // Feedbacks
-        Route::get('/feedbacks', [AdminController::class, 'feedbacks']);
-        Route::put('/feedbacks/{id}/featured', [AdminController::class, 'updateFeedbackFeatured']);
-
         // Hospital Registrations
         Route::get('/hospital-registrations', [AdminController::class, 'hospitalRegistrations']);
 
@@ -147,10 +137,5 @@ Route::prefix('v1')->group(function (): void {
         Route::put('/packages/{id}', [AdminController::class, 'updatePackage']);
         Route::delete('/packages/{id}', [AdminController::class, 'deletePackage']);
 
-        // Kode Promo (diskon pembayaran)
-        Route::get('/promo-codes', [AdminController::class, 'promoCodes']);
-        Route::post('/promo-codes', [AdminController::class, 'storePromoCode']);
-        Route::put('/promo-codes/{id}', [AdminController::class, 'updatePromoCode']);
-        Route::delete('/promo-codes/{id}', [AdminController::class, 'deletePromoCode']);
     });
 });

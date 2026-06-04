@@ -444,7 +444,7 @@ export default function DaftarRS({ user }) {
 
                   {selectedHospital.facilities && (
                     <div>
-                      <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Fasilitas</p>
+                      <p className="text-xs font-bold text-slate-500 uppercase Service-wider mb-2">Fasilitas</p>
                       <div className="flex flex-wrap gap-1.5">
                         {selectedHospital.facilities.split(",").map((f) => (
                           <span key={f} className="text-[11px] px-2 py-1 rounded-lg bg-slate-100 text-slate-600 font-medium">

@@ -17,7 +17,7 @@ import {
   Gift,
   Star,
 } from "lucide-react";
-import logo from "../../../assets/logo.png";
+import mefasafe from "../../../assets/mefasafe.png";
 
 const FEATURES = [
   { icon: ShieldCheck, title: "Polis & Asuransi", desc: "Beli paket, kelola polis aktif, dan pantau saldo perlindungan secara real-time.", color: "from-blue-500 to-cyan-500" },
@@ -26,7 +26,6 @@ const FEATURES = [
   { icon: Hospital, title: "Rumah Sakit Mitra", desc: "Daftar RS mitra di peta interaktif dan registrasi kunjungan online.", color: "from-emerald-500 to-teal-500" },
   { icon: Sparkles, title: "Layanan Kesehatan", desc: "MCU, lab, vaksin, home care — pilih jadwal dan dapatkan nomor antrian.", color: "from-amber-500 to-orange-500" },
   { icon: CalendarDays, title: "Pengingat Kesehatan", desc: "Atur jadwal kontrol, minum obat, dan vaksin dengan notifikasi otomatis.", color: "from-indigo-500 to-blue-500" },
-  { icon: BarChart3, title: "Monitor Polis", desc: "Grafik penggunaan saldo, riwayat klaim, dan ringkasan perlindungan Anda.", color: "from-cyan-500 to-sky-500" },
   { icon: Bot, title: "MefaBot AI", desc: "Asisten virtual berbasis AI untuk tanya jawab seputar asuransi & kesehatan.", color: "from-slate-600 to-slate-800" },
   { icon: Gift, title: "Program Referral", desc: "Ajak teman bergabung dan dapatkan kode diskon setelah target undangan terpenuhi.", color: "from-pink-500 to-rose-500" },
   { icon: TicketPercent, title: "Kode Promo", desc: "Gunakan kode diskon saat pembayaran asuransi, konsultasi, atau layanan kesehatan.", color: "from-fuchsia-500 to-purple-500" },
@@ -50,10 +49,10 @@ export default function TentangKami() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/40 to-indigo-50/60 animate-fadeIn">
+    <div className="min-h-screen">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-80px] right-[-60px] h-72 w-72 rounded-full bg-blue-200/30 blur-3xl" />
-        <div className="absolute bottom-[-100px] left-[-40px] h-80 w-80 rounded-full bg-indigo-200/30 blur-3xl" />
+        <div className="absolute top-[-80px] right-[-60px] h-72 w-72 rounded-full" />
+        <div className="absolute bottom-[-100px] left-[-40px] h-80 w-80 rounded-full" />
       </div>
 
       <div className="relative max-w-6xl mx-auto px-4 py-10 md:px-8 md:py-14 space-y-10">
@@ -62,8 +61,8 @@ export default function TentangKami() {
           <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 px-8 py-12 md:px-12 md:py-14 text-white">
             <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
               <div className="max-w-2xl">
-                <p className="text-xs font-bold uppercase tracking-[0.3em] text-blue-200">Tentang Kami</p>
-                <h1 className="mt-4 text-4xl font-black tracking-tight md:text-5xl">
+                <p className="text-xs font-bold uppercase Service-[0.3em] text-blue-200">Tentang Kami</p>
+                <h1 className="mt-4 text-4xl font-black Service-tight md:text-5xl">
                   MefaSafe
                 </h1>
                 <p className="mt-2 text-xl font-semibold text-blue-100">
@@ -84,8 +83,9 @@ export default function TentangKami() {
                 </button>
               </div>
               <div className="flex shrink-0 justify-center md:justify-end">
-                <div className="rounded-3xl bg-white/15 p-6 backdrop-blur-sm border border-white/20">
-                  <img src={logo} alt="MefaSafe" className="h-28 w-28 md:h-36 md:w-36 object-contain drop-shadow-lg" />
+                <div className="grid grid-cols-2 gap-2 rounded-3xl bg-white/15 p-6 backdrop-blur-sm border border-white/20">
+                  <img src={mefasafe} alt="MefaSafe" className="h-20 w-20 object-contain drop-shadow-lg" />
+                  <p className="text-lg font-bold text-white mt-2">MefaSafe <br></br>Insurance</p>
                 </div>
               </div>
             </div>
@@ -194,32 +194,7 @@ export default function TentangKami() {
           </div>
         </section>
 
-        {/* Footer CTA */}
-        <section className="rounded-3xl bg-slate-950 px-8 py-10 text-white text-center md:text-left md:flex md:items-center md:justify-between gap-6">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-blue-300">Bergabung dengan MefaSafe</p>
-            <h3 className="mt-2 text-2xl font-black">Lindungi kesehatan Anda hari ini.</h3>
-            <p className="mt-2 text-sm text-slate-400 max-w-md">
-              Daftar akun, pilih paket asuransi, dan nikmati kemudahan layanan kesehatan digital dalam genggaman.
-            </p>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-            <button
-              type="button"
-              onClick={() => navigate("/asuransi")}
-              className="rounded-xl bg-white px-6 py-3 text-sm font-bold text-slate-900 hover:bg-slate-100"
-            >
-              Lihat Paket Asuransi
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate("/promo")}
-              className="rounded-xl border border-white/30 px-6 py-3 text-sm font-bold text-white hover:bg-white/10"
-            >
-              Program Promo
-            </button>
-          </div>
-        </section>
+        
       </div>
     </div>
   );
